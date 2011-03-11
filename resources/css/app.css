@@ -60,6 +60,10 @@
     background-image: url('../images/addsmall.png') !important;
 }
 
+.book-relation-remove {
+    background-image: url('../images/deletesmall.png') !important;
+}
+
 .book-item-id {
     border: 0;
     background: none !important;

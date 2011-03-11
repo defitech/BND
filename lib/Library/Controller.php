@@ -208,6 +208,7 @@ class Library_Controller {
     }
 
     protected function saveBook() {
+        Library_Config::getInstance()->testIssetAuser();
         // set des paramètres PHP pour favoriser l'upload au mieux
         ini_set('max_execution_time', 120);
         ini_set('memory_limit', '128M');
@@ -395,6 +396,7 @@ class Library_Controller {
     }
 
     protected function addType() {
+        Library_Config::getInstance()->testIssetAuser();
         $table = new Library_Book_Type();
         $table->insert(array(
             'label' => $this->getParam('text')
@@ -402,6 +404,17 @@ class Library_Controller {
         return array(
             'success' => true,
             'id' => $table->getAdapter()->lastInsertId()
+        );
+    }
+
+    protected function removeType() {
+        Library_Config::getInstance()->testIssetAuser();
+        $id = $this->getParam('id');
+        $table = new Library_Book_Type();
+        $table->delete($table->getAdapter()->quoteInto('id = ?', $id));
+
+        return array(
+            'success' => true
         );
     }
 
@@ -431,6 +444,7 @@ class Library_Controller {
     }
 
     protected function addEditor() {
+        Library_Config::getInstance()->testIssetAuser();
         $table = new Library_Book_Editor();
         $table->insert(array(
             'editor' => $this->getParam('text')
@@ -438,6 +452,17 @@ class Library_Controller {
         return array(
             'success' => true,
             'id' => $table->getAdapter()->lastInsertId()
+        );
+    }
+
+    protected function removeEditor() {
+        Library_Config::getInstance()->testIssetAuser();
+        $id = $this->getParam('id');
+        $table = new Library_Book_Editor();
+        $table->delete($table->getAdapter()->quoteInto('id = ?', $id));
+
+        return array(
+            'success' => true
         );
     }
 
@@ -468,6 +493,7 @@ class Library_Controller {
     }
 
     protected function addNiveau() {
+        Library_Config::getInstance()->testIssetAuser();
         $table = new Library_Niveau();
         $table->insert(array(
             'label' => $this->getParam('text')
@@ -511,6 +537,7 @@ class Library_Controller {
      * @return array
      */
     protected function import() {
+        Library_Config::getInstance()->testIssetAuser();
         // set des paramètres PHP pour favoriser l'upload au mieux
         ini_set('max_execution_time', 120);
         ini_set('memory_limit', '128M');

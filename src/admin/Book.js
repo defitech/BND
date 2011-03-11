@@ -21,6 +21,55 @@ Library.admin.Book = Ext.extend(Library.Book, {
         });
     },
 
+    removeType: function() {
+        var v = this.comboType.getValue();
+        if (v) {
+            Ext.Msg.confirm('Remove', 'Matiere?', function(choice){
+                if (choice == 'yes') {
+                    this.removeSubmit(this.comboType, {
+                        cmd: 'removeType',
+                        id: v
+                    });
+                }
+            }, this);
+        }
+    },
+
+    removeEditor: function() {
+        var v = this.comboEditor.getValue();
+        if (v) {
+            Ext.Msg.confirm('Remove', 'Editeur?', function(choice){
+                if (choice == 'yes') {
+                    this.removeSubmit(this.comboEditor, {
+                        cmd: 'removeEditor',
+                        id: v
+                    });
+                }
+            }, this);
+        }
+    },
+
+    removeSubmit: function(combo, params) {
+        this._mask.show();
+        Ext.Ajax.request({
+            url: Library.Main.config().controller,
+            params: params,
+            scope: this,
+            success: function(response) {
+                var json = Library.Main.getJson(response);
+                this._mask.hide();
+                if (json.success) {
+                    var store = combo.getStore();
+                    store.removeAt(store.find('id', params.id));
+                }
+            },
+            failure: function(response) {
+                this._mask.hide();
+                Library.Main.failure(response);
+            }
+        });
+    },
+
     addNiveau: function() {
         Ext.Msg.prompt(Library.wording.niveau_add_title, Library.wording.niveau_add, function(choice, txt){
             if (choice == 'ok' && txt) {
@@ -130,6 +179,11 @@ Library.admin.Book = Ext.extend(Library.Book, {
                     iconCls: 'book-relation-add',
                     scope: this,
                     handler: this.addNiveau
+                },{
+                    xtype: 'button',
+                    iconCls: 'book-relation-remove',
+                    scope: this,
+                    handler: this.removeNiveau
                 }
             ]
         };
@@ -149,6 +203,11 @@ Library.admin.Book = Ext.extend(Library.Book, {
                         iconCls: 'book-relation-add',
                         scope: this,
                         handler: this.addEditor
+                    },{
+                        xtype: 'button',
+                        iconCls: 'book-relation-remove',
+                        scope: this,
+                        handler: this.removeEditor
                     }
                 ]
             }, {
@@ -161,6 +220,11 @@ Library.admin.Book = Ext.extend(Library.Book, {
                         iconCls: 'book-relation-add',
                         scope: this,
                         handler: this.addType
+                    },{
+                        xtype: 'button',
+                        iconCls: 'book-relation-remove',
+                        scope: this,
+                        handler: this.removeType
                     }
                 ]
             },
