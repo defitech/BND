@@ -63,6 +63,16 @@ class Defitech_Controller {
         return $this->$cmd();
     }
 
+    public function getGroupParam($paramPrefix, $separator = '-') {
+        $params = array();
+        foreach ($this->params as $key => $val) {
+            if (strpos($key, $paramPrefix) !== false) {
+                $params[] = array_pop(explode($separator, $key));
+            }
+        }
+        return $params;
+    }
+
 
 
 
@@ -265,6 +275,17 @@ class Defitech_Controller {
         }
 
         $row->save();
+
+        // set des niveaux
+        $niveaux = $this->getGroupParam('niveau');
+        $table_link = new Defitech_Book_Niveau();
+        $table_link->delete($table_link->getAdapter()->quoteInto('book_id IN(?)', $row->id));
+        foreach ($niveaux as $niveau) {
+            $table_link->insert(array(
+                'book_id' => $row->id,
+                'niveau_id' => $niveau
+            ));
+        }
         
         return array(
             'success' => $success,
