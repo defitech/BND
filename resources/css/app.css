@@ -1,0 +1,66 @@
+.book-thumb {
+    height: 80px;
+    width: 60px;
+    padding: 1px;
+    border: 1px solid #CCCCCC;
+}
+
+.book-thumb-big {
+    width: 260px;
+    height: 400px;
+    padding: 1px;
+    border: 1px solid #CCCCCC;
+}
+
+.book-search-go {
+    background-image: url('../images/loupe.png') !important;
+}
+
+.book-save {
+    background-image: url('../images/save.png') !important;
+}
+
+.book-window-close {
+    background-image: url('../images/close.png') !important;
+}
+
+.book-search-undo {
+    background-image: url('../images/loupe-croix.png') !important;
+}
+
+.book-import {
+    background-image: url('../images/import.png') !important;
+}
+
+.book-add {
+    background-image: url('../images/add.png') !important;
+}
+
+.book-info {
+    background-image: url('../images/info.png') !important;
+}
+
+.book-delete {
+    background-image: url('../images/delete.png') !important;
+}
+
+.book-main {
+    background-image: url('../images/book.png') !important;
+}
+
+.book-connect {
+    background-image: url('../images/lock.png') !important;
+}
+
+.book-deconnect {
+    background-image: url('../images/unlock.png') !important;
+}
+
+.book-relation-add {
+    background-image: url('../images/addsmall.png') !important;
+}
+
+.book-item-id {
+    border: 0;
+    background: none !important;
+}
