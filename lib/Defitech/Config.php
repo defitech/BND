@@ -47,10 +47,11 @@ class Defitech_Config {
      *
      * @param string $instance
      * @param string $dir le chemin + fichier ini, pour la config
+     * @param string $root le chemin vers la racine du site
      */
-    private function __construct($instance, $dir) {
+    private function __construct($instance, $dir, $root) {
         $this->inst = $instance;
-        $this->root = dirname($dir) . '/';
+        $this->root = $root;
         $this->data = new Zend_Config_Ini($dir, $instance);
     }
 

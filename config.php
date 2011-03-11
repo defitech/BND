@@ -29,7 +29,7 @@ $autoloader->registerNamespace('Defitech_');
 
 
 // set de la config, qui se base sur le config.ini placé à la racine
-$config = Defitech_Config::getInstance($instance, $configFile);
+$config = Defitech_Config::getInstance($instance, $configFile, $dir);
 
 ini_set('magic_quotes_gpc', 0);
 // gestion de l'affichage des erreurs
