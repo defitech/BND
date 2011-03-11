@@ -33,11 +33,12 @@ class Defitech_Config {
      *
      * @param string $instance
      * @param string $dir le chemin + fichier ini, pour la config
+     * @param string $root le chemin vers la racine du site
      * @return Defitech_Config
      */
-    public static function getInstance($instance = null, $dir = null) {
+    public static function getInstance($instance = null, $dir = null, $root = null) {
         if (!self::$instance) {
-            self::$instance = new self($instance, $dir);
+            self::$instance = new self($instance, $dir, $root);
         }
         return self::$instance;
     }
