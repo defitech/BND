@@ -28,7 +28,7 @@ class Library_Controller {
                 }
                 return $tab;
             }
-            return recurse($data);
+            return $data ? recurse($data) : array('success' => false);
         } catch (Exception $e) {
             return array(
                 'success' => false,
@@ -152,8 +152,7 @@ class Library_Controller {
                 'editor_id' => isset($editors[$row->editor_id]) ? $editors[$row->editor_id] : $row->editor_id,
                 'type_id' => isset($types[$row->type_id]) ? $types[$row->type_id] : $row->type_id,
                 'thumb' => $row->thumb ? $row->thumb : 'resources/images/empty.jpg',
-                'niveau_id' => implode(', ', $ns),
-                'pdfdl' => Library_Config::getInstance()->getData()->web->pdf . $row->filename
+                'niveau_id' => implode(', ', $ns)
             ));
         }
 
@@ -323,6 +322,42 @@ class Library_Controller {
         return $output;
     }
 
+    protected function download() {
+        Library_Config::getInstance()->testIssetAuser();
+
+        $config = Library_Config::getInstance();
+        $user = $config->getUser();
+        $table = new Library_Book();
+        $book = $table->fetchRow($table->select()->where('id = ?', $this->getParam('id')));
+
+        $filelocation = $config->getData()->path->pdf . $book->filename;
+        $filename = array_pop(explode('/', $book->filename));
+
+        if (! file_exists($filelocation) || is_dir($filelocation)) {
+            header('Content-Type: text/plain');
+            die("Unkown file:".$book->filename);
+        }
+
+        // log du download pour cet utilisateur, avant de l'envoyer
+        $table = new Library_User_Download();
+        $table->insert(array(
+            'book_id' => $book->id,
+            'user_id' => $user->id,
+            'downloaded_at' => date('Y-m-d H:i:s')
+        ));
+
+        header('HTTP/1.1 200 OK');
+        header('Date: ' . date("D M j G:i:s T Y"));
+        header('Last-Modified: ' . date("D M j G:i:s T Y"));
+        header("Content-Type: application/force-download"); // changed to force download
+        header("Content-Lenght: " . (string)(filesize($filelocation)));
+        header("Content-Transfer-Encoding: Binary"); // added
+        header('Content-Disposition: attachment; filename="'.$filename.'"');
+
+        fpassthru(fopen($filelocation,'rb'));
+        exit;
+    }
+
 
 
 
@@ -348,7 +383,7 @@ class Library_Controller {
             $session->pass = $pass;
 
             // on enregistre la date de dernière connection
-            $result->last_connected = date('u');
+            $result->last_connected = date('Y-m-d H:i:s');
             $result->save();
             
             return array(
@@ -629,13 +664,33 @@ class Library_Controller {
     
     protected function removeUser() {
         Library_Config::getInstance()->testIssetAuser();
+        $id = $this->getParam('id');
 
         $user = Library_Config::getInstance()->getUser();
-        if ($user->id == $this->getParam('id')) {
+        if ($user->id == $id) {
             return array(
                 'success' => false,
                 'error' => 'Impossible de se supprimer soi-même'
             );
+        }
+
+        if (!$this->getParam('forceConfirm', false)) {
+            // check si plusieurs livres on l'élément
+            $table = new Library_User_Download();
+            $rowset = $table->fetchAll($table
+                ->select()
+                ->where('user_id = ?', $id)
+            );
+            if ($rowset->count() > 0) {
+                // il y a d'autres livres concernés par cette suppression. On
+                // renvoie au navigateur la demande de confirmation
+                return array(
+                    'success' => true,
+                    'confirm' => true,
+                    'msg' => sprintf('Cet utilisateur a %s téléchargements à son actif. Supprimer quand même?', $rowset->count()),
+                    'nb' => $rowset->count()
+                );
+            }
         }
 
         $table = new Library_User();

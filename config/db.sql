@@ -12,6 +12,7 @@
 #
 # Structure de la table: library_book
 #
+
 CREATE TABLE 'library_book' ( 'id' INTEGER NOT NULL PRIMARY KEY, 'type_id' INT, 'editor_id' INT, 'title' VARCHAR(200), 'thumb' VARCHAR(200), 'tags' TEXT, 'isbn' VARCHAR(150), 'filename' VARCHAR(100) );
 # --------------------------------------------------------
 
@@ -19,6 +20,7 @@ CREATE TABLE 'library_book' ( 'id' INTEGER NOT NULL PRIMARY KEY, 'type_id' INT, 
 #
 # Structure de la table: library_book_editor
 #
+
 CREATE TABLE 'library_book_editor' ( 'id' INTEGER NOT NULL PRIMARY KEY, 'editor' VARCHAR(200) );
 # --------------------------------------------------------
 
@@ -26,6 +28,7 @@ CREATE TABLE 'library_book_editor' ( 'id' INTEGER NOT NULL PRIMARY KEY, 'editor'
 #
 # Structure de la table: library_book_niveau
 #
+
 CREATE TABLE 'library_book_niveau' ( 'book_id' INTEGER NOT NULL, 'niveau_id' INTEGER NOT NULL );
 # --------------------------------------------------------
 
@@ -33,6 +36,7 @@ CREATE TABLE 'library_book_niveau' ( 'book_id' INTEGER NOT NULL, 'niveau_id' INT
 #
 # Structure de la table: library_book_type
 #
+
 CREATE TABLE 'library_book_type' ( 'id' INTEGER NOT NULL PRIMARY KEY, 'label' VARCHAR(200) );
 # --------------------------------------------------------
 
@@ -40,6 +44,7 @@ CREATE TABLE 'library_book_type' ( 'id' INTEGER NOT NULL PRIMARY KEY, 'label' VA
 #
 # Structure de la table: library_niveau
 #
+
 CREATE TABLE 'library_niveau' ( 'id' INTEGER NOT NULL PRIMARY KEY DEFAULT "0", 'label' VARCHAR(50) );
 # --------------------------------------------------------
 
@@ -47,7 +52,16 @@ CREATE TABLE 'library_niveau' ( 'id' INTEGER NOT NULL PRIMARY KEY DEFAULT "0", '
 #
 # Structure de la table: library_user
 #
-CREATE TABLE 'library_user' ( 'id' INTEGER NOT NULL PRIMARY KEY, 'login' VARCHAR(50) , 'pass' VARCHAR(255) , 'right' SMALLINT , 'last_connected' TIMESTAMP );
+
+CREATE TABLE 'library_user' ( 'id' INTEGER NOT NULL PRIMARY KEY, 'login' VARCHAR(50) , 'pass' VARCHAR(255) , 'right' SMALLINT , 'last_connected' DATETIME );
+# --------------------------------------------------------
+
+
+#
+# Structure de la table: library_user_download
+#
+
+CREATE TABLE 'library_user_download' ( 'id' INTEGER NOT NULL PRIMARY KEY , 'book_id' INTEGER , 'user_id' INTEGER , 'downloaded_at' DATETIME ) ;
 # --------------------------------------------------------
 
 #

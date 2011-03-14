@@ -2,49 +2,53 @@ Ext.ns('Library.wording');
 
 Library.wording = {
 
-    library_title: 'BND : Bibliothèque Numérique Download',
+    library_title: 'BND : Biblioth\u00e8que Num\u00e9rique Download',
+
+    library_conditions: 'Conditions d\'utilisation',
+    library_conditions_refuse: 'Je ne suis pas d\'accord',
+    library_conditions_accept: 'J\'ai signé et j\'accepte les conditions ci-dessus',
 
     thumb: 'Aperçu',
     title: 'Titre',
-    tags: 'Mots-clé',
-    type: 'Matière',
+    tags: 'Mots-cl\u00e9',
+    type: 'Mati\u00e8re',
     editor: 'Editeur',
     niveau: 'Niveaux',
     isbn: 'N° ISBN',
     help: 'Aide',
 
     filter_title: 'Filtrer',
-    filter_editor: 'par cet éditeur: {0}',
-    filter_type: 'par cette matière: {0}',
+    filter_editor: 'par cet \u00e9diteur: {0}',
+    filter_type: 'par cette mati\u00e8re: {0}',
     filter_niveau: 'par ce(s) niveau(x): {0}',
 
-    download_book_button: 'Télécharger',
+    download_book_button: 'T\u00e9l\u00e9charger',
     
     currentThumb: 'Aperçu actuel',
     currentPdf: 'PDF actuel',
     
-    editor_add_title: 'Ajouter un éditeur',
-    editor_add: 'Entrez le nom du nouvel éditeur',
-    type_add_title: 'Ajouter une matière',
-    type_add: 'Entrez le nom de la nouvelle matière',
+    editor_add_title: 'Ajouter un \u00e9diteur',
+    editor_add: 'Entrez le nom du nouvel \u00e9diteur',
+    type_add_title: 'Ajouter une mati\u00e8re',
+    type_add: 'Entrez le nom de la nouvelle mati\u00e8re',
     niveau_add_title: 'Ajouter un niveau (classe)',
     niveau_add: 'Entrez le nom du nouveau niveau',
 
-    editor_edit_title: 'Editer l\'éditeur',
-    editor_edit: 'Changez le nom de l\'éditeur',
-    type_edit_title: 'Editer la matière',
-    type_edit: 'Changez le nom de la matière',
+    editor_edit_title: 'Editer l\'\u00e9diteur',
+    editor_edit: 'Changez le nom de l\'\u00e9diteur',
+    type_edit_title: 'Editer la mati\u00e8re',
+    type_edit: 'Changez le nom de la mati\u00e8re',
     niveau_edit_title: 'Editer le niveau (classe)',
     niveau_edit: 'Changez le nom du niveau',
 
-    editor_remove_title: 'Supprimer un éditeur',
-    editor_remove: 'Voulez-vous supprimer l\'éditeur {0}?',
-    type_remove_title: 'Supprimer une matière',
-    type_remove: 'Voulez-vous supprimer la matière {0}?',
+    editor_remove_title: 'Supprimer un \u00e9diteur',
+    editor_remove: 'Voulez-vous supprimer l\'\u00e9diteur {0}?',
+    type_remove_title: 'Supprimer une mati\u00e8re',
+    type_remove: 'Voulez-vous supprimer la mati\u00e8re {0}?',
     niveau_remove_title: 'Supprimer un niveau (classe)',
     niveau_remove: 'Voulez-vous supprimer le niveau {0}',
     remove_confirm_title: 'Confirmation de suppression',
-    remove_confirm: '{0} livres sont liés à cet élément. Supprimer quand même?',
+    remove_confirm: '{0} livres sont li\u00e9s \u00e0 cet \u00e9l\u00e9ment. Supprimer quand m\u00eame?',
 
     file_fieldset: 'Aperçu (miniature)',
     filepdf_fieldset: 'Livre (fichier PDF)',
@@ -58,7 +62,7 @@ Library.wording = {
     user_title: 'Gestion des utilisateurs',
     user_button: 'Utilisateurs',
     user_delete_title: 'Suppression d\'un utilisateur',
-    user_delete: 'Voulez-vous supprimer l\utilisateur {0}?',
+    user_delete: 'Voulez-vous supprimer l\'utilisateur {0}?',
 
     info_book_button: 'Informations',
     info_book_close: 'Fermer',
@@ -71,19 +75,20 @@ Library.wording = {
 
     delete_book_button: 'Supprimer',
     delete_book_title: 'Suppression',
-    delete_book: 'Supprimer les livres sélectionnés?',
+    delete_book: 'Supprimer les livres s\u00e9lectionn\u00e9s?',
 
     error_title: 'Erreur serveur',
-    bad_json: 'Json mal formé',
-    failure: 'Pas de réponse du serveur. Problème réseau.'
+    bad_json: 'Json mal form\u00e9',
+    failure: 'Pas de r\u00e9ponse du serveur. Probl\u00e8me r\u00e9seau.'
 
 };
 
-Ext.override(Ext.ux.grid.GridFilters, {
-    menuFilterText: 'Filtres'
-});
+if (typeof Ext.ux != 'undefined' && typeof Ext.ux.grid != 'undefined') {
+    Ext.override(Ext.ux.grid.GridFilters, {
+        menuFilterText: 'Filtres'
+    });
 
-Ext.override(Ext.ux.menu.ListMenu, {
-    loadingText: 'Chargement...'
-});
-
+    Ext.override(Ext.ux.menu.ListMenu, {
+        loadingText: 'Chargement...'
+    });
+}

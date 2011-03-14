@@ -2,6 +2,10 @@ body {
     background: url('../background/foretcanada.jpg') transparent top left no-repeat;
 }
 
+.book-conditions .x-panel-body {
+    padding: 20px;
+}
+
 .book-thumb {
     height: 80px;
     width: 60px;

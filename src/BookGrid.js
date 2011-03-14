@@ -28,7 +28,7 @@ Library.BookGrid = Ext.extend(Ext.grid.GridPanel, {
     },
 
     launchDownload: function(record) {
-        window.location.href = record.get('pdfdl');
+        window.location.href = Library.Main.config().controller + '?cmd=download&id=' + record.get('id');
     },
     
     initBookContextMenuListeners: function() {

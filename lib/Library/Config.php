@@ -28,6 +28,8 @@ class Library_Config {
 
     private $root;
 
+    private $_log;
+
     /**
      * Retourne l'instance unique signleton
      *
@@ -116,6 +118,19 @@ class Library_Config {
         if (!$this->getUser($right)) {
             throw new Exception('Pas de user connecté');
         }
+    }
+
+    /**
+     * Retourne un loggeur Zend
+     *
+     * @return Zend_Log
+     */
+    public function log() {
+        if (!$this->_log) {
+            $this->_log = new Zend_Log();
+            $logger->addWriter(new Zend_Log_Writer_Stream($this->getData()->path->log));
+        }
+        return $this->_log;
     }
 
 }

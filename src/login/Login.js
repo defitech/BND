@@ -6,6 +6,36 @@ Library.login.Form = Ext.extend(Ext.Window, {
         return this.getComponent(0);
     },
 
+    showSplashScreen: function() {
+        var win = new Ext.Window({
+            modal: true,
+            width: 600,
+            height: 400,
+            layout: 'fit',
+            items: [{
+                xtype: 'panel',
+                cls: 'book-conditions',
+                autoLoad: 'conditions.html',
+                border: false
+            }],
+            buttons: [{
+                text: Library.wording.library_conditions_accept,
+                iconCls: '',
+                scale: 'medium',
+                scope: this,
+                handler: this.connect
+            }, '->', {
+                text: Library.wording.library_conditions_refuse,
+                iconCls: '',
+                scale: 'medium',
+                handler: function() {
+                    win.close();
+                }
+            }]
+        });
+        win.show();
+    },
+
     connect: function() {
         if (this.getForm().getForm().isValid()) {
             this._mask.show();
@@ -86,7 +116,7 @@ Library.login.Form = Ext.extend(Ext.Window, {
                 scale: 'medium',
                 iconCls: 'book-connect',
                 scope: this,
-                handler: this.connect
+                handler: this.showSplashScreen
             }]
         });
         Ext.apply(this, {

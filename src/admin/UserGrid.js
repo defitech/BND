@@ -19,26 +19,39 @@ Library.admin.UserGrid = Ext.extend(Ext.grid.EditorGridPanel, {
         var record = this.getStore().getAt(row[0]);
         Ext.Msg.confirm(Library.wording.user_delete_title, String.format(Library.wording.user_delete, record.get('login')), function(choice){
             if (choice == 'yes') {
-                Ext.Ajax.request({
-                    url: Library.Main.config().controller,
-                    scope: this,
-                    params: {
-                        cmd: 'removeUser',
-                        id: record.get('id')
-                    },
-                    success: function(response) {
-                        var json = Library.Main.getJson(response);
-                        if (json.success) {
-                            this.removebutton.disable();
-                            this.getStore().reload();
-                        }
-                    },
-                    failure: function(response) {
-                        Library.Main.failure(response);
-                    }
-                });
+                this.sendRemoveUser(record);
             }
         }, this);
+    },
+
+    sendRemoveUser: function(record, forceConfirm) {
+        Ext.Ajax.request({
+            url: Library.Main.config().controller,
+            scope: this,
+            params: {
+                cmd: 'removeUser',
+                forceConfirm: forceConfirm,
+                id: record.get('id')
+            },
+            success: function(response) {
+                var json = Library.Main.getJson(response);
+                if (json.success) {
+                    if (json.confirm) {
+                        Ext.Msg.confirm(Library.wording.user_delete_title, json.msg, function(choice){
+                            if (choice == 'yes') {
+                                this.sendRemoveUser(record, true);
+                            }
+                        }, this)
+                    } else {
+                        this.removebutton.disable();
+                        this.getStore().reload();
+                    }
+                }
+            },
+            failure: function(response) {
+                Library.Main.failure(response);
+            }
+        });
     },
 
     saveUserData: function(e) {

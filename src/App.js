@@ -20,6 +20,10 @@ Library.App = Ext.extend(Ext.Viewport, {
         }
     },
 
+    downloadBook: function() {
+        this.getGrid().launchDownload(this.getGrid().getSelectionModel().getSelected());
+    },
+
     getBookInfo: function() {
         this.getGrid().getBookInfo(this.getGrid().getSelectionModel().getSelected());
     },
@@ -164,8 +168,10 @@ Library.App = Ext.extend(Ext.Viewport, {
                         selectionchange: {scope: this, fn: function(grid, model) {
                             if (model.getCount() == 1) {
                                 this.bookinfo.enable();
+                                this.bookdownload.enable();
                             } else {
                                 this.bookinfo.disable();
+                                this.bookdownload.disable();
                             }
                         }}
                     })
@@ -179,6 +185,15 @@ Library.App = Ext.extend(Ext.Viewport, {
                         disabled: true,
                         scope: this,
                         handler: this.getBookInfo
+                    },
+                    {
+                        text: Library.wording.download_book_button,
+                        iconCls: 'book-download',
+                        scale: 'medium',
+                        ref: '../../bookdownload',
+                        disabled: true,
+                        scope: this,
+                        handler: this.downloadBook
                     },
                     '->',
                     {
