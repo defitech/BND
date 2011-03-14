@@ -1,3 +1,7 @@
+body {
+    background: url('../background/montagnes.jpg') transparent top left no-repeat;
+}
+
 .book-thumb {
     height: 80px;
     width: 60px;

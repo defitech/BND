@@ -41,8 +41,9 @@ $user = Library_Config::getInstance()->getUser();
         <script type="text/javascript" src="<?php echo $path; ?>examples/ux/gridfilters/filter/BooleanFilter.js"></script>
         <!-- Base JS App -->
         <script type="text/javascript" src="lang/fr.js"></script>
-        <script type="text/javascript" src="index.js"></script>
         <script type="text/javascript" src="src/Main.js"></script>
+        <?php /* si un utilisateur est connecté, on affiche l'appli */ if ($user) { ?>
+        <script type="text/javascript" src="index.js"></script>
         <script type="text/javascript" src="src/App.js"></script>
         <script type="text/javascript" src="src/Book.js"></script>
         <script type="text/javascript" src="src/BookGrid.js"></script>
@@ -51,6 +52,9 @@ $user = Library_Config::getInstance()->getUser();
         <script type="text/javascript" src="src/admin/BookGrid.js"></script>
         <script type="text/javascript" src="src/admin/Book.js"></script>
         <script type="text/javascript" src="src/admin/ContextMenu.js"></script>
+        <?php /* si aucun utilisateur n'est connecté, on affiche le login */ } else { ?>
+        <script type="text/javascript" src="src/login/Login.js"></script>
+        <?php } ?>
         <!-- Envionment data -->
         <script type="text/javascript">var stacknmblue = <?php echo ($user ? $user->id : 0); ?>;</script>
     </head>

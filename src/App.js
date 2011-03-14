@@ -109,13 +109,32 @@ Library.App = Ext.extend(Ext.Viewport, {
         return [];
     },
 
+    logout: function() {
+        Ext.Ajax.request({
+            url: Library.Main.config().controller,
+            params: {
+                cmd: 'logout'
+            },
+            scope: this,
+            success: function(response) {
+                var json = Library.Main.getJson(response);
+                if (json.success) {
+                    window.location.reload();
+                }
+            },
+            failure: function(response) {
+                Library.Main.failure(response);
+            }
+        });
+    },
+
     initLoginButton: function() {
         return {
-            text: Library.wording.connect_title,
+            text: Library.wording.connect_logout,
             scale: 'medium',
-            iconCls: 'book-connect',
+            iconCls: 'book-deconnect',
             scope: this,
-            handler: this.login
+            handler: this.logout
         };
     },
 
