@@ -26,11 +26,15 @@ Library.BookGrid = Ext.extend(Ext.grid.GridPanel, {
             }
         });
     },
+
+    launchDownload: function(record) {
+        window.location.href = record.get('pdfdl');
+    },
     
     initBookContextMenuListeners: function() {
         return {
             bookdownload: {scope: this, fn: function(menu, record){
-                 console.log('download ' + record.get('title'))
+                 this.launchDownload(record);
             }},
             bookinfo: {scope: this, fn: function(menu, record){
                  this.getBookInfo(record);
@@ -53,13 +57,20 @@ Library.BookGrid = Ext.extend(Ext.grid.GridPanel, {
             record: record,
             data: json.data,
             animateTarget: row || this.getEl(),
-            listeners: {
-                show: {scope: this, fn: function(){
-                    this.loadMask.hide();
-                }}
-            }
+            listeners: this.initBookWindowListeners()
         }, config || {}));
         win.show();
+    },
+
+    initBookWindowListeners: function() {
+        return {
+            show: {scope: this, fn: function(){
+                this.loadMask.hide();
+            }},
+            bookdownload: {scope: this, fn: function(w, record){
+                this.launchDownload(record);
+            }}
+        };
     },
 
     renderBookThumb: function(val, data, record){
@@ -86,7 +97,8 @@ Library.BookGrid = Ext.extend(Ext.grid.GridPanel, {
                 {name: 'isbn'},
                 {name: 'type_id'},
                 {name: 'editor_id'},
-                {name: 'niveau_id'}
+                {name: 'niveau_id'},
+                {name: 'pdfdl'}
             ]
         });
     },

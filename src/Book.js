@@ -22,8 +22,21 @@ Library.Book = Ext.extend(Ext.Window, {
         };
     },
 
+    initDownloadButton: function() {
+        return {
+            text: Library.wording.download_book_button,
+            iconCls: 'book-download',
+            scale: 'medium',
+            scope: this,
+            disabled: !this.record,
+            handler: function() {
+                this.fireEvent('bookdownload', this, this.record)
+            }
+        };
+    },
+
     initBbar: function() {
-        return ['->', this.initCloseButton()];
+        return [this.initDownloadButton(), '->', this.initCloseButton()];
     },
 
     initFieldId: function(config) {
@@ -133,6 +146,7 @@ Library.Book = Ext.extend(Ext.Window, {
     },
 
     initComponent: function() {
+        this.addEvents('bookdownload');
         Ext.applyIf(this, {
             width: 700,
             height: 480

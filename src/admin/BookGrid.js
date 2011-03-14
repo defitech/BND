@@ -8,16 +8,13 @@ Library.admin.BookGrid = Ext.extend(Library.BookGrid, {
             data: json.data,
             modal: true,
             animateTarget: row || this.getEl(),
-            listeners: {
-                show: {scope: this, fn: function(){
-                    this.loadMask.hide();
-                }},
+            listeners: Ext.apply(this.initBookWindowListeners(), {
                 booksave: {scope: this, fn: function(cmp){
                     this.getStore().navigateToRecord = cmp.record;
                     this.getStore().reload();
                     cmp.close();
                 }}
-            }
+            })
         }, config || {}));
         win.show();
     },

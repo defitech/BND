@@ -79,23 +79,27 @@ Library.admin.Book = Ext.extend(Library.Book, {
     },
 
     editType: function() {
-        Ext.Msg.prompt(Library.wording.type_edit_title, Library.wording.type_edit, function(choice, txt){
-            if (choice == 'ok' && txt) {
-                this.editSubmit(this.comboType, txt, {
-                    cmd: 'editType'
-                });
-            }
-        }, this, false, this.comboType.getRawValue());
+        if (this.comboType.getValue()) {
+            Ext.Msg.prompt(Library.wording.type_edit_title, Library.wording.type_edit, function(choice, txt){
+                if (choice == 'ok' && txt) {
+                    this.editSubmit(this.comboType, txt, {
+                        cmd: 'editType'
+                    });
+                }
+            }, this, false, this.comboType.getRawValue());
+        }
     },
 
     editEditor: function() {
-        Ext.Msg.prompt(Library.wording.editor_edit_title, Library.wording.editor_edit, function(choice, txt){
-            if (choice == 'ok' && txt) {
-                this.editSubmit(this.comboEditor, txt, {
-                    cmd: 'editEditor'
-                });
-            }
-        }, this, false, this.comboEditor.getRawValue());
+        if (this.comboEditor.getValue()) {
+            Ext.Msg.prompt(Library.wording.editor_edit_title, Library.wording.editor_edit, function(choice, txt){
+                if (choice == 'ok' && txt) {
+                    this.editSubmit(this.comboEditor, txt, {
+                        cmd: 'editEditor'
+                    });
+                }
+            }, this, false, this.comboEditor.getRawValue());
+        }
     },
 
     editSubmit: function(combo, txt, params) {
@@ -209,6 +213,7 @@ Library.admin.Book = Ext.extend(Library.Book, {
 
     initBbar: function() {
         return [
+            this.initDownloadButton(),
             '->',
             {
                 text: Library.wording.info_book_save,
@@ -270,10 +275,21 @@ Library.admin.Book = Ext.extend(Library.Book, {
                 anchor: '95%'
             },
             items: [{
-                xtype: 'textfield',
-                inputType: 'file',
-                name: 'thumbfile',
-                fieldLabel: Library.wording.thumb
+                xtype: 'compositefield',
+                fieldLabel: Library.wording.thumb,
+                items: [{
+                    xtype: 'textfield',
+                    inputType: 'file',
+                    name: 'thumbfile',
+                    flex: 1
+                }, {
+                    xtype: 'button',
+                    iconCls: 'book-relation-remove',
+                    scope: this,
+                    handler: function(){
+                        this.getForm().getForm().findField('thumbfile').setValue(null);
+                    }
+                }]
             },{
                 xtype: 'textfield',
                 name: 'thumb',
@@ -290,10 +306,21 @@ Library.admin.Book = Ext.extend(Library.Book, {
                 anchor: '95%'
             },
             items: [{
-                xtype: 'textfield',
-                inputType: 'file',
-                name: 'pdffile',
-                fieldLabel: 'PDF'
+                xtype: 'compositefield',
+                fieldLabel: 'PDF',
+                items: [{
+                    xtype: 'textfield',
+                    inputType: 'file',
+                    name: 'pdffile',
+                    flex: 1
+                }, {
+                    xtype: 'button',
+                    iconCls: 'book-relation-remove',
+                    scope: this,
+                    handler: function(){
+                        this.getForm().getForm().findField('pdffile').setValue(null);
+                    }
+                }]
             },{
                 xtype: 'textfield',
                 name: 'pdf',

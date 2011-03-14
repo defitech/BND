@@ -152,7 +152,8 @@ class Library_Controller {
                 'editor_id' => isset($editors[$row->editor_id]) ? $editors[$row->editor_id] : $row->editor_id,
                 'type_id' => isset($types[$row->type_id]) ? $types[$row->type_id] : $row->type_id,
                 'thumb' => $row->thumb ? $row->thumb : 'resources/images/empty.jpg',
-                'niveau_id' => implode(', ', $ns)
+                'niveau_id' => implode(', ', $ns),
+                'pdfdl' => Library_Config::getInstance()->getData()->web->pdf . $row->filename
             ));
         }
 
@@ -572,6 +573,79 @@ class Library_Controller {
             'id' => $table->getAdapter()->lastInsertId()
         );
     }
+
+
+
+
+
+    /**
+     * --------------------------------------------------------------
+     *              Méthodes pour les utilisateurs
+     * --------------------------------------------------------------
+     */
+
+    protected function getUserList() {
+        Library_Config::getInstance()->testIssetAuser();
+        $table = new Library_User();
+        $rowset = $table->fetchAll($table->select()
+            ->order($this->getParam('sort', 'login') . ' ' . $this->getParam('dir', 'ASC'))
+        );
+        $data = array();
+        foreach ($rowset as $row) {
+            $data[] = array_merge($row->toArray(), array(
+                'pass' => ''
+            ));
+        }
+        return array(
+            'success' => true,
+            'total' => count($data),
+            'users' => $data
+        );
+    }
+
+    protected function saveUser() {
+        Library_Config::getInstance()->testIssetAuser();
+
+        $id = $this->getParam('id');
+        $table = new Library_User();
+
+        if ($id) {
+            $row = $table->fetchRow($table->select()->where('id = ?', $this->getParam('id')));
+        } else {
+            $row = $table->createRow();
+        }
+
+        $field = $this->getParam('field');
+        $value = $this->getParam('value');
+        
+        $row->$field = $field == 'pass' ? md5($value) : $value;
+        $row->save();
+
+        return array(
+            'success' => true,
+            'id' => $row->id
+        );
+    }
+    
+    protected function removeUser() {
+        Library_Config::getInstance()->testIssetAuser();
+
+        $user = Library_Config::getInstance()->getUser();
+        if ($user->id == $this->getParam('id')) {
+            return array(
+                'success' => false,
+                'error' => 'Impossible de se supprimer soi-même'
+            );
+        }
+
+        $table = new Library_User();
+        $table->delete($table->getAdapter()->quoteInto('id = ?', $this->getParam('id')));
+
+        return array(
+            'success' => true
+        );
+    }
+
 
 
 

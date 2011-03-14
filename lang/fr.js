@@ -54,6 +54,12 @@ Library.wording = {
     connect_login: 'Login',
     connect_password: 'Mot de passe',
 
+    user_right: 'Droit (1 = admin)',
+    user_title: 'Gestion des utilisateurs',
+    user_button: 'Utilisateurs',
+    user_delete_title: 'Suppression d\'un utilisateur',
+    user_delete: 'Voulez-vous supprimer l\utilisateur {0}?',
+
     info_book_button: 'Informations',
     info_book_close: 'Fermer',
     info_book_save: 'Enregistrer',

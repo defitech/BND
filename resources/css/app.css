@@ -1,5 +1,5 @@
 body {
-    background: url('../background/montagnes.jpg') transparent top left no-repeat;
+    background: url('../background/foretcanada.jpg') transparent top left no-repeat;
 }
 
 .book-thumb {
@@ -89,6 +89,10 @@ body {
     background-image: url('../images/download.png') !important;
 }
 
+.book-download-small {
+    background-image: url('../images/downloadsmall.png') !important;
+}
+
 .book-filter {
     background-image: url('../images/filter.png') !important;
 }
@@ -98,6 +102,10 @@ body {
     background-color: #FFFFFF;
     padding: 7px 10px 7px 25px;
     font-weight: bold;
+}
+
+.book-user {
+    background-image: url('../images/user-add.png') !important;
 }
 
 .x-grid3-cell-inner {

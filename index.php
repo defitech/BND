@@ -51,6 +51,7 @@ $user = Library_Config::getInstance()->getUser();
         <script type="text/javascript" src="src/admin/App.js"></script>
         <script type="text/javascript" src="src/admin/BookGrid.js"></script>
         <script type="text/javascript" src="src/admin/Book.js"></script>
+        <script type="text/javascript" src="src/admin/UserGrid.js"></script>
         <script type="text/javascript" src="src/admin/ContextMenu.js"></script>
         <?php /* si aucun utilisateur n'est connecté, on affiche le login */ } else { ?>
         <script type="text/javascript" src="src/login/Login.js"></script>

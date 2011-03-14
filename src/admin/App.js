@@ -139,7 +139,27 @@ Library.admin.App = Ext.extend(Library.App, {
     },
 
     initActionButtons: function() {
+        var users = null;
         return [{
+            text: Library.wording.user_button,
+            iconCls: 'book-user',
+            scale: 'medium',
+            scope: this,
+            handler: function() {
+                if (!users) {
+                    users = new Ext.Window({
+                        modal: true,
+                        title: Library.wording.user_title,
+                        width: 400,
+                        height: 200,
+                        layout: 'fit',
+                        closeAction: 'hide',
+                        items: new Library.admin.UserGrid()
+                    });
+                }
+                users.show();
+            }
+        }, '-', {
             text: Library.wording.add_book_button,
             iconCls: 'book-add',
             scale: 'medium',
