@@ -22,7 +22,22 @@ Library.admin.BookGrid = Ext.extend(Library.BookGrid, {
         win.show();
     },
 
+    initBookContextMenu: function(record) {
+        return new Library.admin.ContextMenu({
+            record: record,
+            listeners: Ext.apply(this.initBookContextMenuListeners(), {
+                bookadd: {scope: this, fn: function(menu, record){
+                     this.getBookInfo(null);
+                }},
+                bookdelete: {scope: this, fn: function(menu, record){
+                     this.fireEvent('bookdelete', this, record);
+                }}
+            })
+        });
+    },
+
     initComponent: function() {
+        this.addEvents('bookdelete');
         Library.admin.BookGrid.superclass.initComponent.apply(this, arguments);
         this.getStore().on({
             load: {scope: this, fn: function(store){

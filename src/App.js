@@ -130,10 +130,18 @@ Library.App = Ext.extend(Ext.Viewport, {
                 title: Library.wording.library_title,
                 layout: 'fit',
                 margins: '50',
+                tools: [{
+                    id: 'help',
+                    qtip: Library.wording.help,
+                    scope: this,
+                    handler: function() {
+
+                    }
+                }],
                 items: [{
                     xtype: this.bookgridxtype || 'bookgrid',
                     border: false,
-                    listeners: {
+                    listeners: Ext.apply(this.booklisteners || {}, {
                         selectionchange: {scope: this, fn: function(grid, model) {
                             if (model.getCount() == 1) {
                                 this.bookinfo.enable();
@@ -141,7 +149,7 @@ Library.App = Ext.extend(Ext.Viewport, {
                                 this.bookinfo.disable();
                             }
                         }}
-                    }
+                    })
                 }],
                 tbar: this.initActionButtons().concat([
                     {

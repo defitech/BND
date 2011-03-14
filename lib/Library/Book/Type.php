@@ -4,6 +4,8 @@ class Library_Book_Type extends Zend_Db_Table_Abstract {
 
     protected $_primary = 'id';
 
+    protected $_name = 'library_book_type';
+
     protected $_dependentTables = array('Library_Book');
 
     public static function getList() {

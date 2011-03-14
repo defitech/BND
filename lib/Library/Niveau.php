@@ -4,6 +4,8 @@ class Library_Niveau extends Zend_Db_Table_Abstract {
 
     protected $_primary = 'id';
 
+    protected $_name = 'library_niveau';
+
     protected $_dependentTables = array('Library_Book_Niveau');
 
     public static function getList() {

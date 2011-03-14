@@ -4,6 +4,8 @@ class Library_Book_Niveau extends Zend_Db_Table_Abstract {
 
     protected $_primary = array('book_id', 'niveau_id');
 
+    protected $_name = 'library_book_niveau';
+
     protected $_referenceMap = array(
         'Book' => array(
             'columns' => array('book_id'),

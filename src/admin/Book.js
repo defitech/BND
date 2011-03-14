@@ -22,13 +22,11 @@ Library.admin.Book = Ext.extend(Library.Book, {
     },
 
     removeType: function() {
-        var v = this.comboType.getValue();
-        if (v) {
-            Ext.Msg.confirm('Remove', 'Matiere?', function(choice){
+        if (this.comboType.getValue()) {
+            Ext.Msg.confirm(Library.wording.typeremove_title, String.format(Library.wording.type_remove, this.comboType.getRawValue()), function(choice){
                 if (choice == 'yes') {
                     this.removeSubmit(this.comboType, {
-                        cmd: 'removeType',
-                        id: v
+                        cmd: 'removeType'
                     });
                 }
             }, this);
@@ -36,31 +34,88 @@ Library.admin.Book = Ext.extend(Library.Book, {
     },
 
     removeEditor: function() {
-        var v = this.comboEditor.getValue();
-        if (v) {
-            Ext.Msg.confirm('Remove', 'Editeur?', function(choice){
+        if (this.comboEditor.getValue()) {
+            Ext.Msg.confirm(Library.wording.editor_remove_title, String.format(Library.wording.editor_remove, this.comboEditor.getRawValue()), function(choice){
                 if (choice == 'yes') {
                     this.removeSubmit(this.comboEditor, {
-                        cmd: 'removeEditor',
-                        id: v
+                        cmd: 'removeEditor'
                     });
                 }
             }, this);
         }
     },
 
-    removeSubmit: function(combo, params) {
+    removeSubmit: function(combo, params, forceConfirm) {
         this._mask.show();
         Ext.Ajax.request({
             url: Library.Main.config().controller,
-            params: params,
+            params: Ext.apply(params, {
+                id: combo.getValue(),
+                forceConfirm: forceConfirm
+            }),
+            scope: this,
+            success: function(response) {
+                var json = Library.Main.getJson(response);
+                this._mask.hide();
+                if (json.success) {
+                    if (json.confirm) {
+                        Ext.Msg.confirm(Library.wording.remove_confirm_title, String.format(Library.wording.remove_confirm, json.nb), function(choice){
+                            if (choice == 'yes') {
+                                this.removeSubmit(combo, params, true);
+                            }
+                        }, this);
+                    } else {
+                        var store = combo.getStore();
+                        store.removeAt(store.find('id', params.id));
+                        combo.setValue(null);
+                    }
+                }
+            },
+            failure: function(response) {
+                this._mask.hide();
+                Library.Main.failure(response);
+            }
+        });
+    },
+
+    editType: function() {
+        Ext.Msg.prompt(Library.wording.type_edit_title, Library.wording.type_edit, function(choice, txt){
+            if (choice == 'ok' && txt) {
+                this.editSubmit(this.comboType, txt, {
+                    cmd: 'editType'
+                });
+            }
+        }, this, false, this.comboType.getRawValue());
+    },
+
+    editEditor: function() {
+        Ext.Msg.prompt(Library.wording.editor_edit_title, Library.wording.editor_edit, function(choice, txt){
+            if (choice == 'ok' && txt) {
+                this.editSubmit(this.comboEditor, txt, {
+                    cmd: 'editEditor'
+                });
+            }
+        }, this, false, this.comboEditor.getRawValue());
+    },
+
+    editSubmit: function(combo, txt, params) {
+        this._mask.show();
+        Ext.Ajax.request({
+            url: Library.Main.config().controller,
+            params: Ext.apply(params, {
+                id: combo.getValue(),
+                text: txt
+            }),
             scope: this,
             success: function(response) {
                 var json = Library.Main.getJson(response);
                 this._mask.hide();
                 if (json.success) {
                     var store = combo.getStore();
-                    store.removeAt(store.find('id', params.id));
+                    var record = store.getAt(store.find('id', combo.getValue()));
+                    record.set('text', params.text);
+                    record.commit(true);
+                    combo.setValue(combo.getValue());
                 }
             },
             failure: function(response) {
@@ -106,9 +161,8 @@ Library.admin.Book = Ext.extend(Library.Book, {
     addEditor: function() {
         Ext.Msg.prompt(Library.wording.editor_add_title, Library.wording.editor_add, function(choice, txt){
             if (choice == 'ok' && txt) {
-                this.addSubmit(this.comboEditor, {
-                    cmd: 'addEditor',
-                    text: txt
+                this.addSubmit(this.comboEditor, txt, {
+                    cmd: 'addEditor'
                 });
             }
         }, this);
@@ -117,19 +171,20 @@ Library.admin.Book = Ext.extend(Library.Book, {
     addType: function() {
         Ext.Msg.prompt(Library.wording.type_add_title, Library.wording.type_add, function(choice, txt){
             if (choice == 'ok' && txt) {
-                this.addSubmit(this.comboType, {
-                    cmd: 'addType',
-                    text: txt
+                this.addSubmit(this.comboType, txt, {
+                    cmd: 'addType'
                 });
             }
         }, this);
     },
 
-    addSubmit: function(combo, params) {
+    addSubmit: function(combo, txt, params) {
         this._mask.show();
         Ext.Ajax.request({
             url: Library.Main.config().controller,
-            params: params,
+            params: Ext.apply(params, {
+                text: txt
+            }),
             scope: this,
             success: function(response) {
                 var json = Library.Main.getJson(response);
@@ -172,20 +227,9 @@ Library.admin.Book = Ext.extend(Library.Book, {
             xtype: 'compositefield',
             fieldLabel: Library.wording.niveau,
             id: this.niveaux_id,
-            items: [
-                Library.admin.Book.superclass.initFieldNiveaux.apply(this, [{flex: 1, columns: 6}]),
-                {
-                    xtype: 'button',
-                    iconCls: 'book-relation-add',
-                    scope: this,
-                    handler: this.addNiveau
-                },{
-                    xtype: 'button',
-                    iconCls: 'book-relation-remove',
-                    scope: this,
-                    handler: this.removeNiveau
-                }
-            ]
+            items: 
+                [Library.admin.Book.superclass.initFieldNiveaux.apply(this, [{flex: 1, columns: 6}])]
+                .concat(this.initFieldsActions(this.addNiveau, null, null))
         };
     },
 
@@ -196,37 +240,15 @@ Library.admin.Book = Ext.extend(Library.Book, {
             {
                 xtype: 'compositefield',
                 fieldLabel: Library.wording.editor,
-                items: [
-                    this.initFieldEditor({hideTrigger: false, readOnly: false, flex: 1}),
-                    {
-                        xtype: 'button',
-                        iconCls: 'book-relation-add',
-                        scope: this,
-                        handler: this.addEditor
-                    },{
-                        xtype: 'button',
-                        iconCls: 'book-relation-remove',
-                        scope: this,
-                        handler: this.removeEditor
-                    }
-                ]
+                items: 
+                    [this.initFieldEditor({hideTrigger: false, readOnly: false, flex: 1})]
+                    .concat(this.initFieldsActions(this.addEditor, this.editEditor, this.removeEditor))
             }, {
                 xtype: 'compositefield',
                 fieldLabel: Library.wording.type,
-                items: [
-                    this.initFieldType({hideTrigger: false, readOnly: false, flex: 1}),
-                    {
-                        xtype: 'button',
-                        iconCls: 'book-relation-add',
-                        scope: this,
-                        handler: this.addType
-                    },{
-                        xtype: 'button',
-                        iconCls: 'book-relation-remove',
-                        scope: this,
-                        handler: this.removeType
-                    }
-                ]
+                items: 
+                    [this.initFieldType({hideTrigger: false, readOnly: false, flex: 1})]
+                    .concat(this.initFieldsActions(this.addType, this.editType, this.removeType))
             },
             this.initFieldNiveaux(),
             this.initFieldIsbn({xtype: 'textfield'})
@@ -242,6 +264,7 @@ Library.admin.Book = Ext.extend(Library.Book, {
             title: Library.wording.file_fieldset,
             autoHeight: true,
             collapsible: true,
+            collapsed: true,
             anchor: '100%',
             defaults: {
                 anchor: '95%'
@@ -256,7 +279,17 @@ Library.admin.Book = Ext.extend(Library.Book, {
                 name: 'thumb',
                 fieldLabel: Library.wording.currentThumb,
                 value: this.data.thumb
-            },{
+            }]
+        },{
+            xtype: 'fieldset',
+            title: Library.wording.filepdf_fieldset,
+            autoHeight: true,
+            collapsible: true,
+            anchor: '100%',
+            defaults: {
+                anchor: '95%'
+            },
+            items: [{
                 xtype: 'textfield',
                 inputType: 'file',
                 name: 'pdffile',
@@ -268,6 +301,27 @@ Library.admin.Book = Ext.extend(Library.Book, {
                 value: this.data.filename
             }]
         }]);
+    },
+
+    initFieldsActions: function(add, edit, remove) {
+        return [{
+            xtype: 'button',
+            iconCls: 'book-relation-add',
+            scope: this,
+            handler: add
+        },{
+            xtype: 'button',
+            iconCls: 'book-relation-edit',
+            scope: this,
+            handler: edit,
+            disabled: !edit
+        },{
+            xtype: 'button',
+            iconCls: 'book-relation-remove',
+            scope: this,
+            handler: remove,
+            disabled: !remove
+        }];
     },
 
     initComponent: function() {

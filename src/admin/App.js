@@ -63,14 +63,16 @@ Library.admin.App = Ext.extend(Library.App, {
         win.show();
     },
 
-    removeBooks: function(btn) {
+    removeBooks: function(btn, e, selected) {
         var grid = this.getGrid();
         var count = grid.getSelectionModel().getCount();
         if (count > 0) {
             Ext.Msg.confirm(Library.wording.delete_book_title, Library.wording.delete_book, function(choice){
                 if (choice == 'yes') {
-                    btn.disable();
-                    var selected = grid.getSelectionModel().getSelections();
+                    if (btn) btn.disable();
+                    if (!selected) {
+                        selected = grid.getSelectionModel().getSelections();
+                    }
                     var ids = {};
                     for (var i = 0; i < selected.length; i++) {
                         ids['ids[' + i + ']'] = selected[i].get('id');
@@ -88,12 +90,12 @@ Library.admin.App = Ext.extend(Library.App, {
                                 this.afterRemoveBooks(btn, selected, json);
                             } else {
                                 grid.loadMask.hide();
-                                btn.enable();
+                                if (btn) btn.enable();
                             }
                         },
                         failure: function(response) {
                             grid.loadMask.hide();
-                            btn.enable();
+                            if (btn) btn.enable();
                             Library.Main.failure(response);
                         }
                     });
@@ -104,7 +106,7 @@ Library.admin.App = Ext.extend(Library.App, {
 
     afterRemoveBooks: function(btn, selected, json) {
         this.getGrid().getStore().reload();
-        btn.enable();
+        if (btn) btn.enable();
     },
 
     logout: function() {
@@ -160,6 +162,11 @@ Library.admin.App = Ext.extend(Library.App, {
 
     initComponent: function() {
         this.bookgridxtype = 'bookgridadmin';
+        this.booklisteners = {
+            bookdelete: {scope: this, fn: function(grid, record){
+                this.removeBooks(null, null, [record]);
+            }}
+        };
         Library.admin.App.superclass.initComponent.apply(this, arguments);
     }
 

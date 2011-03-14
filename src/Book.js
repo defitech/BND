@@ -56,7 +56,7 @@ Library.Book = Ext.extend(Ext.Window, {
     initFieldEditor: function(config) {
         return Ext.apply({
             xtype: 'combo',
-            name: 'editor_id',
+            hiddenName: 'editor_id',
             fieldLabel: Library.wording.editor,
             value: this.data.editor_id,
             triggerAction: 'all',
@@ -81,7 +81,7 @@ Library.Book = Ext.extend(Ext.Window, {
     initFieldType: function(config) {
         return Ext.apply({
             xtype: 'combo',
-            name: 'type_id',
+            hiddenName: 'type_id',
             fieldLabel: Library.wording.type,
             value: this.data.type_id,
             triggerAction: 'all',

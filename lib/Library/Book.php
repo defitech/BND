@@ -14,6 +14,8 @@ class Library_Book extends Zend_Db_Table_Abstract {
      */
     protected $_primary = 'id';
 
+    protected $_name = 'library_book';
+
     protected $_dependentTables = array('Library_Book_Niveau');
 
     /**
@@ -32,6 +34,17 @@ class Library_Book extends Zend_Db_Table_Abstract {
             'refColumns' => 'id'
         )
     );
+
+    public static function getListForImportDistinct() {
+        $table = new self();
+        $rowset = $table->fetchAll($table->select());
+        $data = array('slug' => array(), 'filename' => array());
+        foreach ($rowset as $row) {
+            $data['slug'][] = Library_Util::getSlug($row->title);
+            $data['filename'][] = $row->filename;
+        }
+        return $data;
+    }
 
     /**
      * Retourne le chemin vers l'image

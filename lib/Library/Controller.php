@@ -98,8 +98,14 @@ class Library_Controller {
         $table = new Library_Book();
         $select = $table
             ->select()
-            ->order(array($sort . ' ' . $dir, 'title ASC'))
             ->limit($limit, $start);
+
+        switch($sort) {
+            case 'editor_id': $select->order('e.editor ' . $dir); break;
+            case 'type_id': $select->order('t.label ' . $dir); break;
+            default: $select->order('' . $sort . ' ' . $dir);
+        }
+        $select->order('title ASC');
 
         // ajout des filtres non-grid s'il y en a
         if (isset($filters['fullsearch'])) {
@@ -117,18 +123,17 @@ class Library_Controller {
         foreach ($gridFilters as $filter) {
             switch ($filter['data']['type']) {
                 case 'string':
-                    $select->where($filter['field'] . ' LIKE "%' . $filter['data']['value'] . '%"');
+                    $select->where('' . $filter['field'] . ' LIKE "%' . $filter['data']['value'] . '%"');
                     break;
                 case 'list':
                     if  ($filter['field'] == 'niveau_id') {
 
                     } else {
-                        $select->where($filter['field'] . ' IN (?)', explode(',', $filter['data']['value']));
+                        $select->where('' . $filter['field'] . ' IN (?)', explode(',', $filter['data']['value']));
                     }
                     break;
             }
         }
-
 
         // récupération des tuples
         $rows = $table->fetchAll($select);
@@ -407,9 +412,41 @@ class Library_Controller {
         );
     }
 
+    protected function editType() {
+        Library_Config::getInstance()->testIssetAuser();
+        $table = new Library_Book_Type();
+        $row = $table->fetchRow($table->select()->where('id = ?', $this->getParam('id')));
+
+        $row->label = $this->getParam('text');
+        $row->save();
+
+        return array(
+            'success' => true
+        );
+    }
+
     protected function removeType() {
         Library_Config::getInstance()->testIssetAuser();
         $id = $this->getParam('id');
+        if (!$this->getParam('forceConfirm', false)) {
+            // check si plusieurs livres on l'élément
+            $table = new Library_Book();
+            $rowset = $table->fetchAll($table
+                ->select()
+                ->where('type_id = ?', $id)
+            );
+            if ($rowset->count() > 1) {
+                // il y a d'autres livres concernés par cette suppression. On
+                // renvoie au navigateur la demande de confirmation
+                return array(
+                    'success' => true,
+                    'confirm' => true,
+                    'nb' => $rowset->count()
+                );
+            }
+        }
+
+        // suppression de l'élément
         $table = new Library_Book_Type();
         $table->delete($table->getAdapter()->quoteInto('id = ?', $id));
 
@@ -455,9 +492,41 @@ class Library_Controller {
         );
     }
 
+    protected function editEditor() {
+        Library_Config::getInstance()->testIssetAuser();
+        $table = new Library_Book_Editor();
+        $row = $table->fetchRow($table->select()->where('id = ?', $this->getParam('id')));
+
+        $row->editor = $this->getParam('text');
+        $row->save();
+
+        return array(
+            'success' => true
+        );
+    }
+
     protected function removeEditor() {
         Library_Config::getInstance()->testIssetAuser();
         $id = $this->getParam('id');
+        if (!$this->getParam('forceConfirm', false)) {
+            // check si plusieurs livres on l'élément
+            $table = new Library_Book();
+            $rowset = $table->fetchAll($table
+                ->select()
+                ->where('editor_id = ?', $id)
+            );
+            if ($rowset->count() > 1) {
+                // il y a d'autres livres concernés par cette suppression. On
+                // renvoie au navigateur la demande de confirmation
+                return array(
+                    'success' => true,
+                    'confirm' => true,
+                    'nb' => $rowset->count()
+                );
+            }
+        }
+
+        // suppression de l'élément
         $table = new Library_Book_Editor();
         $table->delete($table->getAdapter()->quoteInto('id = ?', $id));
 
@@ -532,6 +601,12 @@ class Library_Controller {
     private $importNiveaux = array();
 
     /**
+     * Liste des slugs de tous les livres présents, pour ne pas insérer de doublons
+     * @var array
+     */
+    private $importBooks = array();
+
+    /**
      * Fonction d'importation d'un fichier CSV
      *
      * @return array
@@ -553,14 +628,15 @@ class Library_Controller {
             $this->importTypes = Library_Book_Type::getListToArray();
             $this->importEditors = Library_Book_Editor::getListToArray();
             $this->importNiveaux = Library_Niveau::getListToArray();
+            $this->importBooks = Library_Book::getListForImportDistinct();
             while (($data = fgetcsv($handle)) !== false) {
                 // on skip la 1ère ligne (ligne de titre) ainsi que les lignes
                 // éventuellement vides
-                if ($continue || !trim($data[0])) {
+                $info = $this->makeDataFromImportLine($data);
+                if ($continue || !$info) {
                     $continue = false;
                     continue;
                 }
-                $info = $this->makeDataFromImportLine($data);
                 // check si le pdf de ce livre existe
                 if (file_exists($info['pathpdf'])) {
                     if (!file_exists($info['pathimg'])) {
@@ -614,6 +690,11 @@ class Library_Controller {
      */
     private function makeDataFromImportLine($line) {
         $line = array_map('trim', $line);
+
+        // si la 1ère ligne est vide, on arrête le traitement
+        if (!$line[0]) {
+            return false;
+        }
         
         // données du fichier CSV
         $csv = array(
@@ -625,6 +706,11 @@ class Library_Controller {
             'folder' => $line[5],
             'file' => $line[6],
         );
+
+        // si le livre existe déjà dans la base, on shop
+        if (in_array(Library_Util::getSlug($csv['titre']), $this->importBooks['slug'])) {
+            return false;
+        }
 
         // données rajoutées
         $file = substr($csv['file'], 0, strrpos($csv['file'], '.'));

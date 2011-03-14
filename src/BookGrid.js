@@ -26,6 +26,27 @@ Library.BookGrid = Ext.extend(Ext.grid.GridPanel, {
             }
         });
     },
+    
+    initBookContextMenuListeners: function() {
+        return {
+            bookdownload: {scope: this, fn: function(menu, record){
+                 console.log('download ' + record.get('title'))
+            }},
+            bookinfo: {scope: this, fn: function(menu, record){
+                 this.getBookInfo(record);
+            }},
+            bookfilter: {scope: this, fn: function(menu, record, filter){
+                 console.log('filtre ' + filter + ' ' + record.get('title'))
+            }}
+        };
+    },
+
+    initBookContextMenu: function(record) {
+        return new Library.ContextMenu({
+            record: record,
+            listeners: this.initBookContextMenuListeners()
+        });
+    },
 
     initBookWindow: function(record, json, row, config) {
         var win = new Library.Book(Ext.apply({
@@ -62,6 +83,7 @@ Library.BookGrid = Ext.extend(Ext.grid.GridPanel, {
                 {name: 'id'},
                 {name: 'title'},
                 {name: 'thumb'},
+                {name: 'isbn'},
                 {name: 'type_id'},
                 {name: 'editor_id'},
                 {name: 'niveau_id'}
@@ -114,16 +136,34 @@ Library.BookGrid = Ext.extend(Ext.grid.GridPanel, {
                     header : Library.wording.title,
                     id : idAutoExpand,
                     dataIndex : 'title'
+                },
+                {
+                    header : Library.wording.isbn,
+                    width: 120,
+                    dataIndex : 'isbn'
                 }
             ]
         });
     },
 
     initFilters: function() {
+        /*return new Ext.ux.grid.FilterRow({
+            autoFilter: false,
+            listeners: {
+                change: function(data) {
+                    store.load({
+                        params: data
+                    });
+                }
+            }
+        });*/
         var filters = new Ext.ux.grid.GridFilters({
             filters: [{
                 type: 'string',
                 dataIndex: 'title'
+            },{
+                type: 'string',
+                dataIndex: 'isbn'
             }, {
                 type: 'list',
                 dataIndex: 'editor_id',
@@ -195,6 +235,13 @@ Library.BookGrid = Ext.extend(Ext.grid.GridPanel, {
                 rowdblclick: {scope: this, fn: function(grid, rowIndex){
                     var record = grid.getStore().getAt(rowIndex);
                     this.getBookInfo(record);
+                }},
+                rowcontextmenu: {scope: this, fn: function(grid, rowIndex, e){
+                    var record = grid.getStore().getAt(rowIndex);
+                    grid.getSelectionModel().selectRow(rowIndex);
+                    var contextmenu = this.initBookContextMenu(record);
+                    contextmenu.showAt(e.getXY());
+                    e.stopEvent();
                 }},
                 afterrender: {scope: this, fn: function(grid){
                     grid.getStore().load({params:{start:0, limit: Library.Main.nb}});

@@ -40,6 +40,10 @@
     background-image: url('../images/info.png') !important;
 }
 
+.book-info-small {
+    background-image: url('../images/infosmall.png') !important;
+}
+
 .book-delete {
     background-image: url('../images/delete.png') !important;
 }
@@ -56,7 +60,7 @@
     background-image: url('../images/unlock.png') !important;
 }
 
-.book-relation-add {
+.book-relation-add, .book-add-small {
     background-image: url('../images/addsmall.png') !important;
 }
 
@@ -64,9 +68,32 @@
     background-image: url('../images/deletesmall.png') !important;
 }
 
+.book-relation-edit {
+    background-image: url('../images/edit.png') !important;
+}
+
+.book-delete-small {
+    background-image: url('../images/deletesmall.png') !important;
+}
+
 .book-item-id {
     border: 0;
     background: none !important;
+}
+
+.book-download {
+    background-image: url('../images/download.png') !important;
+}
+
+.book-filter {
+    background-image: url('../images/filter.png') !important;
+}
+
+.book-menu-title {
+    border: 1px solid #CCCCCC;
+    background-color: #FFFFFF;
+    padding: 7px 10px 7px 25px;
+    font-weight: bold;
 }
 
 .x-grid3-cell-inner {
