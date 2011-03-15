@@ -97,20 +97,26 @@ class Library_Controller {
         // création de la requête
         $table = new Library_Book();
         $select = $table
-            ->select()
+            ->select(true)
+            ->distinct()
+            ->joinLeft(array('nb' => 'library_book_niveau'), 'library_book.id = nb.book_id', array())
+            ->joinLeft(array('n' => 'library_niveau'), 'n.id = nb.niveau_id', array())
+            ->joinLeft(array('e' => 'library_book_editor'), 'library_book.editor_id = e.id', array())
+            ->joinLeft(array('t' => 'library_book_type'), 'library_book.type_id = t.id', array())
             ->limit($limit, $start);
 
         switch($sort) {
             case 'editor_id': $select->order('e.editor ' . $dir); break;
             case 'type_id': $select->order('t.label ' . $dir); break;
-            default: $select->order('' . $sort . ' ' . $dir);
+            case 'niveau_id': $select->order('n.label ' . $dir); break;
+            default: $select->order('library_book.' . $sort . ' ' . $dir);
         }
-        $select->order('title ASC');
+        $select->order('library_book.title ASC');
 
         // ajout des filtres non-grid s'il y en a
         if (isset($filters['fullsearch'])) {
             // définition des champs touchés par le fullsearch
-            $fullsearch_fields = array('title', 'tags');
+            $fullsearch_fields = array('library_book.title', 'library_book.tags');
             // création du bout de requête sql
             $tmp = array();
             foreach ($fullsearch_fields as $field) {
@@ -123,14 +129,14 @@ class Library_Controller {
         foreach ($gridFilters as $filter) {
             switch ($filter['data']['type']) {
                 case 'string':
-                    $select->where('' . $filter['field'] . ' LIKE "%' . $filter['data']['value'] . '%"');
+                    $select->where('library_book.' . $filter['field'] . ' LIKE "%' . $filter['data']['value'] . '%"');
                     break;
                 case 'list':
-                    if  ($filter['field'] == 'niveau_id') {
-
-                    } else {
-                        $select->where('' . $filter['field'] . ' IN (?)', explode(',', $filter['data']['value']));
+                    switch  ($filter['field']) {
+                        case 'niveau_id': $tb = 'nb'; break;
+                        default: $tb = 'library_book';
                     }
+                    $select->where($tb . '.' . $filter['field'] . ' IN (?)', explode(',', $filter['data']['value']));
                     break;
             }
         }
