@@ -149,6 +149,10 @@ body {
     background-image: url('../images/filter.png') !important;
 }
 
+.book-filter-undo {
+    background-image: url('../images/filterundo.png') !important;
+}
+
 .book-menu-title {
     border: 1px solid #CCCCCC;
     background-color: #FFFFFF;

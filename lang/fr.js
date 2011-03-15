@@ -17,6 +17,7 @@ Library.wording = {
     isbn: 'N° ISBN',
     help: 'Aide',
 
+    filter_undo: 'Annuler les filtres',
     filter_title: 'Filtrer',
     filter_editor: 'par cet \u00e9diteur: {0}',
     filter_type: 'par cette mati\u00e8re: {0}',

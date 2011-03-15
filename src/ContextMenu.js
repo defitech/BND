@@ -23,6 +23,13 @@ Library.ContextMenu = Ext.extend(Ext.menu.Menu, {
                     this.initMenuNiveaux()
                 ]
             }
+        }, {
+            text: Library.wording.filter_undo,
+            iconCls: 'book-filter-undo',
+            scope: this,
+            handler: function() {
+                this.fireEvent('bookfilterundo', this);
+            }
         }];
     },
 
@@ -89,7 +96,7 @@ Library.ContextMenu = Ext.extend(Ext.menu.Menu, {
     },
 
     initComponent: function() {
-        this.addEvents('bookinfo', 'bookdownload', 'bookfilter');
+        this.addEvents('bookinfo', 'bookdownload', 'bookfilter', 'bookfilterundo');
         Ext.apply(this, {
             items: this.initBookMenuItems(true)
         });

@@ -70,7 +70,3 @@ Ext.override(Ext.ux.menu.ListMenu, {
         }
     }
 });
-
-Ext.override(Ext.ux.grid.filter.ListFilter, {
-
-});

@@ -13,8 +13,9 @@ Library.App = Ext.extend(Ext.Viewport, {
         var grid = this.getGrid();
         this.searchbox.setValue(null);
         grid.getStore().setBaseParam('filters[fullsearch]', '');
+        var current = grid.filters.getFilterData();
         grid.filters.clearFilters();
-        if (grid.filters.getFilterData().length == 0) {
+        if (current.length == 0) {
             grid.getStore().reload();
         }
     },
@@ -95,7 +96,8 @@ Library.App = Ext.extend(Ext.Viewport, {
                                 this.bookinfo.disable();
                                 this.bookdownload.disable();
                             }
-                        }}
+                        }},
+                        filterundo: {scope: this, fn: this.undoBookSearch}
                     })
                 }],
                 tbar: this.initActionButtons().concat([

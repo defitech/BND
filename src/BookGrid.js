@@ -44,6 +44,9 @@ Library.BookGrid = Ext.extend(Ext.grid.GridPanel, {
                  this.loadMask.show();
                  f.setActive(true);
                  f.setValue(value);
+            }},
+            bookfilterundo: {scope: this, fn: function(){
+                this.fireEvent('filterundo', this);
             }}
         };
     },
@@ -239,7 +242,7 @@ Library.BookGrid = Ext.extend(Ext.grid.GridPanel, {
     },
 
     initComponent: function() {
-        this.addEvents('selectionchange');
+        this.addEvents('selectionchange', 'filterundo');
         
         var idAutoExpand = Ext.id();
         var store = this.initBookStore();
