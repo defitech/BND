@@ -28,8 +28,6 @@ class Library_Config {
 
     private $root;
 
-    private $_log;
-
     /**
      * Retourne l'instance unique signleton
      *
@@ -120,17 +118,62 @@ class Library_Config {
         }
     }
 
+
+
+
+
+    /**
+     * --------------------------------------------------------------
+     *              Gestion du log dans un fichier texte
+     * --------------------------------------------------------------
+     */
+
+    /**
+     * Objet de log
+     * @var Zend_Log
+     */
+    private $_log;
+
+    /**
+     * Nom du fichier de log mensuel
+     * @var string
+     */
+    private $logfile = 'log_%s.txt';
+
     /**
      * Retourne un loggeur Zend
      *
      * @return Zend_Log
      */
-    public function log() {
+    public function getLog() {
         if (!$this->_log) {
             $this->_log = new Zend_Log();
-            $logger->addWriter(new Zend_Log_Writer_Stream($this->getData()->path->log));
+            $path = $this->getData()->path->log;
+            if (!is_dir($path)) {
+                mkdir($path, 0766);
+            }
+            // définition du user connecté, s'il y en a un
+            $u = $this->getUser();
+            $user = $u ? $u->login : (isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : 'unknown');
+
+            // définition du log
+            $logfile = $path . sprintf($this->logfile, date('Y-m'));
+            $writer = new Zend_Log_Writer_Stream($logfile);
+            $format = '%timestamp% ' . $user . ' %priorityName% (%priority%): %message%' . PHP_EOL;
+            $writer->setFormatter(new Zend_Log_Formatter_Simple($format));
+            $this->_log->addWriter($writer);
         }
         return $this->_log;
+    }
+
+    /**
+     * Retourne un loggeur Zend. Méthode raccourcis
+     *
+     * @return Zend_Log
+     */
+    public static function log() {
+        $c = self::getInstance();
+        return $c->getLog();
     }
 
 }

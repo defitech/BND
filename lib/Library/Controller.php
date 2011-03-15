@@ -221,7 +221,6 @@ class Library_Controller {
         // set des paramètres PHP pour favoriser l'upload au mieux
         ini_set('max_execution_time', 120);
         ini_set('memory_limit', '128M');
-        // fin
 
         $table = new Library_Book();
         $id = $this->getParam('id');
@@ -355,6 +354,8 @@ class Library_Controller {
             'downloaded_at' => date('Y-m-d H:i:s')
         ));
 
+        Library_Config::log()->info(sprintf('telechargement du livre: %s (%s)', $book->title, $book->id));
+
         header('HTTP/1.1 200 OK');
         header('Date: ' . date("D M j G:i:s T Y"));
         header('Last-Modified: ' . date("D M j G:i:s T Y"));
@@ -394,6 +395,8 @@ class Library_Controller {
             // on enregistre la date de dernière connection
             $result->last_connected = date('Y-m-d H:i:s');
             $result->save();
+
+            Library_Config::log()->info('connexion');
             
             return array(
                 'success' => true
@@ -495,6 +498,7 @@ class Library_Controller {
         $table = new Library_Book_Type();
         $table->delete($table->getAdapter()->quoteInto('id = ?', $id));
 
+        Library_Config::log()->inf(sprintf('suppression de la matiere: %s', $id));
         return array(
             'success' => true
         );
@@ -575,6 +579,7 @@ class Library_Controller {
         $table = new Library_Book_Editor();
         $table->delete($table->getAdapter()->quoteInto('id = ?', $id));
 
+        Library_Config::log()->inf(sprintf('suppression de l\'editeur: %s', $id));
         return array(
             'success' => true
         );
@@ -705,6 +710,7 @@ class Library_Controller {
         $table = new Library_User();
         $table->delete($table->getAdapter()->quoteInto('id = ?', $this->getParam('id')));
 
+        Library_Config::log()->inf(sprintf('suppression de l\'utilisateur: %s', $id));
         return array(
             'success' => true
         );
@@ -745,7 +751,23 @@ class Library_Controller {
     private $importBooks = array();
 
     /**
-     * Fonction d'importation d'un fichier CSV
+     * Le séparateur des niveaux dans le fichier Excel
+     * @var string
+     */
+    private $niveauxSeparator = '-';
+
+    /**
+     * Fonction d'importation d'un fichier CSV. Le fichier CSV doit avoir cette tête:
+     *
+     * - ligne   1: doit être la ligne des titres
+     *
+     * - colonne A: matière (string) ex: Français | Anglais | etc.
+     * - colonne B: éditeur (string) ex: Hachette | Payot | etc.
+     * - colonne C: titre (string) ex: le titre du livre
+     * - colonne D: niveau (separated-string) ex: 1ère-2e | 7e-8e-9e | 5e | etc.
+     * - colonne E: isbn (string) ex: le numéro ISBN du livre
+     * - colonne F: chemin vers le fichier PDF, depuis le dossier racine des livres (path) ex: Anglais/5e/ | Allemand/ | etc.
+     * - colonne G: nom du fichier PDF avec l'extension (string) ex: fichier_livre.pdf | etc.
      *
      * @return array
      */
@@ -754,7 +776,6 @@ class Library_Controller {
         // set des paramètres PHP pour favoriser l'upload au mieux
         ini_set('max_execution_time', 120);
         ini_set('memory_limit', '128M');
-        // fin
 
         $file = $_FILES['csv'];
         $log = array();
@@ -768,11 +789,14 @@ class Library_Controller {
             $this->importNiveaux = Library_Niveau::getListToArray();
             $this->importBooks = Library_Book::getListForImportDistinct();
             while (($data = fgetcsv($handle)) !== false) {
+                if ($continue) {
+                    $continue = false;
+                    continue;
+                }
                 // on skip la 1ère ligne (ligne de titre) ainsi que les lignes
                 // éventuellement vides
                 $info = $this->makeDataFromImportLine($data);
-                if ($continue || !$info) {
-                    $continue = false;
+                if (!$info) {
                     continue;
                 }
                 // check si le pdf de ce livre existe
@@ -911,7 +935,7 @@ class Library_Controller {
     }
 
     private function importGetNiveaux($csv) {
-        $niveaux = array_map('trim', explode('-', $csv['niveau']));
+        $niveaux = array_map('trim', explode($this->niveauxSeparator, $csv['niveau']));
         $ns = array();
         foreach ($niveaux as $niveau) {
             // est-ce que le niveau existe déjà? si oui, on le récupère
