@@ -14,13 +14,6 @@ class Library_User extends Zend_Db_Table_Abstract {
      */
     protected $_primary = 'id';
 
-    /**
-     * Les autres colonnes de cette tables sont:
-     *
-     * - login (varchar) : le login
-     * - pass (varchar) : le mot de passe (en md5)
-     * - right (smallint) : le droit
-     * - last_connected (timestamp) : la date de dernière connexion
-     */
+    protected $_dependentTables = array('Library_User_Download');
 
 }

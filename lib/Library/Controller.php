@@ -144,15 +144,19 @@ class Library_Controller {
         $editors = Library_Book_Editor::getListToArray();
         foreach ($rows as $row) {
             $niveaux = $row->findManyToManyRowset('Library_Niveau', 'Library_Book_Niveau');
-            $ns = array();
+            $ns = array('label' => array(), 'id' => array());
             foreach ($niveaux as $niveau) {
-                $ns[] = $niveau->label;
+                $ns['label'][] = $niveau->label;
+                $ns['id'][] = $niveau->id;
             }
             $books[] = array_merge($row->toArray(), array(
+                'editorid' => $row->editor_id,
                 'editor_id' => isset($editors[$row->editor_id]) ? $editors[$row->editor_id] : $row->editor_id,
+                'typeid' => $row->type_id,
                 'type_id' => isset($types[$row->type_id]) ? $types[$row->type_id] : $row->type_id,
                 'thumb' => $row->thumb ? $row->thumb : 'resources/images/empty.jpg',
-                'niveau_id' => implode(', ', $ns)
+                'niveauid' => implode(',', $ns['id']),
+                'niveau_id' => implode(', ', $ns['label'])
             ));
         }
 
@@ -323,6 +327,12 @@ class Library_Controller {
     }
 
     protected function download() {
+        // le download n'est pas appelé en ajax. Si on ne change pas le header
+        // et qu'il y a une exception, ça va proposer en téléchargement le
+        // fichier controller.php avec l'erreur dedans. On set donc text/plain
+        // pour ne pas télécharger le fichier si quelque chose de louche se
+        // passe
+        header('Content-Type: text/plain');
         Library_Config::getInstance()->testIssetAuser();
 
         $config = Library_Config::getInstance();
@@ -334,7 +344,6 @@ class Library_Controller {
         $filename = array_pop(explode('/', $book->filename));
 
         if (! file_exists($filelocation) || is_dir($filelocation)) {
-            header('Content-Type: text/plain');
             die("Unkown file:".$book->filename);
         }
 

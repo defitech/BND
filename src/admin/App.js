@@ -171,13 +171,13 @@ Library.admin.App = Ext.extend(Library.App, {
             scale: 'medium',
             scope: this,
             handler: this.removeBooks
-        },{
+        }, '-', {
             text: Library.wording.import_book_button,
             iconCls: 'book-import',
             scale: 'medium',
             scope: this,
             handler: this.importBooks
-        }];
+        }, '-'];
     },
 
     initComponent: function() {

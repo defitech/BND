@@ -20,7 +20,8 @@ Library.wording = {
     filter_title: 'Filtrer',
     filter_editor: 'par cet \u00e9diteur: {0}',
     filter_type: 'par cette mati\u00e8re: {0}',
-    filter_niveau: 'par ce(s) niveau(x): {0}',
+    filter_niveau: 'par ce niveau: {0}',
+    filter_niveaux: 'par ces niveaux',
 
     download_book_button: 'T\u00e9l\u00e9charger',
     

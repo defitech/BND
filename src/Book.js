@@ -138,9 +138,9 @@ Library.Book = Ext.extend(Ext.Window, {
         return [
             this.initFieldId(),
             this.initFieldTitle(),
-            this.initFieldEditor(),
-            this.initFieldType(),
-            this.initFieldNiveaux(),
+            this.initFieldEditor({cls: 'book-combo-disable'}),
+            this.initFieldType({cls: 'book-combo-disable'}),
+            this.initFieldNiveaux(null, {}),
             this.initFieldIsbn()
         ];
     },

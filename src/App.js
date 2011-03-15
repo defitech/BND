@@ -13,9 +13,8 @@ Library.App = Ext.extend(Ext.Viewport, {
         var grid = this.getGrid();
         this.searchbox.setValue(null);
         grid.getStore().setBaseParam('filters[fullsearch]', '');
-        var current_filters = grid.filters.getFilterData();
         grid.filters.clearFilters();
-        if (current_filters.length == 0) {
+        if (grid.filters.getFilterData().length == 0) {
             grid.getStore().reload();
         }
     },
@@ -30,83 +29,6 @@ Library.App = Ext.extend(Ext.Viewport, {
 
     getGrid: function() {
         return this.getComponent(0).getComponent(0);
-    },
-
-    login: function() {
-        var win = new Ext.Window({
-            modal: true,
-            width: 300,
-            height: 150,
-            resizable: false,
-            layout: 'fit',
-            title: Library.wording.connect_title,
-            items: {
-                xtype: 'form',
-                border: false,
-                bodyStyle: 'padding: 10px;',
-                items: [{
-                    xtype: 'textfield',
-                    fieldLabel: Library.wording.connect_login,
-                    name: 'login'
-                },{
-                    xtype: 'textfield',
-                    fieldLabel: Library.wording.connect_password,
-                    name: 'pass',
-                    inputType: 'password',
-                    enableKeyEvents: true,
-                    listeners: {
-                        keypress: {scope: this, fn: function(field, e){
-                            if (e.getKey() == e.ENTER) this.doLogin(win);
-                        }}
-                    }
-                }],
-                bbar: ['->', {
-                    text: Library.wording.connect_title,
-                    scale: 'medium',
-                    iconCls: 'book-connect',
-                    scope: this,
-                    handler: function() {
-                        this.doLogin(win);
-                    }
-                }]
-            },
-            listeners: {
-                afterrender: function(cmp) {
-                    cmp.bmask = new Ext.LoadMask(cmp.bwrap);
-                },
-                show: function(cmp) {
-                    cmp.getComponent(0).getForm().findField('login').focus();
-                }
-            }
-        });
-        win.show();
-    },
-
-    doLogin: function(win) {
-        var login = win.getComponent(0).getForm().findField('login');
-        var pass = win.getComponent(0).getForm().findField('pass');
-        win.bmask.show();
-        Ext.Ajax.request({
-            url: Library.Main.config().controller,
-            params: {
-                cmd: 'login',
-                login: login.getValue(),
-                pass: pass.getValue()
-            },
-            scope: this,
-            success: function(response) {
-                var json = Library.Main.getJson(response);
-                if (json.success) {
-                    window.location.reload();
-                } else {
-                    win.bmask.hide();
-                }
-            },
-            failure: function(response) {
-                win.bmask.hide();
-                Library.Main.failure(response);
-            }
-        });
     },
 
     initActionButtons: function() {
@@ -197,6 +119,13 @@ Library.App = Ext.extend(Ext.Viewport, {
                     },
                     '->',
                     {
+                        xtype: 'button',
+                        scale: 'medium',
+                        iconCls: 'book-search-go',
+                        text: Library.wording.filter_title,
+                        scope: this,
+                        handler: this.doBookSearch
+                    },{
                         xtype: 'textfield',
                         name: 'book-search',
                         ref: '../../searchbox',
@@ -208,12 +137,6 @@ Library.App = Ext.extend(Ext.Viewport, {
                                 }
                             }}
                         }
-                    },{
-                        xtype: 'button',
-                        scale: 'medium',
-                        iconCls: 'book-search-go',
-                        scope: this,
-                        handler: this.doBookSearch
                     },{
                         xtype: 'button',
                         scale: 'medium',

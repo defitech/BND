@@ -39,8 +39,11 @@ Library.BookGrid = Ext.extend(Ext.grid.GridPanel, {
             bookinfo: {scope: this, fn: function(menu, record){
                  this.getBookInfo(record);
             }},
-            bookfilter: {scope: this, fn: function(menu, record, filter){
-                 console.log('filtre ' + filter + ' ' + record.get('title'))
+            bookfilter: {scope: this, fn: function(menu, record, filter, value){
+                 var f = this.filters.getFilter(filter);
+                 this.loadMask.show();
+                 f.setActive(true);
+                 f.setValue(value);
             }}
         };
     },
@@ -95,9 +98,18 @@ Library.BookGrid = Ext.extend(Ext.grid.GridPanel, {
                 {name: 'title'},
                 {name: 'thumb'},
                 {name: 'isbn'},
+                // correspond au label (texte)
                 {name: 'type_id'},
+                // correspond au nom de l'editeur (texte)
                 {name: 'editor_id'},
+                // correspond aux labels des niveaux (texte)
                 {name: 'niveau_id'},
+                // id de la matiere (int)
+                {name: 'typeid', type: 'int'},
+                // id de l'editeur (int)
+                {name: 'editorid', type: 'int'},
+                // liste des ids des niveaux (texte separe par virgule)
+                {name: 'niveauid'},
                 {name: 'pdfdl'}
             ]
         });

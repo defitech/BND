@@ -45,3 +45,32 @@ Library.Main = {
         });
     }
 };
+
+
+Ext.override(Ext.ux.menu.ListMenu, {
+    setSelected : function (value) {
+        value = this.selected = [].concat(value);
+
+        if (this.loaded) {
+            this.items.each(function(item){
+                item.setChecked(false, true);
+                for (var i = 0, len = value.length; i < len; i++) {
+                    if (item.itemId == value[i]) {
+                        item.setChecked(true, true);
+                    }
+                }
+            }, this);
+        } else {
+            this.store.load({
+                scope: this,
+                callback: function() {
+                    this.setSelected(value);
+                }
+            });
+        }
+    }
+});
+
+Ext.override(Ext.ux.grid.filter.ListFilter, {
+
+});
