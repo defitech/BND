@@ -33,6 +33,10 @@ Library.admin.BookGrid = Ext.extend(Library.BookGrid, {
         });
     },
 
+    initKeyMap: function() {
+        return new Library.admin.Keys();
+    },
+
     initComponent: function() {
         this.addEvents('bookdelete');
         Library.admin.BookGrid.superclass.initComponent.apply(this, arguments);

@@ -156,7 +156,6 @@ Library.Book = Ext.extend(Ext.Window, {
             layout: 'border',
             resizable: false,
             bbar: this.initBbar(),
-            onEsc: Ext.emptyFn,
             items: [{
                 xtype: 'panel',
                 region: 'west',

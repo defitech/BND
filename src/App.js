@@ -97,6 +97,9 @@ Library.App = Ext.extend(Ext.Viewport, {
                                 this.bookdownload.disable();
                             }
                         }},
+                        focusfullsearch: {scope: this, fn: function() {
+                            this.searchbox.focus();
+                        }},
                         filterundo: {scope: this, fn: this.undoBookSearch}
                     })
                 }],

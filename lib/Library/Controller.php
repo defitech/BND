@@ -116,7 +116,7 @@ class Library_Controller {
         // ajout des filtres non-grid s'il y en a
         if (isset($filters['fullsearch'])) {
             // définition des champs touchés par le fullsearch
-            $fullsearch_fields = array('library_book.title', 'library_book.tags');
+            $fullsearch_fields = array('library_book.title', 'library_book.tags', 'e.editor', 't.label', 'n.label');
             // création du bout de requête sql
             $tmp = array();
             foreach ($fullsearch_fields as $field) {

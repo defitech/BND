@@ -241,8 +241,12 @@ Library.BookGrid = Ext.extend(Ext.grid.GridPanel, {
         return filters;
     },
 
+    initKeyMap: function() {
+        return new Library.Keys();
+    },
+
     initComponent: function() {
-        this.addEvents('selectionchange', 'filterundo');
+        this.addEvents('selectionchange', 'filterundo', 'focusfullsearch');
         
         var idAutoExpand = Ext.id();
         var store = this.initBookStore();
@@ -272,6 +276,10 @@ Library.BookGrid = Ext.extend(Ext.grid.GridPanel, {
                 }},
                 afterrender: {scope: this, fn: function(grid){
                     grid.getStore().load({params:{start:0, limit: Library.Main.nb}});
+                }},
+                keypress: {scope: this, fn: function(e){
+                    if (!this._map) this._map = this.initKeyMap();
+                    this._map.get(this, e);
                 }}
             }
         });
@@ -280,6 +288,12 @@ Library.BookGrid = Ext.extend(Ext.grid.GridPanel, {
         this.getSelectionModel().on({
             selectionchange: {scope: this, fn: function(model){
                 this.fireEvent('selectionchange', this, model);
+            }}
+        });
+
+        this.getStore().on({
+            load: {scope: this, fn: function(){
+                this.getSelectionModel().selectFirstRow();
             }}
         });
     }

@@ -354,7 +354,9 @@ Library.admin.Book = Ext.extend(Library.Book, {
     initComponent: function() {
         this.addEvents('booksave');
         Ext.apply(this, {
-            width: 900
+            width: 900,
+            // on annule Esc, histoire d'eviter de quitter la fenetre inopinement
+            onEsc: Ext.emptyFn
         });
         Library.admin.Book.superclass.initComponent.apply(this, arguments);
     }
