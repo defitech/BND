@@ -6,9 +6,6 @@ Library.admin.Book = Ext.extend(Library.Book, {
         this._mask.show();
         this.getForm().getForm().submit({
             url: Library.Main.config().controller,
-            params: {
-                cmd: 'saveBook'
-            },
             scope: this,
             success: function(form, action) {
                 this._mask.hide();
@@ -242,6 +239,7 @@ Library.admin.Book = Ext.extend(Library.Book, {
         var items = [
             this.initFieldId({xtype: 'textfield', cls: 'book-item-id', readOnly: true}),
             this.initFieldTitle({xtype: 'textfield'}),
+            {xtype: 'hidden', name: 'cmd', value: 'saveBook'},
             {
                 xtype: 'compositefield',
                 fieldLabel: Library.wording.editor,
