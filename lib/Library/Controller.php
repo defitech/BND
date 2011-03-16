@@ -73,6 +73,17 @@ class Library_Controller {
         return $params;
     }
 
+    public function getGroupParamPair($paramPrefix, $separator = '-') {
+        $params = array();
+        foreach ($this->params as $key => $val) {
+            if (strpos($key, $paramPrefix) !== false) {
+                $k = array_pop(explode($separator, $key));
+                $params[$k] = $val;
+            }
+        }
+        return $params;
+    }
+
 
 
 
@@ -639,6 +650,28 @@ class Library_Controller {
         );
     }
 
+    protected function editNiveau() {
+        Library_Config::getInstance()->testIssetAuser();
+        $niveaux = $this->getGroupParamPair('niveau');
+        $table = new Library_Niveau();
+
+        foreach ($niveaux as $id => $val) {
+            $row = $table->fetchRow($table->select()->where('id = ?', $id));
+            $row->label = $val;
+            $row->save();
+        }
+
+        $t = new Library_Book();
+        $book = $t->fetchRow($t->select()->where('id = ?', $this->getParam('book_id', 0)));
+        if (!$book) {
+            $book = $t->createRow();
+        }
+        return array(
+            'success' => true,
+            'niveaux' => $this->getNiveauListForCheckboxGroup($book)
+        );
+    }
+
     protected function removeNiveau() {
         Library_Config::getInstance()->testIssetAuser();
         $niveaux = $this->getGroupParam('niveau');
@@ -680,9 +713,13 @@ class Library_Controller {
         Library_Config::log(sprintf('suppression des niveaux: %s', implode(', ', $niveaux)));
 
         $t = new Library_Book();
+        $book = $t->fetchRow($t->select()->where('id = ?', $this->getParam('book_id', 0)));
+        if (!$book) {
+            $book = $t->createRow();
+        }
         return array(
             'success' => true,
-            'niveaux' => $this->getNiveauListForCheckboxGroup($t->createRow())
+            'niveaux' => $this->getNiveauListForCheckboxGroup($book)
         );
     }
 

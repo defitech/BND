@@ -74,6 +74,7 @@ Library.wording = {
 
     info_book_button: 'Informations',
     info_book_close: 'Fermer',
+    info_book_cancel: 'Annuler',
     info_book_save: 'Enregistrer',
 
     import_book_button: 'Importer CSV',
@@ -86,6 +87,7 @@ Library.wording = {
     delete_book: 'Supprimer les livres s\u00e9lectionn\u00e9s?',
 
     error_title: 'Erreur serveur',
+    loading: 'Chargement...',
     bad_json: 'Json mal form\u00e9',
     failure: 'Pas de r\u00e9ponse du serveur. Probl\u00e8me r\u00e9seau.'
 
@@ -97,6 +99,6 @@ if (typeof Ext.ux != 'undefined' && typeof Ext.ux.grid != 'undefined') {
     });
 
     Ext.override(Ext.ux.menu.ListMenu, {
-        loadingText: 'Chargement...'
+        loadingText: Library.wording.loading
     });
 }

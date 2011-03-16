@@ -43,6 +43,7 @@ Library.admin.Book = Ext.extend(Library.Book, {
             url: Library.Main.config().controller,
             params: Ext.apply(params, {
                 cmd: 'removeNiveau',
+                book_id: this.data.id,
                 forceConfirm: forceConfirm
             }),
             scope: this,
@@ -132,6 +133,72 @@ Library.admin.Book = Ext.extend(Library.Book, {
                 Library.Main.failure(response);
             }
         });
+    },
+
+    editNiveau: function() {
+        var values = this.checkniveau.getValue();
+        if (values && values.length > 0) {
+            var items = [];
+            for (var i = 0; i < values.length; i++) {
+                items.push({
+                    xtype: 'textfield',
+                    anchor: '95%',
+                    name: values[i].getName(),
+                    hideLabel: true,
+                    value: values[i].boxLabel
+                })
+            }
+            var win = new Ext.Window({
+                title: Library.wording.remove_edit_title,
+                modal: true,
+                layout: 'fit',
+                width: 200,
+                height: 150,
+                items: {
+                    xtype: 'form',
+                    bodyStyle: 'padding:10px;',
+                    items: items,
+                    border: false,
+                    waitMsgTarget: true,
+                    buttonAlign: 'center',
+                    autoScroll: true,
+                    buttons: [{
+                        text: 'OK',
+                        scope: this,
+                        handler: function() {
+                            win.getComponent(0).getForm().submit({
+                                url: Library.Main.config().controller,
+                                waitMsg: Library.wording.loading,
+                                params: {
+                                    cmd: 'editNiveau',
+                                    book_id: this.data.id
+                                },
+                                scope: this,
+                                success: function(form, action) {
+                                    var json = action.result;
+                                    if (json.success) {
+                                        this.getForm().remove(Ext.getCmp(this.niveaux_id));
+                                        this.data.niveaux = json.niveaux;
+                                        this.getForm().insert(this.niveauPos, this.initFieldNiveaux());
+                                        this.getForm().doLayout();
+                                    }
+                                    win.close();
+                                },
+                                failure: function(form, action) {
+                                    Library.Main.failureForm(action.result);
+                                }
+                            });
+                        }
+                    }, {
+                        text: Library.wording.info_book_cancel,
+                        handler: function() {
+                            win.close();
+                        }
+                    }]
+                }
+            });
+            win.show();
+        }
     },
 
     editType: function() {
@@ -290,7 +357,7 @@ Library.admin.Book = Ext.extend(Library.Book, {
             id: this.niveaux_id,
             items: 
                 [Library.admin.Book.superclass.initFieldNiveaux.apply(this, [{flex: 1, columns: 6}])]
-                .concat(this.initFieldsActions(this.addNiveau, null, this.removeNiveau))
+                .concat(this.initFieldsActions(this.addNiveau, this.editNiveau, this.removeNiveau))
         };
     },
 
