@@ -268,26 +268,26 @@ class Library_Controller {
         }
 
         // si un pdf est envoyé en fichier
-//        $pdf = $_FILES['pdffile'];
-//        if ($pdf['error'] == UPLOAD_ERR_OK) {
-//            if ($pdf['type'] == 'application/pdf') {
-//                $path = $config->getData()->path->pdf . 'upload/';
-//                if (!is_dir($path)) {
-//                    mkdir($path, 0766);
-//                }
-//                $p = Library_Util::getSlug($row->title) . '.pdf';
-//                $i = Library_Util::getSlug($row->title) . '.jpg';
-//                move_uploaded_file($pdf['tmp_name'], $path . $p);
-//                $output = $this->generatePdfFirstPageThumb($path . $p, Library_Book::getThumbPath(true). $i);
-//                $log[] = $output;
-//                // set du nouveau pdf et de son thumb
-//                $row->thumb = Library_Book::getThumbFolder() . $i;
-//                $row->filename = 'upload/' . $p;
-//            } else {
-//                $success = false;
-//                $msg = "Mauvais type de fichier pour le PDF";
-//            }
-//        }
+        $pdf = $_FILES['pdffile'];
+        if ($pdf['error'] == UPLOAD_ERR_OK) {
+            if ($pdf['type'] == 'application/pdf' || $pdf['type'] == 'application/download') {
+                $path = $config->getData()->path->pdf . 'upload/';
+                if (!is_dir($path)) {
+                    mkdir($path, 0766);
+                }
+                $p = Library_Util::getSlug($row->title) . '.pdf';
+                $i = Library_Util::getSlug($row->title) . '.jpg';
+                move_uploaded_file($pdf['tmp_name'], $path . $p);
+                $output = $this->generatePdfFirstPageThumb($path . $p, Library_Book::getThumbPath(true). $i);
+                $log[] = $output;
+                // set du nouveau pdf et de son thumb
+                $row->thumb = Library_Book::getThumbFolder() . $i;
+                $row->filename = 'upload/' . $p;
+            } else {
+                $success = false;
+                $msg = "Mauvais type de fichier pour le PDF";
+            }
+        }
 
         $row->save();
 

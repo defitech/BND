@@ -2,8 +2,17 @@ Ext.ns('Library.admin');
 
 Library.admin.Book = Ext.extend(Library.Book, {
 
+    /**
+     * Position, dans la liste des items du formulaire, du checkboxgroup des niveaux
+     * @var integer
+     */
     niveauPos: 5,
 
+    /**
+     * Sauve les informations du livre
+     *
+     * @return void
+     */
     doSave: function() {
         this._mask.show();
         this.getForm().getForm().submit({
@@ -19,6 +28,17 @@ Library.admin.Book = Ext.extend(Library.Book, {
             }
         });
     },
+
+
+
+
+
+
+    /**
+     * --------------------------------------------------------------
+     *              Fonctions de suppressions
+     * --------------------------------------------------------------
+     */
 
     removeNiveau: function() {
         var values = this.checkniveau.getValue();
@@ -134,6 +154,19 @@ Library.admin.Book = Ext.extend(Library.Book, {
             }
         });
     },
+
+
+
+
+
+
+
+
+    /**
+     * --------------------------------------------------------------
+     *              Fonction d'edition
+     * --------------------------------------------------------------
+     */
 
     editNiveau: function() {
         var values = this.checkniveau.getValue();
@@ -252,6 +285,20 @@ Library.admin.Book = Ext.extend(Library.Book, {
         });
     },
 
+
+
+
+
+
+
+
+    /**
+     * --------------------------------------------------------------
+     *              Fonctions d'ajout
+     * --------------------------------------------------------------
+     */
+
+
     addNiveau: function() {
         Ext.Msg.prompt(Library.wording.niveau_add_title, Library.wording.niveau_add, function(choice, txt){
             if (choice == 'ok' && txt) {
@@ -333,6 +380,18 @@ Library.admin.Book = Ext.extend(Library.Book, {
             }
         });
     },
+
+
+
+
+
+
+
+    /**
+     * --------------------------------------------------------------
+     *              Fonctions d'initialisation
+     * --------------------------------------------------------------
+     */
 
     initBbar: function() {
         return [
@@ -448,6 +507,11 @@ Library.admin.Book = Ext.extend(Library.Book, {
                 xtype: 'compositefield',
                 fieldLabel: 'PDF',
                 items: [{xtype: 'hidden'}, {
+                    xtype: 'textfield',
+                    inputType: 'file',
+                    name: 'pdffile',
+                    flex: 1
+                },{
                     xtype: 'button',
                     iconCls: 'book-relation-remove',
                     scope: this,
