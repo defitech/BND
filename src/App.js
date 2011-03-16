@@ -2,6 +2,33 @@ Ext.ns('Library');
 
 Library.App = Ext.extend(Ext.Viewport, {
 
+    showHelpScreen: function() {
+        var win = new Ext.Window({
+            modal: true,
+            width: 400,
+            height: 400,
+            title: Library.wording.help,
+            layout: 'fit',
+            items: [{
+                xtype: 'panel',
+                cls: 'book-help',
+                autoLoad: 'help.html',
+                border: false,
+                autoScroll: true
+            }],
+            buttons: ['->', {
+                text: Library.wording.info_book_close,
+                iconCls: 'book-window-close',
+                scale: 'medium',
+                tabIndex: 1,
+                handler: function() {
+                    win.close();
+                }
+            }]
+        });
+        win.show();
+    },
+
     doBookSearch: function() {
         var search = this.searchbox.getValue();
         var grid = this.getGrid();
@@ -81,9 +108,7 @@ Library.App = Ext.extend(Ext.Viewport, {
                     id: 'help',
                     qtip: Library.wording.help,
                     scope: this,
-                    handler: function() {
-
-                    }
+                    handler: this.showHelpScreen
                 }],
                 items: [{
                     xtype: this.bookgridxtype || 'bookgrid',

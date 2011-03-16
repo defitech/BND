@@ -2,7 +2,7 @@ body {
     background: url('../background/foretcanada.jpg') transparent top left no-repeat;
 }
 
-.book-conditions .x-panel-body {
+.book-conditions .x-panel-body, .book-help .x-panel-body {
     padding: 20px;
 }
 .book-conditions-ok {
@@ -11,7 +11,7 @@ body {
 .book-conditions-no {
     background-image: url('../images/nobig.png') !important;
 }
-.book-conditions h1 {
+.book-conditions h1, .book-help h1 {
     font-size: 140%;
     padding: 10px;
     padding-top: 0;
@@ -20,7 +20,7 @@ body {
     margin-bottom: 20px;
 }
 
-.book-conditions p, .book-conditions li {
+.book-conditions p, .book-conditions li, .book-help {
     text-align: justify;
 }
 
@@ -44,6 +44,15 @@ body {
 .book-conditions ul {
     list-style-type: disc;
     margin: 0 0 0 30px;
+}
+
+.book-help ul {
+    list-style-type: disc;
+    margin: 0 0 10px 30px;
+}
+
+.book-help strong {
+    font-weight: bold;
 }
 
 

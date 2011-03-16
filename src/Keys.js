@@ -6,24 +6,27 @@ Library.Keys = Ext.extend(Ext.util.Observable, {
         var k = e.getKey();
         var records = grid.getSelectionModel().getSelections();
         var record = records[0];
-        var m = grid.getColumnModel();
+        var filter;
         if (e.shiftKey) {
             if (e.altKey) {
                 var col;
-                if (k == e.E) { // editeur
-                    col = m.getColumnAt(m.findColumnIndex('editor_id'));
-                    col.filter.getField().setValue(record.get('editor_id'));
-                    col.filter.fireChangeEvent();
+                if (k == e.E || k == 203) { // editeur
+                    filter = grid.filters.getFilter('editor_id');
+                    grid.loadMask.show();
+                    filter.setActive(true);
+                    filter.setValue(record.get('editorid'));
                     e.stopEvent()
-                } else if (k == e.M) { // matiere
-                    col = m.getColumnAt(m.findColumnIndex('type_id'));
-                    col.filter.getField().setValue(record.get('type_id'));
-                    col.filter.fireChangeEvent();
+                } else if (k == e.M || k == 730) { // matiere
+                    filter = grid.filters.getFilter('type_id');
+                    grid.loadMask.show();
+                    filter.setActive(true);
+                    filter.setValue(record.get('typeid'));
                     e.stopEvent()
-                } else if (k == e.N) { // niveaux
-                    col = m.getColumnAt(m.findColumnIndex('niveau_id'));
-                    col.filter.getField().setValue(record.get('niveau_ids'));
-                    col.filter.fireChangeEvent();
+                } else if (k == e.N || k == 729) { // niveaux
+                    filter = grid.filters.getFilter('niveau_id');
+                    grid.loadMask.show();
+                    filter.setActive(true);
+                    filter.setValue(record.get('niveauid'));
                     e.stopEvent()
                 }
             } else {
