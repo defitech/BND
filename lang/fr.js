@@ -25,6 +25,11 @@ Library.wording = {
     filter_niveaux: 'par ces niveaux',
 
     download_book_button: 'T\u00e9l\u00e9charger',
+
+    swfupload_upload_progress: 'Fichier {0} à {1}',
+    swfupload_error_title: 'Erreur d\'upload',
+    swfupload_button_text: 'Parcourir...',
+    swfupload_title: 'Upload de fichiers',
     
     currentThumb: 'Aperçu actuel',
     currentPdf: 'PDF actuel',
@@ -48,7 +53,8 @@ Library.wording = {
     type_remove_title: 'Supprimer une mati\u00e8re',
     type_remove: 'Voulez-vous supprimer la mati\u00e8re {0}?',
     niveau_remove_title: 'Supprimer un niveau (classe)',
-    niveau_remove: 'Voulez-vous supprimer le niveau {0}',
+    niveau_remove: 'Voulez-vous supprimer le(s) niveau(x) {0}',
+    niveau_remove_confirm: 'D\'autres \u00e9l\u00e9ments sont li\u00e9s \u00e0 ce(s) niveau(x): {0}. Supprimer quand m\u00eame?',
     remove_confirm_title: 'Confirmation de suppression',
     remove_confirm: '{0} livres sont li\u00e9s \u00e0 cet \u00e9l\u00e9ment. Supprimer quand m\u00eame?',
 

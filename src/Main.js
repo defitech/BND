@@ -2,12 +2,18 @@ Ext.ns('Library');
 
 Library.Main = {
 
-    nb: 25,
+    cfg: {
+        nb: 25,
+        controller: 'lib/controller.php',
+        upload: 'lib/upload.php'
+    },
 
     config: function() {
-        return {
-            controller: 'lib/controller.php'
-        };
+        return Library.Main.cfg;
+    },
+
+    addConfig: function(obj) {
+        Ext.apply(Library.Main.cfg, obj);
     },
 
     getJson: function(response) {
@@ -61,6 +67,8 @@ Ext.override(Ext.ux.menu.ListMenu, {
                 }
             }, this);
         } else {
+            // override du ListMenu pour pouvoir setter une valeur de recherche
+            // alors que le combo n'a pas encore ete charge
             this.store.load({
                 scope: this,
                 callback: function() {
@@ -68,5 +76,12 @@ Ext.override(Ext.ux.menu.ListMenu, {
                 }
             });
         }
+    }
+});
+
+Ext.override(Ext.form.Field, {
+    getName : function(){
+        // ajout du check si "dom" existe, pour eviter des erreurs
+        return this.rendered && this.el.dom && this.el.dom.name ? this.el.dom.name : this.name || this.id || '';
     }
 });

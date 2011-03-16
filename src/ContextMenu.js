@@ -26,6 +26,7 @@ Library.ContextMenu = Ext.extend(Ext.menu.Menu, {
         }, {
             text: Library.wording.filter_undo,
             iconCls: 'book-filter-undo',
+            disabled: this.disableUndoFilters,
             scope: this,
             handler: function() {
                 this.fireEvent('bookfilterundo', this);

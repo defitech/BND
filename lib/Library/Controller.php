@@ -116,7 +116,12 @@ class Library_Controller {
         // ajout des filtres non-grid s'il y en a
         if (isset($filters['fullsearch'])) {
             // définition des champs touchés par le fullsearch
-            $fullsearch_fields = array('library_book.title', 'library_book.tags', 'e.editor', 't.label', 'n.label');
+            $fullsearch_fields = array(
+                'library_book.title', 'library_book.tags', 'library_book.isbn',
+                'e.editor',
+                't.label',
+                'n.label'
+            );
             // création du bout de requête sql
             $tmp = array();
             foreach ($fullsearch_fields as $field) {
@@ -125,7 +130,7 @@ class Library_Controller {
             $select->where('(' . implode(' OR ', $tmp) . ')');
         }
 
-        //ajout des filtres grid s'il y en a
+        // ajout des filtres grid s'il y en a
         foreach ($gridFilters as $filter) {
             switch ($filter['data']['type']) {
                 case 'string':
@@ -194,23 +199,7 @@ class Library_Controller {
         }
 
         // récupération de tous les niveaux
-        $niveaux_all = Library_Niveau::getListToArray();
-        // récupération des niveaux liés au livre
-        $table_link = new Library_Book_Niveau();
-        $niveaux_tmp = $book->findManyToManyRowset('Library_Niveau', 'Library_Book_Niveau');
-        $niveaux_select = array();
-        foreach ($niveaux_tmp as $n) {
-            $niveaux_select[$n->id] = $n->id;
-        }
-        $niveaux = array();
-        foreach ($niveaux_all as $i => $n) {
-            // création du tableau pour le set de checkbox
-            $niveaux[] = array(
-                'boxLabel' => $n,
-                'checked' => isset($niveaux_select[$i]) ? true : false,
-                'name' => 'niveau-' . $i
-            );
-        }
+        $niveaux = $this->getNiveauListForCheckboxGroup($book);
 
         return array(
             'success' => true,
@@ -268,26 +257,26 @@ class Library_Controller {
         }
 
         // si un pdf est envoyé en fichier
-        $pdf = $_FILES['pdffile'];
-        if ($pdf['error'] == UPLOAD_ERR_OK) {
-            if ($pdf['type'] == 'application/pdf') {
-                $path = $config->getData()->path->pdf . 'upload/';
-                if (!is_dir($path)) {
-                    mkdir($path, 0766);
-                }
-                $p = Library_Util::getSlug($row->title) . '.pdf';
-                $i = Library_Util::getSlug($row->title) . '.jpg';
-                move_uploaded_file($pdf['tmp_name'], $path . $p);
-                $output = $this->generatePdfFirstPageThumb($path . $p, Library_Book::getThumbPath(true). $i);
-                $log[] = $output;
-                // set du nouveau pdf et de son thumb
-                $row->thumb = Library_Book::getThumbFolder() . $i;
-                $row->filename = 'upload/' . $p;
-            } else {
-                $success = false;
-                $msg = "Mauvais type de fichier pour le PDF";
-            }
-        }
+//        $pdf = $_FILES['pdffile'];
+//        if ($pdf['error'] == UPLOAD_ERR_OK) {
+//            if ($pdf['type'] == 'application/pdf') {
+//                $path = $config->getData()->path->pdf . 'upload/';
+//                if (!is_dir($path)) {
+//                    mkdir($path, 0766);
+//                }
+//                $p = Library_Util::getSlug($row->title) . '.pdf';
+//                $i = Library_Util::getSlug($row->title) . '.jpg';
+//                move_uploaded_file($pdf['tmp_name'], $path . $p);
+//                $output = $this->generatePdfFirstPageThumb($path . $p, Library_Book::getThumbPath(true). $i);
+//                $log[] = $output;
+//                // set du nouveau pdf et de son thumb
+//                $row->thumb = Library_Book::getThumbFolder() . $i;
+//                $row->filename = 'upload/' . $p;
+//            } else {
+//                $success = false;
+//                $msg = "Mauvais type de fichier pour le PDF";
+//            }
+//        }
 
         $row->save();
 
@@ -489,7 +478,7 @@ class Library_Controller {
                 ->select()
                 ->where('type_id = ?', $id)
             );
-            if ($rowset->count() > 1) {
+            if ($rowset->count() > 0) {
                 // il y a d'autres livres concernés par cette suppression. On
                 // renvoie au navigateur la demande de confirmation
                 return array(
@@ -570,7 +559,7 @@ class Library_Controller {
                 ->select()
                 ->where('editor_id = ?', $id)
             );
-            if ($rowset->count() > 1) {
+            if ($rowset->count() > 0) {
                 // il y a d'autres livres concernés par cette suppression. On
                 // renvoie au navigateur la demande de confirmation
                 return array(
@@ -617,6 +606,27 @@ class Library_Controller {
         );
     }
 
+    protected function getNiveauListForCheckboxGroup($book) {
+        $niveaux_all = Library_Niveau::getListToArray();
+        // récupération des niveaux liés au livre
+        $table_link = new Library_Book_Niveau();
+        $niveaux_tmp = $book->findManyToManyRowset('Library_Niveau', 'Library_Book_Niveau');
+        $niveaux_select = array();
+        foreach ($niveaux_tmp as $n) {
+            $niveaux_select[$n->id] = $n->id;
+        }
+        $niveaux = array();
+        foreach ($niveaux_all as $i => $n) {
+            // création du tableau pour le set de checkbox
+            $niveaux[] = array(
+                'boxLabel' => $n,
+                'checked' => isset($niveaux_select[$i]) ? true : false,
+                'name' => 'niveau-' . $i
+            );
+        }
+        return $niveaux;
+    }
+
     protected function addNiveau() {
         Library_Config::getInstance()->testIssetAuser();
         $table = new Library_Niveau();
@@ -626,6 +636,53 @@ class Library_Controller {
         return array(
             'success' => true,
             'id' => $table->getAdapter()->lastInsertId()
+        );
+    }
+
+    protected function removeNiveau() {
+        Library_Config::getInstance()->testIssetAuser();
+        $niveaux = $this->getGroupParam('niveau');
+        if (!$this->getParam('forceConfirm', false)) {
+            // check si plusieurs livres on l'élément
+            $table = Zend_Registry::get('db');
+            $rowset = $table->fetchAll($table
+                ->select()
+                ->from(array('n' => 'library_niveau'), array('txt' => 'n.label'))
+                ->join(array('nb' => 'library_book_niveau'), 'nb.niveau_id = n.id', array('nbd' => 'COUNT(*)'))
+                ->where('n.id IN(?)', $niveaux)
+                ->group('nb.niveau_id')
+            );
+
+            if (count($rowset) > 0) {
+                $more = false;
+                foreach ($rowset as $row) {
+                    if ($row['nbd'] > 0) {
+                        $more = true;
+                        break;
+                    }
+                }
+                // il y a d'autres livres concernés par cette suppression. On
+                // renvoie au navigateur la demande de confirmation
+                if ($more) {
+                    return array(
+                        'success' => true,
+                        'confirm' => true,
+                        'nb' => $rowset
+                    );
+                }
+            }
+        }
+
+        // suppression de l'élément
+        $table = new Library_Niveau();
+        $table->delete($table->getAdapter()->quoteInto('id IN(?)', $niveaux));
+
+        Library_Config::log(sprintf('suppression des niveaux: %s', implode(', ', $niveaux)));
+
+        $t = new Library_Book();
+        return array(
+            'success' => true,
+            'niveaux' => $this->getNiveauListForCheckboxGroup($t->createRow())
         );
     }
 

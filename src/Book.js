@@ -123,6 +123,7 @@ Library.Book = Ext.extend(Ext.Window, {
             }
             return Ext.apply({
                 xtype: 'checkboxgroup',
+                ref: '../../checkniveau',
                 fieldLabel: Library.wording.niveau,
                 columns: 4,
                 items: this.data.niveaux

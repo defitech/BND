@@ -1,5 +1,5 @@
 Ext.onReady(function() {
-    if (stacknmblue == 1) {
+    if (Library.Main.config().cid == 1) {
         new Library.admin.App({
             renderTo: Ext.getBody()
         });

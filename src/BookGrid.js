@@ -51,9 +51,10 @@ Library.BookGrid = Ext.extend(Ext.grid.GridPanel, {
         };
     },
 
-    initBookContextMenu: function(record) {
+    initBookContextMenu: function(record, disableUndoFilters) {
         return new Library.ContextMenu({
             record: record,
+            disableUndoFilters: disableUndoFilters,
             listeners: this.initBookContextMenuListeners()
         });
     },
@@ -121,7 +122,7 @@ Library.BookGrid = Ext.extend(Ext.grid.GridPanel, {
     initPagingToolbar: function(store, filters) {
         return {
             xtype : 'paging',
-            pageSize : Library.Main.nb,
+            pageSize : Library.Main.config().nb,
             store : store,
             displayInfo : true,
             plugins: [filters]
@@ -270,12 +271,13 @@ Library.BookGrid = Ext.extend(Ext.grid.GridPanel, {
                 rowcontextmenu: {scope: this, fn: function(grid, rowIndex, e){
                     var record = grid.getStore().getAt(rowIndex);
                     grid.getSelectionModel().selectRow(rowIndex);
-                    var contextmenu = this.initBookContextMenu(record);
+                    var disableUndoFilters = grid.filters.getFilterData().length == 0;
+                    var contextmenu = this.initBookContextMenu(record, disableUndoFilters);
                     contextmenu.showAt(e.getXY());
                     e.stopEvent();
                 }},
                 afterrender: {scope: this, fn: function(grid){
-                    grid.getStore().load({params:{start:0, limit: Library.Main.nb}});
+                    grid.getStore().load({params:{start:0, limit: Library.Main.config().nb}});
                 }},
                 keypress: {scope: this, fn: function(e){
                     if (!this._map) this._map = this.initKeyMap();

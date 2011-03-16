@@ -169,10 +169,14 @@ class Library_Config {
     /**
      * Retourne un loggeur Zend. Méthode raccourcis
      *
+     * @param string $str si on la renseigne, enregistrera un log info()
      * @return Zend_Log
      */
-    public static function log() {
+    public static function log($str = null) {
         $c = self::getInstance();
+        if ($str) {
+            $c->getLog()->info($str);
+        }
         return $c->getLog();
     }
 

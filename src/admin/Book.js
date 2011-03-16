@@ -2,6 +2,8 @@ Ext.ns('Library.admin');
 
 Library.admin.Book = Ext.extend(Library.Book, {
 
+    niveauPos: 5,
+
     doSave: function() {
         this._mask.show();
         this.getForm().getForm().submit({
@@ -18,9 +20,66 @@ Library.admin.Book = Ext.extend(Library.Book, {
         });
     },
 
+    removeNiveau: function() {
+        var values = this.checkniveau.getValue();
+        if (values && values.length > 0) {
+            var params = {};
+            var vtext = [];
+            for (var i = 0; i < values.length; i++) {
+                vtext.push(values[i].boxLabel);
+                params[values[i].getName()] = 1;
+            }
+            Ext.Msg.confirm(Library.wording.niveau_remove_title, String.format(Library.wording.niveau_remove, vtext.join(', ')), function(choice){
+                if (choice == 'yes') {
+                    this.removeNiveauSubmit(params);
+                }
+            }, this);
+        }
+    },
+
+    removeNiveauSubmit: function(params, forceConfirm) {
+        this._mask.show();
+        Ext.Ajax.request({
+            url: Library.Main.config().controller,
+            params: Ext.apply(params, {
+                cmd: 'removeNiveau',
+                forceConfirm: forceConfirm
+            }),
+            scope: this,
+            success: function(response) {
+                var json = Library.Main.getJson(response);
+                this._mask.hide();
+                if (json.success) {
+                    if (json.confirm) {
+                        var c = [];
+                        var str = '{0} ({1}x)';
+                        for (var i = 0; i < json.nb.length; i++) {
+                            c.push(String.format(str, json.nb[i].txt, json.nb[i].nbd));
+                        }
+                        c = c.join(', ');
+                        Ext.Msg.confirm(Library.wording.remove_confirm_title, String.format(Library.wording.niveau_remove_confirm, c), function(choice){
+                            if (choice == 'yes') {
+                                this.removeNiveauSubmit(params, true);
+                            }
+                        }, this);
+                    } else {
+                        this.getForm().remove(Ext.getCmp(this.niveaux_id));
+                        this.data.niveaux = json.niveaux;
+                        this.getForm().insert(this.niveauPos, this.initFieldNiveaux());
+                        this.getForm().doLayout();
+                    }
+                }
+            },
+            failure: function(response) {
+                this._mask.hide();
+                Library.Main.failure(response);
+            }
+        });
+    },
+
     removeType: function() {
         if (this.comboType.getValue()) {
-            Ext.Msg.confirm(Library.wording.typeremove_title, String.format(Library.wording.type_remove, this.comboType.getRawValue()), function(choice){
+            Ext.Msg.confirm(Library.wording.type_remove_title, String.format(Library.wording.type_remove, this.comboType.getRawValue()), function(choice){
                 if (choice == 'yes') {
                     this.removeSubmit(this.comboType, {
                         cmd: 'removeType'
@@ -145,7 +204,7 @@ Library.admin.Book = Ext.extend(Library.Book, {
                                 name: 'niveau-' + json.id,
                                 boxLabel: txt
                             });
-                            this.getForm().insert(4, this.initFieldNiveaux());
+                            this.getForm().insert(this.niveauPos, this.initFieldNiveaux());
                             this.getForm().doLayout();
                         }
                         this._mask.hide();
@@ -231,7 +290,7 @@ Library.admin.Book = Ext.extend(Library.Book, {
             id: this.niveaux_id,
             items: 
                 [Library.admin.Book.superclass.initFieldNiveaux.apply(this, [{flex: 1, columns: 6}])]
-                .concat(this.initFieldsActions(this.addNiveau, null, null))
+                .concat(this.initFieldsActions(this.addNiveau, null, this.removeNiveau))
         };
     },
 
@@ -256,6 +315,21 @@ Library.admin.Book = Ext.extend(Library.Book, {
             this.initFieldNiveaux(),
             this.initFieldIsbn({xtype: 'textfield'})
         ];
+
+//        this.swfButton = new Ext.ux.PluploadButton({
+//            text: 'upload',
+//            upload_config: {
+//                runtimes : 'html5,flash,silverlight',
+//                browse_button : 'pickfiles',
+//                container : 'container',
+//                max_file_size : '300mb',
+//                url : Library.Main.config().upload,
+//                flash_swf_url : Library.Main.config().libspath + 'extjsux/plupload/js/plupload.flash.swf',
+//                filters : [
+//                    {title : "PDF files", extensions : "pdf"}
+//                ]
+//            }
+//        });
 
         return items.concat([{
             xtype: 'textfield',
@@ -306,12 +380,7 @@ Library.admin.Book = Ext.extend(Library.Book, {
             items: [{
                 xtype: 'compositefield',
                 fieldLabel: 'PDF',
-                items: [{
-                    xtype: 'textfield',
-                    inputType: 'file',
-                    name: 'pdffile',
-                    flex: 1
-                }, {
+                items: [{xtype: 'hidden'}, {
                     xtype: 'button',
                     iconCls: 'book-relation-remove',
                     scope: this,

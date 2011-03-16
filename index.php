@@ -5,6 +5,12 @@ include_once 'config.php';
 $path = Library_Config::getInstance()->getData()->path->extjs;
 $user = Library_Config::getInstance()->getUser();
 
+$config = array(
+    'sid' => session_id(),
+    'cid' => $user ? $user->id : 0,
+    'libspath' => $path . '../'
+);
+
 ?>
 <html>
     <head>
@@ -18,18 +24,17 @@ $user = Library_Config::getInstance()->getUser();
         <link rel="shortcut icon" type="image/png" href="resources/images/favicon.png" />
         <!-- CSS Ext -->
         <link rel="stylesheet" type="text/css" href="<?php echo $path; ?>resources/css/ext-all.css" />
-        <!--<link rel="stylesheet" type="text/css" href="<?php echo $path; ?>../extjsux/filterrow/FilterRow.css" />
-        <link rel="stylesheet" type="text/css" href="<?php echo $path; ?>../extjsux/CheckboxCombo/Ext.ux.form.CheckboxCombo.min.css" />
-        !-- CSS app -->
+        <link rel="stylesheet" type="text/css" href="<?php echo $path; ?>../extjsux/extjsplupload/ext.ux.plupload.css" />
+        <!-- CSS app -->
         <link rel="stylesheet" type="text/css" href="resources/css/app.css" />
         <!-- Base JS Ext -->
         <script type="text/javascript" src="<?php echo $path; ?>adapter/ext/ext-base-debug.js"></script>
         <script type="text/javascript" src="<?php echo $path; ?>ext-all-debug.js"></script>
         <script type="text/javascript" src="<?php echo $path; ?>src/locale/ext-lang-fr.js"></script>
-        <!-- Plugin JS Ext --
-        <script type="text/javascript" src="<?php echo $path; ?>../extjsux/filterrow/FilterRow.js"></script>
-        <script type="text/javascript" src="<?php echo $path; ?>../extjsux/CheckboxCombo/Ext.ux.form.CheckboxCombo.min.js"></script>
-        -->
+        <!-- Plugin JS Ext -->
+        <script type="text/javascript" src="<?php echo $path; ?>../extjsux/plupload/js/plupload.min.js"></script>
+        <script type="text/javascript" src="<?php echo $path; ?>../extjsux/extjsplupload/ext.ux.plupload.js"></script>
+
         <script type="text/javascript" src="<?php echo $path; ?>examples/ux/gridfilters/menu/RangeMenu.js"></script>
         <script type="text/javascript" src="<?php echo $path; ?>examples/ux/gridfilters/menu/ListMenu.js"></script>
         <script type="text/javascript" src="<?php echo $path; ?>examples/ux/gridfilters/GridFilters.js"></script>
@@ -59,7 +64,10 @@ $user = Library_Config::getInstance()->getUser();
         <script type="text/javascript" src="src/login/Login.js"></script>
         <?php } ?>
         <!-- Envionment data -->
-        <script type="text/javascript">var stacknmblue = <?php echo ($user ? $user->id : 0); ?>;</script>
+        <script type="text/javascript">
+            Ext.BLANK_IMAGE_URL = '<?php echo $path; ?>resources/images/default/s.gif';
+            Library.Main.addConfig(<?php echo Zend_Json::encode($config); ?>);
+        </script>
     </head>
     <body></body>
 </html>

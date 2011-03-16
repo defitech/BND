@@ -19,9 +19,10 @@ Library.admin.BookGrid = Ext.extend(Library.BookGrid, {
         win.show();
     },
 
-    initBookContextMenu: function(record) {
+    initBookContextMenu: function(record, disableUndoFilters) {
         return new Library.admin.ContextMenu({
             record: record,
+            disableUndoFilters: disableUndoFilters,
             listeners: Ext.apply(this.initBookContextMenuListeners(), {
                 bookadd: {scope: this, fn: function(menu, record){
                      this.getBookInfo(null);
