@@ -135,10 +135,10 @@ Library.admin.UserGrid = Ext.extend(Ext.grid.EditorGridPanel, {
     },
 
     initComponent: function() {
+        this.addEvents('showdownloads');
         Ext.apply(this, {
             store: this.initUserStore(),
             loadMask: true,
-            border: false,
             columnLines: false,
             colModel: this.initUsersHeader(),
             viewConfig: {
@@ -157,6 +157,15 @@ Library.admin.UserGrid = Ext.extend(Ext.grid.EditorGridPanel, {
                 ref: '../removebutton',
                 scope: this,
                 handler: this.removeUser
+            }, '->', {
+                text: Library.wording.user_button_dl,
+                iconCls: 'book-download-small',
+                scope: this,
+                handler: function() {
+                    var row = this.getSelectionModel().getSelectedCell();
+                    var record = this.getStore().getAt(row[0]);
+                    this.fireEvent('showdownloads', this, record)
+                }
             }],
             listeners: {
                 afterrender: {scope: this, fn: function(grid){

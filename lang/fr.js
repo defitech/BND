@@ -46,7 +46,7 @@ Library.wording = {
     type_edit_title: 'Editer la mati\u00e8re',
     type_edit: 'Changez le nom de la mati\u00e8re',
     niveau_edit_title: 'Editer le niveau (classe)',
-    niveau_edit: 'Changez le nom du niveau',
+    niveau_edit: 'Changez le nom du niveau (classe)',
 
     editor_remove_title: 'Supprimer un \u00e9diteur',
     editor_remove: 'Voulez-vous supprimer l\'\u00e9diteur {0}?',
@@ -69,8 +69,14 @@ Library.wording = {
     user_right: 'Droit (1 = admin)',
     user_title: 'Gestion des utilisateurs',
     user_button: 'Utilisateurs',
+    user_button_dl: 'Voir les t\u00e9l\u00e9chargements',
     user_delete_title: 'Suppression d\'un utilisateur',
     user_delete: 'Voulez-vous supprimer l\'utilisateur {0}?',
+
+    user_dl_title: 'Livres t\u00e9l\u00e9charg\u00e9s par {0}',
+    user_dl_book: 'Titre du livre',
+    user_dl_nb: 'Nb t\u00e9l\u00e9chargements',
+    user_dl_exportcsv: 'Exporter en CSV',
 
     info_book_button: 'Informations',
     info_book_close: 'Fermer',

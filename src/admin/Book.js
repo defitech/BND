@@ -171,22 +171,27 @@ Library.admin.Book = Ext.extend(Library.Book, {
     editNiveau: function() {
         var values = this.checkniveau.getValue();
         if (values && values.length > 0) {
-            var items = [];
+            var items = [{
+                xtype: 'displayfield',
+                anchor: '95%',
+                hideLabel: true,
+                value: Library.wording.niveau_edit
+            }];
             for (var i = 0; i < values.length; i++) {
                 items.push({
                     xtype: 'textfield',
                     anchor: '95%',
-                    name: values[i].getName(),
                     hideLabel: true,
+                    name: values[i].getName(),
                     value: values[i].boxLabel
                 })
             }
             var win = new Ext.Window({
-                title: Library.wording.remove_edit_title,
+                title: Library.wording.niveau_edit_title,
                 modal: true,
                 layout: 'fit',
                 width: 200,
-                height: 150,
+                height: 250,
                 items: {
                     xtype: 'form',
                     bodyStyle: 'padding:10px;',

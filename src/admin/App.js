@@ -150,11 +150,17 @@ Library.admin.App = Ext.extend(Library.App, {
                     users = new Ext.Window({
                         modal: true,
                         title: Library.wording.user_title,
-                        width: 400,
-                        height: 200,
+                        width: 700,
+                        height: 300,
                         layout: 'fit',
                         closeAction: 'hide',
-                        items: new Library.admin.UserGrid()
+                        items: new Library.admin.UserPanel({
+                            listeners: {
+                                bookget: {scope: this, fn: function(grid, record){
+                                    this.getGrid().getBookInfo(record, {modal: true, forceReadOnly: true});
+                                }}
+                            }
+                        })
                     });
                 }
                 users.show();

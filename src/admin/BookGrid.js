@@ -3,20 +3,24 @@ Ext.ns('Library.admin');
 Library.admin.BookGrid = Ext.extend(Library.BookGrid, {
 
     initBookWindow: function(record, json, row, config) {
-        var win = new Library.admin.Book(Ext.apply({
-            record: record,
-            data: json.data,
-            modal: true,
-            animateTarget: row || this.getEl(),
-            listeners: Ext.apply(this.initBookWindowListeners(), {
-                booksave: {scope: this, fn: function(cmp){
-                    this.getStore().navigateToRecord = cmp.record;
-                    this.getStore().reload();
-                    cmp.close();
-                }}
-            })
-        }, config || {}));
-        win.show();
+        if (!config.forceReadOnly) {
+            var win = new Library.admin.Book(Ext.apply({
+                record: record,
+                data: json.data,
+                modal: true,
+                animateTarget: row || this.getEl(),
+                listeners: Ext.apply(this.initBookWindowListeners(), {
+                    booksave: {scope: this, fn: function(cmp){
+                        this.getStore().navigateToRecord = cmp.record;
+                        this.getStore().reload();
+                        cmp.close();
+                    }}
+                })
+            }, config || {}));
+            win.show();
+        } else {
+            Library.admin.BookGrid.superclass.initBookWindow.apply(this, arguments);
+        }
     },
 
     initBookContextMenu: function(record, disableUndoFilters) {

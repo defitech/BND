@@ -7,7 +7,6 @@ Library.admin.Keys = Ext.extend(Library.Keys, {
         var k = e.getKey();
         var records = grid.getSelectionModel().getSelections();
         var record = records[0];
-        var m = grid.getColumnModel();
         if (e.shiftKey) {
             if (!e.altKey) {
                 if (k == e.D) {

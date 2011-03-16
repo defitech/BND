@@ -14,8 +14,11 @@ Library.BookGrid = Ext.extend(Ext.grid.GridPanel, {
             success: function(response) {
                 var json = Library.Main.getJson(response);
                 if (json.success) {
-                    var row = record ? this.getView().getRow(this.getStore().indexOf(record)) : null;
-                    this.initBookWindow(record, json, row, config);
+                    var row = null;
+                    if (record && record.store && record.store.baseParams.cmd == this.getStore().baseParams.cmd) {
+                        row = this.getView().getRow(this.getStore().indexOf(record));
+                    }
+                    this.initBookWindow(record, json, row, config || {});
                 } else {
                     this.loadMask.hide();
                 }

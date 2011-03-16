@@ -153,6 +153,10 @@ body {
     background-image: url('../images/filterundo.png') !important;
 }
 
+.book-export-csv {
+    background-image: url('../images/csv.png') !important;
+}
+
 .book-menu-title {
     border: 1px solid #CCCCCC;
     background-color: #FFFFFF;
