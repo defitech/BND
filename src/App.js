@@ -76,6 +76,7 @@ Library.App = Ext.extend(Ext.Viewport, {
                 title: Library.wording.library_title,
                 layout: 'fit',
                 margins: '50',
+                collapsible: true,
                 tools: [{
                     id: 'help',
                     qtip: Library.wording.help,
