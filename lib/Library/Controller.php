@@ -217,7 +217,8 @@ class Library_Controller {
             'data' => array_merge($book->toArray(), array(
                 'editors' => $this->getEditorList(),
                 'types' => $this->getTypeList(),
-                'niveaux' => $niveaux
+                'niveaux' => $niveaux,
+                'maxpostsize' => ini_get('post_max_size')
             ))
         );
     }

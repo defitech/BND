@@ -510,7 +510,7 @@ Library.admin.Book = Ext.extend(Library.Book, {
             },
             items: [{
                 xtype: 'compositefield',
-                fieldLabel: 'PDF',
+                fieldLabel: 'PDF'  + ' (max: ' + this.data.maxpostsize + ')',
                 items: [{xtype: 'hidden'}, {
                     xtype: 'textfield',
                     inputType: 'file',
