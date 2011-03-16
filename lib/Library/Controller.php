@@ -871,7 +871,8 @@ class Library_Controller {
         );
         foreach ($rowset as $row) {
             $items[] = array(
-                $user->id, $user->login, $row['bid'], str_replace('"', "'", $row['btitle']), $row['nb']
+                $user->id, '"' . $user->login .'"', $row['bid'],
+                '"'. str_replace('"', "'", $row['btitle']) .'"', $row['nb']
             );
         }
 
@@ -884,7 +885,7 @@ class Library_Controller {
 
         $str = '';
         foreach ($items as $item) {
-            $str .= '"' . implode('","', $item) . '"' . PHP_EOL;
+            $str .= implode(',', $item) . PHP_EOL;
         }
 
         echo $str;

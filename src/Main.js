@@ -47,7 +47,8 @@ Library.Main = {
     failureForm: function(json) {
         Ext.Msg.show({
             title: Library.wording.error_title,
-            msg: json.error || json.msg || Library.wording.error_title
+            msg: json.error || json.msg || Library.wording.error_title,
+            width: 400
         });
     }
 };
@@ -83,5 +84,34 @@ Ext.override(Ext.form.Field, {
     getName : function(){
         // ajout du check si "dom" existe, pour eviter des erreurs
         return this.rendered && this.el.dom && this.el.dom.name ? this.el.dom.name : this.name || this.id || '';
+    }
+});
+
+Ext.override(Ext.form.Action.Submit, {
+    handleResponse : function(response){
+        if(this.form.errorReader){
+            var rs = this.form.errorReader.read(response);
+            var errors = [];
+            if(rs.records){
+                for(var i = 0, len = rs.records.length; i < len; i++) {
+                    var r = rs.records[i];
+                    errors[i] = r.data;
+                }
+            }
+            if(errors.length < 1){
+                errors = null;
+            }
+            return {
+                success : rs.success,
+                errors : errors
+            };
+        }
+        // ajout d'un try catch pour eviter des erreurs de js si la reponse est mal formee
+        try {
+            return Ext.decode(response.responseText);
+        } catch (e) {
+            var msg = response.responseText + '<br/>' + e.toString();
+            return {success: false, error: msg}
+        }
     }
 });

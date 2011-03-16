@@ -67,6 +67,7 @@ CREATE TABLE 'library_user_download' ( 'id' INTEGER NOT NULL PRIMARY KEY , 'book
 #
 # Contenu de la table: library_user
 #
+
 INSERT INTO 'library_user' VALUES ('1', 'admin', 'c462ea29c64efa0f679b05d046205d41', '1', '0');
 # --------------------------------------------------------
 
