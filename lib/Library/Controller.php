@@ -360,7 +360,7 @@ class Library_Controller {
             'downloaded_at' => date('Y-m-d H:i:s')
         ));
 
-        Library_Config::log()->info(sprintf('telechargement du livre: %s (%s)', $book->title, $book->id));
+        Library_Config::log(sprintf('telechargement du livre: %s (%s)', $book->title, $book->id));
 
         header('HTTP/1.1 200 OK');
         header('Date: ' . date("D M j G:i:s T Y"));
@@ -402,7 +402,7 @@ class Library_Controller {
             $result->last_connected = date('Y-m-d H:i:s');
             $result->save();
 
-            Library_Config::log()->info('connexion');
+            Library_Config::log('connexion');
             
             return array(
                 'success' => true
@@ -504,7 +504,7 @@ class Library_Controller {
         $table = new Library_Book_Type();
         $table->delete($table->getAdapter()->quoteInto('id = ?', $id));
 
-        Library_Config::log()->inf(sprintf('suppression de la matiere: %s', $id));
+        Library_Config::log(sprintf('suppression de la matiere: %s', $id));
         return array(
             'success' => true
         );
@@ -585,7 +585,7 @@ class Library_Controller {
         $table = new Library_Book_Editor();
         $table->delete($table->getAdapter()->quoteInto('id = ?', $id));
 
-        Library_Config::log()->inf(sprintf('suppression de l\'editeur: %s', $id));
+        Library_Config::log(sprintf('suppression de l\'editeur: %s', $id));
         return array(
             'success' => true
         );
@@ -810,7 +810,7 @@ class Library_Controller {
         $table = new Library_User();
         $table->delete($table->getAdapter()->quoteInto('id = ?', $this->getParam('id')));
 
-        Library_Config::log()->inf(sprintf('suppression de l\'utilisateur: %s', $id));
+        Library_Config::log(sprintf('suppression de l\'utilisateur: %s', $id));
         return array(
             'success' => true
         );
