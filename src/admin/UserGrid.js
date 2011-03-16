@@ -14,9 +14,11 @@ Library.admin.UserGrid = Ext.extend(Ext.grid.EditorGridPanel, {
         this.startEditing(0, 0);
     },
 
-    removeUser: function() {
-        var row = this.getSelectionModel().getSelectedCell();
-        var record = this.getStore().getAt(row[0]);
+    removeUser: function(record) {
+        if (!record || !record.data) {
+            var row = this.getSelectionModel().getSelectedCell();
+            record = this.getStore().getAt(row[0]);
+        }
         Ext.Msg.confirm(Library.wording.user_delete_title, String.format(Library.wording.user_delete, record.get('login')), function(choice){
             if (choice == 'yes') {
                 this.sendRemoveUser(record);
@@ -77,6 +79,34 @@ Library.admin.UserGrid = Ext.extend(Ext.grid.EditorGridPanel, {
                 }
             });
         }
+    },
+
+    showDownloads: function(record) {
+        if (!record || !record.data) {
+            var row = this.getSelectionModel().getSelectedCell();
+            record = this.getStore().getAt(row[0]);
+        }
+        this.fireEvent('showdownloads', this, record)
+    },
+
+    initContextMenu: function(record) {
+        return new Ext.menu.Menu({
+            items: [{
+                text: Library.wording.delete_book_button,
+                iconCls: 'book-delete-small',
+                scope: this,
+                handler: function() {
+                    this.removeUser(record);
+                }
+            }, {
+                text: Library.wording.user_button_dl,
+                iconCls: 'book-download-small',
+                scope: this,
+                handler: function() {
+                    this.showDownloads(record);
+                }
+            }]
+        });
     },
 
     initUserStore: function() {
@@ -161,11 +191,7 @@ Library.admin.UserGrid = Ext.extend(Ext.grid.EditorGridPanel, {
                 text: Library.wording.user_button_dl,
                 iconCls: 'book-download-small',
                 scope: this,
-                handler: function() {
-                    var row = this.getSelectionModel().getSelectedCell();
-                    var record = this.getStore().getAt(row[0]);
-                    this.fireEvent('showdownloads', this, record)
-                }
+                handler: this.showDownloads
             }],
             listeners: {
                 afterrender: {scope: this, fn: function(grid){
@@ -174,6 +200,11 @@ Library.admin.UserGrid = Ext.extend(Ext.grid.EditorGridPanel, {
                 afteredit: {scope: this, fn: this.saveUserData},
                 rowclick: {scope: this, fn: function(){
                     this.removebutton.enable();
+                }},
+                rowcontextmenu: {scope: this, fn: function(grid, index, e){
+                    var contextmenu = this.initContextMenu(grid.getStore().getAt(index));
+                    contextmenu.showAt(e.getXY());
+                    e.stopEvent();
                 }}
             }
         });
