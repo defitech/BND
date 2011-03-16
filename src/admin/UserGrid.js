@@ -92,6 +92,11 @@ Library.admin.UserGrid = Ext.extend(Ext.grid.EditorGridPanel, {
     initContextMenu: function(record) {
         return new Ext.menu.Menu({
             items: [{
+                xtype: 'panel',
+                html: record.get('login'),
+                cls: 'book-menu-title',
+                border: false
+            },{
                 text: Library.wording.delete_book_button,
                 iconCls: 'book-delete-small',
                 scope: this,
