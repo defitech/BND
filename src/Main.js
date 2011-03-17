@@ -1,5 +1,9 @@
 Ext.ns('Library');
 
+Ext.onReady(function() {
+    document.title = Library.wording.library_title;
+});
+
 Library.Main = {
 
     cfg: {

@@ -141,7 +141,9 @@ Library.Book = Ext.extend(Ext.Window, {
             this.initFieldTitle(),
             this.initFieldEditor({cls: 'book-combo-disable'}),
             this.initFieldType({cls: 'book-combo-disable'}),
-            this.initFieldNiveaux(null, {}),
+            this.initFieldNiveaux(null, {
+                autoCreate: {tag: 'input', type: 'checkbox', disabled: 'disabled'}
+            }),
             this.initFieldIsbn()
         ];
     },
@@ -183,6 +185,10 @@ Library.Book = Ext.extend(Ext.Window, {
             listeners: Ext.apply({
                 afterrender: function(cmp) {
                     cmp._mask = new Ext.LoadMask(cmp.bwrap);
+                },
+                destroy: function(cmp) {
+                    cmp._mask.destroy();
+                    delete cmp._mask;
                 }
             },this.listeners || {})
         });

@@ -8,5 +8,4 @@ Ext.onReady(function() {
             renderTo: Ext.getBody()
         });
     }
-    document.title = Library.wording.library_title;
 });

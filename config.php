@@ -5,7 +5,7 @@ $dir = dirname(__FILE__) . '/';
 
 // récupération du chemin vers le Zend Framework. On chope l'instance
 $instance = file_get_contents($dir . 'instance');
-// on chope le config.ini qui contient toutes les infors de configuration
+// on chope le config.ini qui contient toutes les infos de configuration
 $configFile = $dir . 'config/config.ini';
 $ini = parse_ini_file($configFile, true);
 if (isset($ini[$instance])) {
@@ -30,7 +30,7 @@ $autoloader->registerNamespace('Library_');
 
 
 
-// set de la config, qui se base sur le config.ini placé à la racine
+// set de la config, qui se base sur le config.ini
 $config = Library_Config::getInstance($instance, $configFile, $dir);
 
 ini_set('magic_quotes_gpc', 0);

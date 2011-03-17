@@ -1,5 +1,13 @@
-body {
-    background: url('../background/foretcanada.jpg') transparent top left no-repeat;
+body.book-background {
+    background: transparent top left no-repeat;
+}
+
+body.book-background-foretcanada {
+    background-image: url('../background/foretcanada.jpg') !important;
+}
+
+body.book-background-montagnes {
+    background-image: url('../background/montagnes.jpg') !important;
 }
 
 .book-conditions .x-panel-body, .book-help .x-panel-body {

@@ -395,9 +395,13 @@ class Library_Controller {
 
     protected function generatePdfThumb() {
         Library_Config::getInstance()->testIssetAuser();
-
+        // on laisse la possibilité de générer un thumb même si aucun id de
+        // livre n'est fourni
         $pdfname = $this->getParam('pdf', '');
         $imagename = $pdfname;
+        $book = null;
+        // si un livre est fourni, on en récupère les informations afin de
+        // déterminer le nom du thumb
         if ($this->getParam('book_id', null)) {
             $table = new Library_Book();
             $book = $table->fetchRow($table->select()->where('id = ?', $this->getParam('book_id')));
@@ -411,6 +415,11 @@ class Library_Controller {
         $pdf = Library_Config::getInstance()->getData()->path->pdf . $pdfname;
         if (file_exists($pdf) && is_file($pdf)) {
             $this->generatePdfFirstPageThumb($pdf, Library_Book::getThumbPath(true). $i);
+            // s'il y a un livre défini, on lui set son thumb
+            if ($book) {
+                $book->thumb = Library_Book::getThumbPath() . $i;
+                $book->save();
+            }
             return array(
                 'success' => true,
                 'thumb' => Library_Book::getThumbPath() . $i

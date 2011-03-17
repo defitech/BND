@@ -189,7 +189,6 @@ Library.login.Form = Ext.extend(Ext.Window, {
 });
 
 Ext.onReady(function(){
-    document.title = Library.wording.library_title;
     var win = new Library.login.Form();
     win.show();
 });

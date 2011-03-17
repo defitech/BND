@@ -40,7 +40,7 @@ Library.Keys = Ext.extend(Ext.util.Observable, {
                     e.stopEvent()
                 }
                 else if (k == e.F) {
-                    grid.fireEvent('focusfullsearch', this, e);
+                    grid.fireEvent('focusfullsearch', grid, e);
                     e.stopEvent()
                 }
                 else if (k == e.PAGE_DOWN || k == e.RIGHT || k == e.END) {

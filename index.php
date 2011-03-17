@@ -8,7 +8,8 @@ $user = Library_Config::getInstance()->getUser();
 $config = array(
     'sid' => session_id(),
     'cid' => $user ? $user->id : 0,
-    'libspath' => $path . '../'
+    'libspath' => $path . '../',
+    'background' => 'foretcanada'
 );
 
 ?>
@@ -71,5 +72,5 @@ $config = array(
             Library.Main.addConfig(<?php echo Zend_Json::encode($config); ?>);
         </script>
     </head>
-    <body></body>
+    <body class="book-background book-background-<?php echo $config['background']; ?>"></body>
 </html>
