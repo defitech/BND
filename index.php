@@ -29,8 +29,8 @@ $config = array(
         <!-- CSS app -->
         <link rel="stylesheet" type="text/css" href="resources/css/app.css" />
         <!-- Base JS Ext -->
-        <script type="text/javascript" src="<?php echo $path; ?>adapter/ext/ext-base-debug.js"></script>
-        <script type="text/javascript" src="<?php echo $path; ?>ext-all-debug.js"></script>
+        <script type="text/javascript" src="<?php echo $path; ?>adapter/ext/ext-base.js"></script>
+        <script type="text/javascript" src="<?php echo $path; ?>ext-all.js"></script>
         <script type="text/javascript" src="<?php echo $path; ?>src/locale/ext-lang-fr.js"></script>
         <!-- Plugin JS Ext -->
         <script type="text/javascript" src="<?php echo $path; ?>../extjsux/plupload/js/plupload.min.js"></script>

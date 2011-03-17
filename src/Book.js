@@ -174,6 +174,7 @@ Library.Book = Ext.extend(Ext.Window, {
                 region: 'center',
                 border: false,
                 fileUpload: true,
+                autoScroll: true,
                 bodyStyle: 'padding:10px; padding-top: 15px;',
                 defaults: {
                     anchor: '95%'
