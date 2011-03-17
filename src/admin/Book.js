@@ -29,6 +29,36 @@ Library.admin.Book = Ext.extend(Library.Book, {
         });
     },
 
+    createThumbFromPdf: function() {
+        var pdf = this.getForm().getForm().findField('pdf').getValue();
+        if (pdf && this.data.id) {
+            this._mask.show();
+            Ext.Ajax.request({
+                url: Library.Main.config().controller,
+                params: {
+                    cmd: 'generatePdfThumb',
+                    pdf: pdf,
+                    book_id: this.data.id
+                },
+                scope: this,
+                success: function(response) {
+                    var json = Library.Main.getJson(response);
+                    this._mask.hide();
+                    if (json.success) {
+                        this.getForm().getForm().findField('thumb').setValue(json.thumb);
+                        var img = Ext.get(this.thumbId);
+                        img.set({src: json.thumb});
+                        this.fireEvent('bookthumbchange', this, json.thumb);
+                    }
+                },
+                failure: function(response) {
+                    this._mask.hide();
+                    Library.Main.failure(response);
+                }
+            });
+        }
+    },
+
 
 
 
@@ -525,10 +555,27 @@ Library.admin.Book = Ext.extend(Library.Book, {
                     }
                 }]
             },{
-                xtype: 'textfield',
-                name: 'pdf',
+                xtype: 'compositefield',
                 fieldLabel: Library.wording.currentPdf,
-                value: this.data.filename
+                items: [{
+                    xtype: 'textfield',
+                    name: 'pdf',
+                    flex: 1,
+                    fieldLabel: Library.wording.currentPdf,
+                    value: this.data.filename
+                },{
+                    xtype: 'button',
+                    iconCls: 'book-thumb-small',
+                    scope: this,
+                    disabled: !this.data.filename && !this.data.id,
+                    handler: function(){
+                        Ext.Msg.confirm(Library.wording.book_thumb_create_title, Library.wording.book_thumb_create, function(choice){
+                            if (choice == 'yes') {
+                                this.createThumbFromPdf();
+                            }
+                        }, this);
+                    }
+                }]
             }]
         }]);
     },
@@ -555,7 +602,7 @@ Library.admin.Book = Ext.extend(Library.Book, {
     },
 
     initComponent: function() {
-        this.addEvents('booksave');
+        this.addEvents('booksave', 'bookthumbchange');
         Ext.apply(this, {
             width: 900,
             // on annule Esc, histoire d'eviter de quitter la fenetre inopinement

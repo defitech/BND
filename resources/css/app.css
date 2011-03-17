@@ -81,6 +81,10 @@ body {
     background-image: url('../images/loupe.png') !important;
 }
 
+.book-thumb-small {
+    background-image: url('../images/thumb.png') !important;
+}
+
 .book-save {
     background-image: url('../images/save.png') !important;
 }

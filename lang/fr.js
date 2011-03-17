@@ -85,6 +85,9 @@ Library.wording = {
 
     import_book_button: 'Importer CSV',
 
+    book_thumb_create_title: 'Cr\u00e9ation de la miniature',
+    book_thumb_create: 'Voulez-vous r\u00e9g\u00e9n\u00e9rer la miniature pour ce document?',
+
     add_book_button: 'Ajouter',
     add_book: "Ajout d'un nouveau livre",
 

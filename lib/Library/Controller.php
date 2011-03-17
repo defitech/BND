@@ -393,6 +393,36 @@ class Library_Controller {
         exit;
     }
 
+    protected function generatePdfThumb() {
+        Library_Config::getInstance()->testIssetAuser();
+
+        $pdfname = $this->getParam('pdf', '');
+        $imagename = $pdfname;
+        if ($this->getParam('book_id', null)) {
+            $table = new Library_Book();
+            $book = $table->fetchRow($table->select()->where('id = ?', $this->getParam('book_id')));
+            $imagename = $book->title;
+            if ($book->filename) {
+                $pdfname = $book->filename;
+            }
+        }
+
+        $i = Library_Util::getSlug($imagename) . '.jpg';
+        $pdf = Library_Config::getInstance()->getData()->path->pdf . $pdfname;
+        if (file_exists($pdf) && is_file($pdf)) {
+            $this->generatePdfFirstPageThumb($pdf, Library_Book::getThumbPath(true). $i);
+            return array(
+                'success' => true,
+                'thumb' => Library_Book::getThumbPath() . $i
+            );
+        } else {
+            return array(
+                'success' => false,
+                'error' => sprintf('Le fichier %s n\'existe pas', $pdfname)
+            );
+        }
+    }
+
 
 
 

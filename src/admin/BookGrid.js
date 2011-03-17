@@ -14,6 +14,10 @@ Library.admin.BookGrid = Ext.extend(Library.BookGrid, {
                         this.getStore().navigateToRecord = cmp.record;
                         this.getStore().reload();
                         cmp.close();
+                    }},
+                    bookthumbchange: {scope: this, fn: function(cmp, thumb){
+                        record.set('thumb', thumb);
+                        record.commit();
                     }}
                 })
             }, config || {}));

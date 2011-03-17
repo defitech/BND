@@ -3,7 +3,7 @@ Ext.ns('Library');
 Library.Book = Ext.extend(Ext.Window, {
 
     tplImage: new Ext.XTemplate(
-        '<img class="book-thumb-big" src="{src}" title="{title}" alt="{title}" />'
+        '<img id="{id}" class="book-thumb-big" src="{src}" title="{title}" alt="{title}" />'
     ),
 
     getForm: function() {
@@ -152,6 +152,7 @@ Library.Book = Ext.extend(Ext.Window, {
             width: 700,
             height: 480
         });
+        this.thumbId = Ext.id();
         Ext.apply(this, {
             title: this.record ? this.record.get('title') : Library.wording.add_book,
             layout: 'border',
@@ -165,7 +166,8 @@ Library.Book = Ext.extend(Ext.Window, {
                 bodyStyle: 'padding: 4px;',
                 html: this.tplImage.apply({
                     src: this.data.thumb || 'resources/images/empty.jpg',
-                    title: this.data.title
+                    title: this.data.title,
+                    id: this.thumbId
                 })
             },{
                 xtype: 'form',
