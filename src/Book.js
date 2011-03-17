@@ -118,14 +118,12 @@ Library.Book = Ext.extend(Ext.Window, {
 
     initFieldNiveaux: function(config, cniveau) {
         if (this.data.niveaux && this.data.niveaux.length > 0) {
-            for (var i = 0; i < this.data.niveaux.length; i++) {
-                Ext.apply(this.data.niveaux[i], cniveau || {});
-            }
             return Ext.apply({
                 xtype: 'checkboxgroup',
                 ref: '../../checkniveau',
                 fieldLabel: Library.wording.niveau,
                 columns: 4,
+                defaults: cniveau || {},
                 items: this.data.niveaux
             }, config || {});
         } else {
