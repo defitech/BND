@@ -6,7 +6,7 @@ Library.wording = {
 
     library_conditions: 'Conditions d\'utilisation',
     library_conditions_refuse: 'Je ne suis pas d\'accord',
-    library_conditions_accept: 'J\'ai signé et j\'accepte les conditions ci-dessus',
+    library_conditions_accept: 'J\'ai sign\u00e9 et j\'accepte les conditions ci-dessus',
 
     thumb: 'Aperçu',
     title: 'Titre',
@@ -26,7 +26,7 @@ Library.wording = {
 
     download_book_button: 'T\u00e9l\u00e9charger',
 
-    swfupload_upload_progress: 'Fichier {0} à {1}',
+    swfupload_upload_progress: 'Fichier {0} \u00e0 {1}',
     swfupload_error_title: 'Erreur d\'upload',
     swfupload_button_text: 'Parcourir...',
     swfupload_title: 'Upload de fichiers',
@@ -91,6 +91,8 @@ Library.wording = {
     delete_book_button: 'Supprimer',
     delete_book_title: 'Suppression',
     delete_book: 'Supprimer les livres s\u00e9lectionn\u00e9s?',
+    delete_book_confirmmany: 'Un ou plusieurs de ces livres ont d\u00e9j\u00e0 \u00e9t\u00e9 t\u00e9l\u00e9charg\u00e9s au moins une fois. Supprimer quand m\u00eame?',
+    delete_book_confirmone: 'Ce livre a d\u00e9j\u00e0 \u00e9t\u00e9 t\u00e9l\u00e9charg\u00e9 au moins une fois. Supprimer quand m\u00eame?',
 
     error_title: 'Erreur serveur',
     loading: 'Chargement...',

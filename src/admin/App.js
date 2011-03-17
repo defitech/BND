@@ -69,7 +69,6 @@ Library.admin.App = Ext.extend(Library.App, {
         if (count > 0) {
             Ext.Msg.confirm(Library.wording.delete_book_title, Library.wording.delete_book, function(choice){
                 if (choice == 'yes') {
-                    if (btn) btn.disable();
                     if (!selected) {
                         selected = grid.getSelectionModel().getSelections();
                     }
@@ -77,36 +76,46 @@ Library.admin.App = Ext.extend(Library.App, {
                     for (var i = 0; i < selected.length; i++) {
                         ids['ids[' + i + ']'] = selected[i].get('id');
                     }
-                    grid.loadMask.show();
-                    Ext.Ajax.request({
-                        url: Library.Main.config().controller,
-                        params: Ext.apply(ids, {
-                            cmd: 'removeBook'
-                        }),
-                        scope: this,
-                        success: function(response) {
-                            var json = Library.Main.getJson(response);
-                            if (json.success) {
-                                this.afterRemoveBooks(btn, selected, json);
-                            } else {
-                                grid.loadMask.hide();
-                                if (btn) btn.enable();
-                            }
-                        },
-                        failure: function(response) {
-                            grid.loadMask.hide();
-                            if (btn) btn.enable();
-                            Library.Main.failure(response);
-                        }
-                    });
+                    this.removeBooksSubmit(ids, btn, selected);
                 }
             }, this);
         }
     },
 
-    afterRemoveBooks: function(btn, selected, json) {
-        this.getGrid().getStore().reload();
-        if (btn) btn.enable();
+    removeBooksSubmit: function(ids, btn, selected, forceConfirm) {
+        var grid = this.getGrid();
+        grid.loadMask.show();
+        if (btn) btn.disable();
+        Ext.Ajax.request({
+            url: Library.Main.config().controller,
+            params: Ext.apply(ids, {
+                cmd: 'removeBook',
+                forceConfirm: forceConfirm
+            }),
+            scope: this,
+            success: function(response) {
+                var json = Library.Main.getJson(response);
+                grid.loadMask.hide();
+                if (btn) btn.enable();
+                if (json.success) {
+                    if (json.confirm) {
+                        var str = grid.getSelectionModel().getCount() > 1 ? Library.wording.delete_book_confirmmany : Library.wording.delete_book_confirmone;
+                        Ext.Msg.confirm(Library.wording.delete_book_title, str, function(choice){
+                            if (choice == 'yes') {
+                                this.removeBooksSubmit(ids, btn, selected, true);
+                            }
+                        }, this);
+                    } else {
+                        grid.getStore().reload();
+                    }
+                }
+            },
+            failure: function(response) {
+                grid.loadMask.hide();
+                if (btn) btn.enable();
+                Library.Main.failure(response);
+            }
+        });
     },
 
     logout: function() {

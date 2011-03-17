@@ -313,9 +313,27 @@ class Library_Controller {
     protected function removeBook() {
         Library_Config::getInstance()->testIssetAuser();
         $ids = $this->getParam('ids');
+        if (!$this->getParam('forceConfirm', false)) {
+            // check si plusieurs livres on l'élément
+            $table = new Library_User_Download();
+            $rowset = $table->fetchAll($table
+                ->select()
+                ->where('book_id IN(?)', $ids)
+            );
+            if ($rowset->count() > 0) {
+                // il y a d'autres livres concernés par cette suppression. On
+                // renvoie au navigateur la demande de confirmation
+                return array(
+                    'success' => true,
+                    'confirm' => true,
+                    'nb' => $rowset->count()
+                );
+            }
+        }
         $table = new Library_Book();
         $table->delete($table->getAdapter()->quoteInto('id IN(?)', $ids));
 
+        Library_Config::log(sprintf('suppression du(des) livre(s): ', implode(', ', $ids)));
         return array(
             'success' => true,
             'nb' => count($ids)

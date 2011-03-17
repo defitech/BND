@@ -110,7 +110,7 @@ Ext.override(Ext.form.Action.Submit, {
         try {
             return Ext.decode(response.responseText);
         } catch (e) {
-            var msg = response.responseText + '<br/>' + e.toString();
+            var msg = response.responseText + '<br/>Javascript: ' + e.toString();
             return {success: false, error: msg}
         }
     }
