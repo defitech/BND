@@ -72,28 +72,32 @@ Library.admin.Book = Ext.extend(Library.Book, {
 
     createThumbFromPdf: function() {
         var pdf = this.getForm().getForm().findField('pdf').getValue();
-        if (pdf && this.data.id) {
-            this._mask.show();
-            Ext.Ajax.request({
-                url: Library.Main.config().controller,
-                params: {
-                    cmd: 'generatePdfThumb',
-                    pdf: pdf,
-                    book_id: this.data.id
-                },
-                scope: this,
-                success: function(response) {
-                    var json = Library.Main.getJson(response);
-                    this._mask.hide();
-                    if (json.success) {
-                        this.setThumbInfo(json.thumb);
-                    }
-                },
-                failure: function(response) {
-                    this._mask.hide();
-                    Library.Main.failure(response);
+        if (pdf) {
+            Ext.Msg.confirm(Library.wording.book_thumb_create_title, Library.wording.book_thumb_create, function(choice){
+                if (choice == 'yes') {
+                    this._mask.show();
+                    Ext.Ajax.request({
+                        url: Library.Main.config().controller,
+                        params: {
+                            cmd: 'generatePdfThumb',
+                            pdf: pdf,
+                            book_id: this.data.id
+                        },
+                        scope: this,
+                        success: function(response) {
+                            var json = Library.Main.getJson(response);
+                            this._mask.hide();
+                            if (json.success) {
+                                this.setThumbInfo(json.thumb);
+                            }
+                        },
+                        failure: function(response) {
+                            this._mask.hide();
+                            Library.Main.failure(response);
+                        }
+                    });
                 }
-            });
+            }, this);
         }
     },
 
@@ -612,14 +616,7 @@ Library.admin.Book = Ext.extend(Library.Book, {
                     xtype: 'button',
                     iconCls: 'book-thumb-small',
                     scope: this,
-                    disabled: !this.data.filename && !this.data.id,
-                    handler: function(){
-                        Ext.Msg.confirm(Library.wording.book_thumb_create_title, Library.wording.book_thumb_create, function(choice){
-                            if (choice == 'yes') {
-                                this.createThumbFromPdf();
-                            }
-                        }, this);
-                    }
+                    handler: this.createThumbFromPdf
                 }]
             }]
         }]);
