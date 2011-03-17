@@ -26,25 +26,22 @@ $config = array(
         <!-- CSS Ext -->
         <link rel="stylesheet" type="text/css" href="<?php echo $path; ?>resources/css/ext-all.css" />
         <link rel="stylesheet" type="text/css" href="<?php echo $path; ?>../extjsux/extjsplupload/ext.ux.plupload.css" />
+        <link rel="stylesheet" type="text/css" href="<?php echo $path; ?>../extjsux/examples/ux/gridfilters/css/GridFilters.css" />
         <!-- CSS app -->
         <link rel="stylesheet" type="text/css" href="resources/css/app.css" />
         <!-- Base JS Ext -->
         <script type="text/javascript" src="<?php echo $path; ?>adapter/ext/ext-base.js"></script>
         <script type="text/javascript" src="<?php echo $path; ?>ext-all.js"></script>
-        <script type="text/javascript" src="<?php echo $path; ?>src/locale/ext-lang-fr.js"></script>
+        <script type="text/javascript" src="<?php echo $path; ?>../extjsux/src/locale/ext-lang-fr.js"></script>
         <!-- Plugin JS Ext -->
         <script type="text/javascript" src="<?php echo $path; ?>../extjsux/plupload/js/plupload.min.js"></script>
         <script type="text/javascript" src="<?php echo $path; ?>../extjsux/extjsplupload/ext.ux.plupload.js"></script>
 
-        <script type="text/javascript" src="<?php echo $path; ?>examples/ux/gridfilters/menu/RangeMenu.js"></script>
-        <script type="text/javascript" src="<?php echo $path; ?>examples/ux/gridfilters/menu/ListMenu.js"></script>
-        <script type="text/javascript" src="<?php echo $path; ?>examples/ux/gridfilters/GridFilters.js"></script>
-        <script type="text/javascript" src="<?php echo $path; ?>examples/ux/gridfilters/filter/Filter.js"></script>
-        <script type="text/javascript" src="<?php echo $path; ?>examples/ux/gridfilters/filter/StringFilter.js"></script>
-        <script type="text/javascript" src="<?php echo $path; ?>examples/ux/gridfilters/filter/DateFilter.js"></script>
-        <script type="text/javascript" src="<?php echo $path; ?>examples/ux/gridfilters/filter/ListFilter.js"></script>
-        <script type="text/javascript" src="<?php echo $path; ?>examples/ux/gridfilters/filter/NumericFilter.js"></script>
-        <script type="text/javascript" src="<?php echo $path; ?>examples/ux/gridfilters/filter/BooleanFilter.js"></script>
+        <script type="text/javascript" src="<?php echo $path; ?>../extjsux/examples/ux/gridfilters/menu/ListMenu.js"></script>
+        <script type="text/javascript" src="<?php echo $path; ?>../extjsux/examples/ux/gridfilters/GridFilters.js"></script>
+        <script type="text/javascript" src="<?php echo $path; ?>../extjsux/examples/ux/gridfilters/filter/Filter.js"></script>
+        <script type="text/javascript" src="<?php echo $path; ?>../extjsux/examples/ux/gridfilters/filter/StringFilter.js"></script>
+        <script type="text/javascript" src="<?php echo $path; ?>../extjsux/examples/ux/gridfilters/filter/ListFilter.js"></script>
         <!-- Base JS App -->
         <script type="text/javascript" src="lang/fr.js"></script>
         <script type="text/javascript" src="src/Main.js"></script>
