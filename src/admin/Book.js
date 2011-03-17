@@ -29,6 +29,47 @@ Library.admin.Book = Ext.extend(Library.Book, {
         });
     },
 
+    doApply: function() {
+        this._mask.show();
+        this.getForm().getForm().submit({
+            url: Library.Main.config().controller,
+            scope: this,
+            success: function(form, action) {
+                this._mask.hide();
+                if (action.result.success) {
+                    var frm = this.getForm().getForm();
+                    Ext.apply(this.data, action.result.infos);
+                    frm.findField('id').setValue(this.data.id);
+                    frm.findField('pdf').setValue(this.data.filename);
+                    if (this.data.thumb) {
+                        this.setThumbInfo(action.result.infos.thumb);
+                    }
+                    this.fireEvent('bookapply', this, Ext.apply(this.data, {
+                        editorid: this.data.editor_id,
+                        editor_id: frm.findField('editor_id').getRawValue(),
+                        typeid: this.data.type_id,
+                        type_id: frm.findField('type_id').getRawValue(),
+                        niveauid: Ext.getCmp(this.niveaux_id).getValue()
+                    }));
+                } else {
+                    this.fireEvent('booksave', this, form, action);
+                }
+            },
+            failure: function(form, action) {
+                this._mask.hide();
+                Library.Main.failureForm(action.result);
+            }
+        });
+    },
+
+    setThumbInfo: function(thumb) {
+        this.data.thumb = thumb;
+        this.getForm().getForm().findField('thumb').setValue(thumb);
+        var img = Ext.get(this.thumbId);
+        img.set({src: thumb});
+        this.fireEvent('bookthumbchange', this, thumb);
+    },
+
     createThumbFromPdf: function() {
         var pdf = this.getForm().getForm().findField('pdf').getValue();
         if (pdf && this.data.id) {
@@ -45,10 +86,7 @@ Library.admin.Book = Ext.extend(Library.Book, {
                     var json = Library.Main.getJson(response);
                     this._mask.hide();
                     if (json.success) {
-                        this.getForm().getForm().findField('thumb').setValue(json.thumb);
-                        var img = Ext.get(this.thumbId);
-                        img.set({src: json.thumb});
-                        this.fireEvent('bookthumbchange', this, json.thumb);
+                        this.setThumbInfo(json.thumb);
                     }
                 },
                 failure: function(response) {
@@ -439,6 +477,13 @@ Library.admin.Book = Ext.extend(Library.Book, {
                 scope: this,
                 handler: this.doSave
             },
+            {
+                text: Library.wording.info_book_apply,
+                iconCls: 'book-apply',
+                scale: 'medium',
+                scope: this,
+                handler: this.doApply
+            },
             this.initCloseButton()
         ];
     },
@@ -602,7 +647,7 @@ Library.admin.Book = Ext.extend(Library.Book, {
     },
 
     initComponent: function() {
-        this.addEvents('booksave', 'bookthumbchange');
+        this.addEvents('booksave', 'bookapply', 'bookthumbchange');
         Ext.apply(this, {
             width: 900,
             // on annule Esc, histoire d'eviter de quitter la fenetre inopinement

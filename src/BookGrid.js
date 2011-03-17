@@ -116,8 +116,7 @@ Library.BookGrid = Ext.extend(Ext.grid.GridPanel, {
                 // id de l'editeur (int)
                 {name: 'editorid', type: 'int'},
                 // liste des ids des niveaux (texte separe par virgule)
-                {name: 'niveauid'},
-                {name: 'pdfdl'}
+                {name: 'niveauid'}
             ]
         });
     },

@@ -82,6 +82,7 @@ Library.wording = {
     info_book_close: 'Fermer',
     info_book_cancel: 'Annuler',
     info_book_save: 'Enregistrer',
+    info_book_apply: 'Appliquer',
 
     import_book_button: 'Importer CSV',
 

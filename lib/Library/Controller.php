@@ -306,6 +306,7 @@ class Library_Controller {
         return array(
             'success' => $success,
             'msg' => $msg,
+            'infos' => $row->toArray(),
             'log' => $log
         );
     }

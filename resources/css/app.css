@@ -97,6 +97,10 @@ body.book-background-montagnes {
     background-image: url('../images/save.png') !important;
 }
 
+.book-apply {
+    background-image: url('../images/apply.png') !important;
+}
+
 .book-window-close {
     background-image: url('../images/close.png') !important;
 }
