@@ -34,6 +34,9 @@ Library.App = Ext.extend(Ext.Viewport, {
         var grid = this.getGrid();
         grid.getStore().setBaseParam('filters[fullsearch]', search);
         grid.filters.reload();
+        // s'il y a un fullsearch, on informe la grid pour pouvoir faire un
+        // undo grace au clic-droite
+        grid.hasFullsearch = search ? true : false;
     },
 
     undoBookSearch: function() {
@@ -45,6 +48,8 @@ Library.App = Ext.extend(Ext.Viewport, {
         if (current.length == 0) {
             grid.getStore().reload();
         }
+        // on informe la grid pour desactiver le undo du clic-droite
+        grid.hasFullsearch = false;
     },
 
     downloadBook: function() {
@@ -102,7 +107,7 @@ Library.App = Ext.extend(Ext.Viewport, {
                 iconCls: 'book-main',
                 title: Library.wording.library_title,
                 layout: 'fit',
-                margins: '50',
+                margins: '100',
                 collapsible: true,
                 tools: [{
                     id: 'help',

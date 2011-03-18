@@ -4,7 +4,7 @@
 $dir = dirname(__FILE__) . '/';
 
 // récupération du chemin vers le Zend Framework. On chope l'instance
-$instance = file_get_contents($dir . 'instance');
+$instance = trim(file_get_contents($dir . 'instance'));
 // on chope le config.ini qui contient toutes les infos de configuration
 $configFile = $dir . 'config/config.ini';
 $ini = parse_ini_file($configFile, true);

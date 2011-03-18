@@ -273,7 +273,7 @@ Library.BookGrid = Ext.extend(Ext.grid.GridPanel, {
                 rowcontextmenu: {scope: this, fn: function(grid, rowIndex, e){
                     var record = grid.getStore().getAt(rowIndex);
                     grid.getSelectionModel().selectRow(rowIndex);
-                    var disableUndoFilters = grid.filters.getFilterData().length == 0;
+                    var disableUndoFilters = grid.filters.getFilterData().length == 0 && !grid.hasFullsearch;
                     var contextmenu = this.initBookContextMenu(record, disableUndoFilters);
                     contextmenu.showAt(e.getXY());
                     e.stopEvent();
