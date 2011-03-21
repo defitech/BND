@@ -85,6 +85,7 @@ Library.ContextMenu = Ext.extend(Ext.menu.Menu, {
         },{
             text: Library.wording.download_book_button,
             iconCls: 'book-download-small',
+            disabled: !this.record.get('filename'),
             scope: this,
             handler: function() {
                 this.fireEvent('bookdownload', this, this.record);
