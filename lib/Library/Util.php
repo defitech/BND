@@ -60,7 +60,7 @@ class Library_Util {
         print_r($types);
         echo "</pre>";
         exit;
-        if(in_array($e['type'], $types)) {
+        if (true || in_array($e['type'], $types)) {
             echo "bon on log?";
             Library_Config::log(sprintf('%s, %s, %s, %s', $e['type'], $e['message'], $e['file'], $e['line']));
             echo "ok";
