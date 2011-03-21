@@ -54,9 +54,7 @@ class Library_Util {
         $e = error_get_last();
         $types = array(E_STRICT, E_ERROR, E_RECOVERABLE_ERROR, E_USER_ERROR);
         if (in_array($e['type'], $types)) {
-            echo "bon on log?";
-            Library_Config::log('on log');
-            echo "ok";
+            Library_Config::log()->err(sprintf('%s, %s, %s, %s', $e['type'], $e['message'], $e['file'], $e['line']));
         }
     }
 
