@@ -45,6 +45,3 @@ Zend_Session::start();
 
 
 register_shutdown_function('Library_Util::manageFatalErrors');
-
-
-new sdklfklds();
