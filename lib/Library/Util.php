@@ -53,6 +53,10 @@ class Library_Util {
     public static function manageFatalErrors() {
         $e = error_get_last();
         $types = array(E_STRICT, E_ERROR, E_RECOVERABLE_ERROR, E_USER_ERROR);
+        echo "<pre>";
+        print_r($e);
+        echo "</pre>";
+        exit;
         if(in_array($e['type'], $types)) {
             Library_Config::log(sprintf('%s, %s, %s, %s', $e['type'], $e['message'], $e['file'], $e['line']));
         }
