@@ -56,6 +56,9 @@ class Library_Util {
         echo "<pre>";
         print_r($e);
         echo "</pre>";
+        echo "<pre>";
+        print_r($types);
+        echo "</pre>";
         exit;
         if(in_array($e['type'], $types)) {
             echo "bon on log?";
