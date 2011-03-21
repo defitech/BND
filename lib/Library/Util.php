@@ -45,4 +45,17 @@ class Library_Util {
        return ereg_replace(' +', $separator, trim($Str));
     }
 
+    /**
+     * Gère le traitement des fatal error
+     *
+     * @return void
+     */
+    public static function manageFatalErrors() {
+        $e = error_get_last();
+        $types = array(E_STRICT, E_ERROR, E_RECOVERABLE_ERROR, E_USER_ERROR);
+        if(in_array($e['type'], $types)) {
+            Library_Config::log(sprintf('%s, %s, %s, %s', $e['type'], $e['message'], $e['file'], $e['line']));
+        }
+    }
+
 }

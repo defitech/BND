@@ -28,8 +28,10 @@ $autoloader = Zend_Loader_Autoloader::getInstance();
 
 $autoloader->registerNamespace('Library_');
 
+register_shutdown_function('Library_Util::manageFatalErrors');
 
 
+new sdklfklds();
 // set de la config, qui se base sur le config.ini
 $config = Library_Config::getInstance($instance, $configFile, $dir);
 

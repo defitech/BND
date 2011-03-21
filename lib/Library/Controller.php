@@ -52,13 +52,13 @@ class Library_Controller {
         } elseif ($default !== 'FjhOh83hoo3') {
             return $default;
         }
-        throw new Exception('Le paramètre ' . $param . " n'existe pas.");
+        throw new Exception(sprintf(Library_Wording::get('param_doesnt_exists', $params)));
     }
 
     public function action() {
         $cmd = $this->getParam('cmd');
         if (!method_exists($this, $cmd)) {
-            throw new Exception('Paramètre cmd: ' . $cmd . ' inconnu');
+            throw new Exception(sprintf(Library_Wording::get('param_cmd_unknow'), $cmd));
         }
         return $this->$cmd();
     }
@@ -256,7 +256,7 @@ class Library_Controller {
                 $row->thumb = Library_Book::getThumbFolder() . $img;
             } else {
                 $success = false;
-                $msg = "Mauvais type de fichier pour l'aperçu";
+                $msg = Library_Wording::get('bad_thumb_type');
             }
         }
 
@@ -278,7 +278,7 @@ class Library_Controller {
                 $row->filename = 'upload/' . $p;
             } else {
                 $success = false;
-                $msg = "Mauvais type de fichier pour le PDF";
+                $msg = Library_Wording::get('bad_pdf_type');
             }
         }
 
@@ -326,7 +326,7 @@ class Library_Controller {
         $table = new Library_Book();
         $table->delete($table->getAdapter()->quoteInto('id IN(?)', $ids));
 
-        Library_Config::log(sprintf('suppression du(des) livre(s): ', implode(', ', $ids)));
+        Library_Config::log(sprintf(Library_Wording::get('book_delete'), implode(', ', $ids)));
         return array(
             'success' => true,
             'nb' => count($ids)
@@ -372,7 +372,7 @@ class Library_Controller {
             'downloaded_at' => date('Y-m-d H:i:s')
         ));
 
-        Library_Config::log(sprintf('telechargement du livre: %s (%s)', $book->title, $book->id));
+        Library_Config::log(sprintf(Library_Wording::get('book_download'), $book->title, $book->id));
 
         header('HTTP/1.1 200 OK');
         header('Date: ' . date("D M j G:i:s T Y"));
@@ -420,7 +420,7 @@ class Library_Controller {
         } else {
             return array(
                 'success' => false,
-                'error' => sprintf('Le fichier %s n\'existe pas', $pdfname)
+                'error' => sprintf(Library_Wording::get('pdf_doesnt_exists'), $pdfname)
             );
         }
     }
@@ -462,7 +462,7 @@ class Library_Controller {
 
         return array(
             'success' => false,
-            'error' => 'Mauvais couple login/pass'
+            'error' => Library_Wording::get('bad_login')
         );
     }
 
@@ -555,7 +555,7 @@ class Library_Controller {
         $table = new Library_Book_Type();
         $table->delete($table->getAdapter()->quoteInto('id = ?', $id));
 
-        Library_Config::log(sprintf('suppression de la matiere: %s', $id));
+        Library_Config::log(sprintf(Library_Wording::get('type_delete'), $id));
         return array(
             'success' => true
         );
@@ -636,7 +636,7 @@ class Library_Controller {
         $table = new Library_Book_Editor();
         $table->delete($table->getAdapter()->quoteInto('id = ?', $id));
 
-        Library_Config::log(sprintf('suppression de l\'editeur: %s', $id));
+        Library_Config::log(sprintf(Library_Wording::get('editor_delete'), $id));
         return array(
             'success' => true
         );
@@ -762,7 +762,7 @@ class Library_Controller {
         $table = new Library_Niveau();
         $table->delete($table->getAdapter()->quoteInto('id IN(?)', $niveaux));
 
-        Library_Config::log(sprintf('suppression des niveaux: %s', implode(', ', $niveaux)));
+        Library_Config::log(sprintf(Library_Wording::get('niveau_delete'), implode(', ', $niveaux)));
 
         $t = new Library_Book();
         $book = $t->fetchRow($t->select()->where('id = ?', $this->getParam('book_id', 0)));
@@ -836,7 +836,7 @@ class Library_Controller {
         if ($user->id == $id) {
             return array(
                 'success' => false,
-                'error' => 'Impossible de se supprimer soi-même'
+                'error' => Library_Wording::get('own_deletion_not_allowed')
             );
         }
 
@@ -853,7 +853,7 @@ class Library_Controller {
                 return array(
                     'success' => true,
                     'confirm' => true,
-                    'msg' => sprintf('Cet utilisateur a %s téléchargements à son actif. Supprimer quand même?', $rowset->count()),
+                    'msg' => sprintf(Library_Wording::get('user_delete_confirm'), $rowset->count()),
                     'nb' => $rowset->count()
                 );
             }
@@ -862,7 +862,7 @@ class Library_Controller {
         $table = new Library_User();
         $table->delete($table->getAdapter()->quoteInto('id = ?', $this->getParam('id')));
 
-        Library_Config::log(sprintf('suppression de l\'utilisateur: %s', $id));
+        Library_Config::log(sprintf(Library_Wording::get('user_delete'), $id));
         return array(
             'success' => true
         );
@@ -1066,7 +1066,7 @@ class Library_Controller {
         }
         return array(
             'success' => false,
-            'error' => 'Mouvais fichier fourni. Il doit s agir d un CSV'
+            'error' => Library_Wording::get('bad_csv_type')
         );
     }
 
