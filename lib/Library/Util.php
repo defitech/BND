@@ -37,7 +37,7 @@ class Library_Util {
        $Stop = array_merge($Stop, array('+', '-', '*', '/', '°', '%', 'µ', '§'));
 
        # Divers
-       $Stop = array_merge($Stop, array('_', '#', '~', '|', '^', '@', '¨', '$', '�ç�', '£'));
+       $Stop = array_merge($Stop, array('_', '#', '~', '|', '^', '@', '¨', '$', '£'));
 
        $Str = str_replace($Stop, ' ', $Str);
 
