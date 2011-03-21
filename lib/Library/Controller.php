@@ -725,7 +725,8 @@ class Library_Controller {
 
     protected function removeNiveau() {
         Library_Config::getInstance()->testIssetAuser();
-        $niveaux = $this->getGroupParam('niveau');
+        $ns = $this->getGroupParam('niveau');
+        $niveaux = array_keys($ns);
         if (!$this->getParam('forceConfirm', false)) {
             // check si plusieurs livres on l'élément
             $table = Zend_Registry::get('db');
@@ -733,7 +734,7 @@ class Library_Controller {
                 ->select()
                 ->from(array('n' => 'library_niveau'), array('txt' => 'n.label'))
                 ->join(array('nb' => 'library_book_niveau'), 'nb.niveau_id = n.id', array('nbd' => 'COUNT(*)'))
-                ->where('n.id IN(?)', array_keys($niveaux))
+                ->where('n.id IN(?)', $niveaux)
                 ->group('nb.niveau_id')
             );
 
@@ -761,7 +762,7 @@ class Library_Controller {
         $table = new Library_Niveau();
         $table->delete($table->getAdapter()->quoteInto('id IN(?)', $niveaux));
 
-        Library_Config::log(sprintf('suppression des niveaux: %s', implode(', ', array_keys($niveaux))));
+        Library_Config::log(sprintf('suppression des niveaux: %s', implode(', ', $niveaux)));
 
         $t = new Library_Book();
         $book = $t->fetchRow($t->select()->where('id = ?', $this->getParam('book_id', 0)));
