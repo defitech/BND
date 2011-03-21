@@ -58,22 +58,12 @@ class Library_Controller {
     public function action() {
         $cmd = $this->getParam('cmd');
         if (!method_exists($this, $cmd)) {
-            throw new Exception('Paramètre ' . $cmd . ' inconnu');
+            throw new Exception('Paramètre cmd: ' . $cmd . ' inconnu');
         }
         return $this->$cmd();
     }
 
     public function getGroupParam($paramPrefix, $separator = '-') {
-        $params = array();
-        foreach ($this->params as $key => $val) {
-            if (strpos($key, $paramPrefix) !== false) {
-                $params[] = array_pop(explode($separator, $key));
-            }
-        }
-        return $params;
-    }
-
-    public function getGroupParamPair($paramPrefix, $separator = '-') {
         $params = array();
         foreach ($this->params as $key => $val) {
             if (strpos($key, $paramPrefix) !== false) {
@@ -97,6 +87,7 @@ class Library_Controller {
      */
 
     protected function getBookList() {
+        Library_Config::getInstance()->testIssetAuser();
         // récupération des paramètres
         $sort = $this->getParam('sort', 'title');
         $dir = $this->getParam('dir', 'ASC');
@@ -197,6 +188,7 @@ class Library_Controller {
     }
 
     protected function getBook() {
+        Library_Config::getInstance()->testIssetAuser();
         $table = new Library_Book();
         $id = $this->getParam('id');
 
@@ -296,10 +288,10 @@ class Library_Controller {
         $niveaux = $this->getGroupParam('niveau');
         $table_link = new Library_Book_Niveau();
         $table_link->delete($table_link->getAdapter()->quoteInto('book_id IN(?)', $row->id));
-        foreach ($niveaux as $niveau) {
+        foreach ($niveaux as $key => $niveau) {
             $table_link->insert(array(
                 'book_id' => $row->id,
-                'niveau_id' => $niveau
+                'niveau_id' => $key
             ));
         }
         
@@ -711,7 +703,7 @@ class Library_Controller {
 
     protected function editNiveau() {
         Library_Config::getInstance()->testIssetAuser();
-        $niveaux = $this->getGroupParamPair('niveau');
+        $niveaux = $this->getGroupParam('niveau');
         $table = new Library_Niveau();
 
         foreach ($niveaux as $id => $val) {
@@ -741,7 +733,7 @@ class Library_Controller {
                 ->select()
                 ->from(array('n' => 'library_niveau'), array('txt' => 'n.label'))
                 ->join(array('nb' => 'library_book_niveau'), 'nb.niveau_id = n.id', array('nbd' => 'COUNT(*)'))
-                ->where('n.id IN(?)', $niveaux)
+                ->where('n.id IN(?)', array_keys($niveaux))
                 ->group('nb.niveau_id')
             );
 
@@ -886,6 +878,7 @@ class Library_Controller {
      */
 
     protected function getUserDownloadList() {
+        Library_Config::getInstance()->testIssetAuser();
         $items = array();
         $table = Zend_Registry::get('db');
         $rowset = $table->fetchAll($table
@@ -911,6 +904,7 @@ class Library_Controller {
 
     protected function exportUserDownloadCav() {
         header('Content-Type: text/plain');
+        Library_Config::getInstance()->testIssetAuser();
 
         $table = Zend_Registry::get('db');
         $rowset = $table->fetchAll($table
@@ -992,7 +986,7 @@ class Library_Controller {
     /**
      * Fonction d'importation d'un fichier CSV. Le fichier CSV doit avoir cette tête:
      *
-     * - ligne   1: doit être la ligne des titres
+     * - ligne   1: doit être la ligne des entêtes
      *
      * - colonne A: matière (string) ex: Français | Anglais | etc.
      * - colonne B: éditeur (string) ex: Hachette | Payot | etc.

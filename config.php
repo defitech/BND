@@ -38,9 +38,6 @@ ini_set('magic_quotes_gpc', 0);
 // initialisation de la base de données
 $db = $config->getData()->db;
 Zend_Registry::set('db', Zend_Db::factory('PDO_Sqlite', array(
-    'host' => $db->host,
-    'username' => $db->user,
-    'password' => $db->pass,
     'dbname' => $db->name
 )));
 Zend_Db_Table_Abstract::setDefaultAdapter(Zend_Registry::get('db'));
