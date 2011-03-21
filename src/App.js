@@ -107,7 +107,7 @@ Library.App = Ext.extend(Ext.Viewport, {
                 iconCls: 'book-main',
                 title: Library.wording.library_title,
                 layout: 'fit',
-                margins: '100',
+                margins: '50 100',
                 collapsible: true,
                 tools: [{
                     id: 'help',
