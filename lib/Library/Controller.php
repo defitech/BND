@@ -761,7 +761,7 @@ class Library_Controller {
         $table = new Library_Niveau();
         $table->delete($table->getAdapter()->quoteInto('id IN(?)', $niveaux));
 
-        Library_Config::log(sprintf('suppression des niveaux: %s', implode(', ', $niveaux)));
+        Library_Config::log(sprintf('suppression des niveaux: %s', implode(', ', array_keys($niveaux))));
 
         $t = new Library_Book();
         $book = $t->fetchRow($t->select()->where('id = ?', $this->getParam('book_id', 0)));
