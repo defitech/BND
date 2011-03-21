@@ -105,6 +105,7 @@ Library.BookGrid = Ext.extend(Ext.grid.GridPanel, {
                 {name: 'title'},
                 {name: 'thumb'},
                 {name: 'isbn'},
+                {name: 'filename'},
                 // correspond au label (texte)
                 {name: 'type_id'},
                 // correspond au nom de l'editeur (texte)
