@@ -33,6 +33,20 @@ Library.BookGrid = Ext.extend(Ext.grid.GridPanel, {
     launchDownload: function(record) {
         window.location.href = Library.Main.config().controller + '?cmd=download&id=' + record.get('id');
     },
+
+    doContextMenuFilter: function(text, id) {
+        var record = this.getRecordFromContextMenu();
+        var filter = this.filters.getFilter(text);
+        this.loadMask.show();
+        filter.setActive(true);
+        filter.setValue(record.get(id));
+    },
+
+    getRecordFromContextMenu: function(wholeSelection) {
+        var records = this.getSelectionModel().getSelections();
+        var record = records[0];
+        return wholeSelection ? records : record;
+    },
     
     initBookContextMenuListeners: function() {
         return {
@@ -246,7 +260,8 @@ Library.BookGrid = Ext.extend(Ext.grid.GridPanel, {
     },
 
     initKeyMap: function() {
-        return new Library.Keys();
+        var keys = new Library.Keys();
+        return keys.get(this);
     },
 
     initComponent: function() {
@@ -259,6 +274,7 @@ Library.BookGrid = Ext.extend(Ext.grid.GridPanel, {
             store: store,
             plugins: [filters],
             loadMask: true,
+            keys: this.initKeyMap(),
             columnLines: false,
             colModel: this.initBookHeaders(idAutoExpand),
             autoExpandColumn: idAutoExpand,
@@ -281,10 +297,6 @@ Library.BookGrid = Ext.extend(Ext.grid.GridPanel, {
                 }},
                 afterrender: {scope: this, fn: function(grid){
                     grid.getStore().load({params:{start:0, limit: Library.Main.config().nb}});
-                }},
-                keypress: {scope: this, fn: function(e){
-                    if (!this._map) this._map = this.initKeyMap();
-                    this._map.get(this, e);
                 }}
             }
         });

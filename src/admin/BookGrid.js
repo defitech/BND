@@ -53,7 +53,8 @@ Library.admin.BookGrid = Ext.extend(Library.BookGrid, {
     },
 
     initKeyMap: function() {
-        return new Library.admin.Keys();
+        var map = new Library.admin.Keys();
+        return map.get(this);
     },
 
     initComponent: function() {
