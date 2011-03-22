@@ -42,7 +42,7 @@ class Library_Util {
        $Str = str_replace($Stop, ' ', $Str);
 
        # Remplacement espace multiple
-       return ereg_replace(' +', $separator, trim($Str));
+       return preg_replace('/ +/', $separator, trim($Str));
     }
 
     /**
