@@ -225,7 +225,6 @@ class Library_Controller {
         $id = $this->getParam('id');
         $success = true;
         $msg = '';
-        $log = array();
 
         if ($id) {
             $row = $table->fetchRow($table
@@ -272,9 +271,11 @@ class Library_Controller {
                 $i = Library_Util::getSlug($row->title) . '.jpg';
                 move_uploaded_file($pdf['tmp_name'], $path . $p);
                 $output = $this->generatePdfFirstPageThumb($path . $p, Library_Book::getThumbPath(true). $i);
-                $log[] = $output;
-                // set du nouveau pdf et de son thumb
-                $row->thumb = Library_Book::getThumbFolder() . $i;
+                if (count($output) == 1) {
+                    // set du nouveau pdf et de son thumb seulement s'il n'y a
+                    // pas eu d'erreur pendant la génération du thumb
+                    $row->thumb = Library_Book::getThumbFolder() . $i;
+                }
                 $row->filename = 'upload/' . $p;
             } else {
                 $success = false;
@@ -298,8 +299,7 @@ class Library_Controller {
         return array(
             'success' => $success,
             'msg' => $msg,
-            'infos' => $row->toArray(),
-            'log' => $log
+            'infos' => $row->toArray()
         );
     }
 
@@ -421,9 +421,10 @@ class Library_Controller {
         $i = Library_Util::getSlug($imagename) . '.jpg';
         $pdf = Library_Config::getInstance()->getData()->path->pdf . $pdfname;
         if (file_exists($pdf) && is_file($pdf)) {
-            $this->generatePdfFirstPageThumb($pdf, Library_Book::getThumbPath(true). $i);
-            // s'il y a un livre défini, on lui set son thumb
-            if ($book) {
+            $output = $this->generatePdfFirstPageThumb($pdf, Library_Book::getThumbPath(true). $i);
+            // s'il y a un livre défini, on lui set son thumb. On check aussi
+            // s'il n'y a pas eu d'erreur pendant la génération du thumb
+            if ($book && count($output) == 1) {
                 $book->thumb = Library_Book::getThumbPath() . $i;
                 $book->save();
             }
