@@ -68,7 +68,8 @@ CREATE TABLE 'library_user_download' ( 'id' INTEGER NOT NULL PRIMARY KEY , 'book
 # Contenu de la table: library_user
 #
 
-INSERT INTO 'library_user' VALUES ('1', 'admin', 'c462ea29c64efa0f679b05d046205d41', '1', '0');
+INSERT INTO 'library_user' VALUES ('1', 'admin', 'c462ea29c64efa0f679b05d046205d41', '1', '2011-03-22 13:10:00');
+INSERT INTO 'library_user' VALUES ('2', 'defitech', 'ce47d07243bb6eaf5e1322c81baf9bbf', '2', '2011-03-22 13:10:14');
 # --------------------------------------------------------
 
 

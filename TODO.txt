@@ -1,0 +1,22 @@
+à faire appli Defitech:
+(dernière màj le 16.03.2011)
+
+- important: upload de maxi gros fichier pour les PDFs (utiliser flash ou java)
+
+- gérer l'import csv de façon progressive, avec xhr (genre 10 lignes à la fois max)
+- boutons "précédents" et "suivant" dans la popup livre, pour naviguer d'un livre à l'autre sans avoir à passer par la grid
+- ramener le focus sur la grid après chaque action (avec raccourcis clavier)
+- la largeur du champ titre (grid des livres) se stoppe à ~1200px
+
+
+
+Raccourcis clavier sur fenêtre d'information:
+- Shift+Q: ferme la fenêtre
+- Shift+S: télécharger
+
+
+
+Reflexions:
+- filtres pour la grid http://triin.net/temp/filter-row/ ?
+- téléchargement sécurisé? par php? ou par http? htaccess?
+- sortir du svn les miniatures? les mettre dans bndlibs?
