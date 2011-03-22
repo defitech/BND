@@ -28,7 +28,7 @@ Library.Book = Ext.extend(Ext.Window, {
             iconCls: 'book-download',
             scale: 'medium',
             scope: this,
-            disabled: !this.record,
+            disabled: !this.record || !this.record.filename,
             handler: function() {
                 this.fireEvent('bookdownload', this, this.record)
             }
