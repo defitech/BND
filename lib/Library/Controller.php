@@ -336,9 +336,20 @@ class Library_Controller {
     private function generatePdfFirstPageThumb($pdf, $img) {
         $path_convert = Library_Config::getInstance()->getData()->path->convert;
 
-        $cmd = $path_convert . "convert '" . $pdf . "[0]' '" . $img . "'";
+        $argpdf = $pdf . '[0]';
+        $cmd = $path_convert . "convert " . escapeshellarg($argpdf) . " " . escapeshellarg($img);
         $output = array($cmd);
         exec($cmd, $output);
+
+        // log de l'output
+        ob_start();
+        echo "<pre>";
+        print_r($output);
+        echo "</pre>";
+        $content = ob_get_contents();
+        ob_end_clean();
+        Library_Config::log('Creation de thumb. Output ci-dessous:');
+        Library_Config::log()->debug($content);
 
         return $output;
     }
@@ -388,6 +399,9 @@ class Library_Controller {
 
     protected function generatePdfThumb() {
         Library_Config::getInstance()->testIssetAuser();
+        // set des paramètres PHP pour favoriser l'upload au mieux
+        ini_set('max_execution_time', 240);
+        ini_set('memory_limit', '256M');
         // on laisse la possibilité de générer un thumb même si aucun id de
         // livre n'est fourni
         $pdfname = $this->getParam('pdf', '');

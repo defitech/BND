@@ -23,3 +23,9 @@ Reflexions:
 - filtres pour la grid http://triin.net/temp/filter-row/ ?
 - téléchargement sécurisé? par php? ou par http? htaccess?
 - sortir du svn les miniatures? les mettre dans bndlibs?
+
+
+Erreurs d'uploads.
+Parfois, le thumb ne se crée pas. Loin d'être un hasard, voici des pistes:
+- fichier PDF trop gros, le script exec() plante (peut-être un timeout?)
+- le PDF n'a pas été trouvé sur le serveur (problème de nom ou d'accent)
