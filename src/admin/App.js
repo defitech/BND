@@ -88,10 +88,10 @@ Library.admin.App = Ext.extend(Library.App, {
                     xtype: 'textfield',
                     inputType: 'file',
                     name: 'csv',
-                    fieldLabel: 'Fichier'
+                    fieldLabel: Library.wording.file
                 },
                 buttons: [{
-                    text: 'Importer',
+                    text: Library.wording.import_book_button,
                     scale: 'medium',
                     iconCls: 'book-import',
                     scope: this,
@@ -252,7 +252,11 @@ Library.admin.App = Ext.extend(Library.App, {
                     scope: this,
                     iconCls: 'book-search-import',
                     handler: function() {
-                        this.checkForNewBooks();
+                        Ext.Msg.confirm(Library.wording.search_for_new_books_title, Library.wording.search_for_new_books_confirm, function(choice){
+                            if (choice == 'yes') {
+                                this.checkForNewBooks();
+                            }
+                        }, this);
                     }
                 }]
             }

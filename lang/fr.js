@@ -16,6 +16,7 @@ Library.wording = {
     niveau: 'Niveaux',
     isbn: 'N° ISBN',
     help: 'Aide',
+    file: 'Fichier',
 
     filter_undo: 'Annuler les filtres',
     filter_title: 'Filtrer',
@@ -105,6 +106,7 @@ Library.wording = {
 
     search_for_new_books: "Vérifier s'il y a de nouveaux livres PDF",
     search_for_new_books_title: 'Nouveaux livres PDF',
+    search_for_new_books_confirm: "Voulez-vous importer les PDFs présents dans le dossier temporaire (s'il y en a) vers l'application?",
     book_moved: '{0} fichiers PDF traités sur {1}',
     book_moved_first: 'Traitement du 1er fichier PDF',
     book_moved_finish: "<strong>{0}</strong> PDFs ont été ajouté. Vous pourrez les retrouver en cherchant <strong>new</strong> dans la barre de filtre principale. N'oubliez pas d'enlever ce mot-clé une fois le livre édité correctement!"
