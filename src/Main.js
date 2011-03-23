@@ -2,7 +2,7 @@ Ext.ns('Library');
 
 Ext.onReady(function() {
     document.title = Library.wording.library_title;
-    Ext.Msg.minWidth = 400;
+    Ext.Msg.minWidth = 450;
 });
 
 Library.Main = {

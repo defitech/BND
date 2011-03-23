@@ -186,6 +186,14 @@ body.book-background-montagnes {
     background-image: url('../images/searchimport.png') !important;
 }
 
+.book-new-check-true {
+    color: #009900 !important;
+}
+
+.book-new-check-false {
+    color: #990000 !important;
+}
+
 .book-menu-title {
     border: 1px solid #CCCCCC;
     background-color: #FFFFFF;

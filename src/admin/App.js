@@ -7,7 +7,7 @@ Library.admin.App = Ext.extend(Library.App, {
             '<p>{text}</p><br/>',
             '<ul>',
                 '<tpl for="data">',
-                '<li class"book-new-check-{success}}">{title} ({file}). Miniature: {thumb}</li>',
+                '<li class="book-new-check-{success}">{title} ({file}). Miniature: {thumb}</li>',
                 '</tpl>',
             '</ul>',
         '</div>'
