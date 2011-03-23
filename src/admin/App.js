@@ -45,27 +45,25 @@ Library.admin.App = Ext.extend(Library.App, {
                 // nombre d'elements traites jusqu'a present
                 start++;
                 result = result.concat(json.data || []);
-                if (json.next && !json.stop) {
-                    // on continue, donc on modifie la progressbar
-                    mask.updateProgress(start / total || 1, String.format(Library.wording.book_moved, start, total));
-                    // on modifie le tableau de resultat affiche a la fin du processus
-                    // on lance une nouvelle fois la requete
-                    this.checkForNewBooks(mask, start, total, result);
-                } else {
-                    // on a fini le processus. On affiche le resultat
-                    mask.hide();
-                    Ext.Msg.alert(Library.wording.search_for_new_books_title, this.checkForNewBooksTpl.apply({
-                        data: result,
-                        text: String.format(Library.wording.book_moved_finish, total)
-                    }));
+                if (json.success) {
+                    if (json.next && !json.stop) {
+                        // on continue, donc on modifie la progressbar
+                        mask.updateProgress(start / total || 1, String.format(Library.wording.book_moved, start, total));
+                        // on modifie le tableau de resultat affiche a la fin du processus
+                        // on lance une nouvelle fois la requete
+                        this.checkForNewBooks(mask, start, total, result);
+                    } else {
+                        // on a fini le processus. On affiche le resultat
+                        mask.hide();
+                        Ext.Msg.alert(Library.wording.search_for_new_books_title, this.checkForNewBooksTpl.apply({
+                            data: result,
+                            text: String.format(Library.wording.book_moved_finish, total)
+                        }));
+                    }
                 }
             },
             failure: function(response) {
                 mask.hide();
-                Ext.Msg.alert(Library.wording.search_for_new_books_title, this.checkForNewBooksTpl.apply({
-                    data: result,
-                    text: String.format(Library.wording.book_moved_finish, total)
-                }));
                 Library.Main.failure(response);
             }
         })
