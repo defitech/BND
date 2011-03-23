@@ -1152,7 +1152,7 @@ class Library_Controller {
 
                 // si le livre existe déjà dans la base, on shop
                 if (in_array(Library_Util::getSlug($info['titre']), $this->importBooks['slug'])) {
-                    return false;
+                    continue;
                 }
 
                 // check si le pdf de ce livre existe
