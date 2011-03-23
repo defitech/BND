@@ -65,7 +65,7 @@ Library.ContextMenu = Ext.extend(Ext.menu.Menu, {
                 });
             }
             return Ext.apply({
-                text: Library.wording.filter_niveaux,
+                text: String.format(Library.wording.filter_niveau, ''),
                 menu: {
                     items: ns
                 }
