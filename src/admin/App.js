@@ -4,7 +4,7 @@ Library.admin.App = Ext.extend(Library.App, {
 
     checkForNewBooksTpl: new Ext.XTemplate(
         '<div class="book-help">',
-            '<p>{text}</p>',
+            '<p>{text}</p><br/>',
             '<ul>',
                 '<tpl for="data">',
                 '<li class"book-new-check-{success}}">{title} ({file}). Miniature: {thumb}</li>',
@@ -62,6 +62,10 @@ Library.admin.App = Ext.extend(Library.App, {
             },
             failure: function(response) {
                 mask.hide();
+                Ext.Msg.alert(Library.wording.search_for_new_books_title, this.checkForNewBooksTpl.apply({
+                    data: result,
+                    text: String.format(Library.wording.book_moved_finish, total)
+                }));
                 Library.Main.failure(response);
             }
         })
