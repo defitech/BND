@@ -1093,38 +1093,71 @@ class Library_Controller {
      */
     protected function import() {
         Library_Config::getInstance()->testIssetAuser();
-        // set des paramètres PHP pour favoriser l'upload au mieux
-        ini_set('max_execution_time', 120);
-        ini_set('memory_limit', '128M');
 
         $file = $_FILES['csv'];
         $log = array();
         // on check si on peut ouvrir ce fichier uploadé
-        if ($file['error'] == UPLOAD_ERR_OK && $file['type'] == 'text/csv' && ($handle = fopen($file['tmp_name'], 'r')) !== false) {
+        if ($file['error'] == UPLOAD_ERR_OK && $file['type'] == 'text/csv') {
             // backup de la bd
             Library_Util::backupDb();
+            
+            // sauvegarde du csv quelque part pour réutilisation ultérieure
+            $path = Library_Config::getInstance()->getData()->path->log;
+            move_uploaded_file($file['tmp_name'], $path . 'import.csv');
 
+            return array(
+                'success' => true
+            );
+        }
+        return array(
+            'success' => false,
+            'error' => Library_Wording::get('bad_csv_type')
+        );
+    }
+
+    protected function importSegment() {
+        Library_Config::getInstance()->testIssetAuser();
+        // set des paramètres PHP pour favoriser l'upload au mieux
+        ini_set('max_execution_time', 120);
+        ini_set('memory_limit', '128M');
+
+        $file = Library_Config::getInstance()->getData()->path->log . 'import.csv';
+        $log = array();
+        // on check si on peut ouvrir ce fichier uploadé
+        if (($handle = fopen($file, 'r')) !== false) {
             $table = new Library_Book();
             $lines = 0;
+            $start = $this->getParam('start') + 1;
             $continue = true;
             $this->importTypes = Library_Book_Type::getListToArray();
             $this->importEditors = Library_Book_Editor::getListToArray();
             $this->importNiveaux = Library_Niveau::getListToArray();
             $this->importBooks = Library_Book::getListForImportDistinct();
             while (($data = fgetcsv($handle)) !== false) {
+                // on skip la 1ère ligne (ligne de titre)
                 if ($continue) {
                     $continue = false;
                     continue;
                 }
-                // on skip la 1ère ligne (ligne de titre) ainsi que les lignes
-                // éventuellement vides
+
+                // on skip les lignes éventuellement vides
                 $info = $this->makeDataFromImportLine($data);
                 if (!$info) {
                     continue;
                 }
+                
+                // on ne s'occupe que de la ligne voulue
+                $lines++;
+                if ($start != $lines) continue;
+
+                // si le livre existe déjà dans la base, on shop
+                if (in_array(Library_Util::getSlug($info['titre']), $this->importBooks['slug'])) {
+                    return false;
+                }
+
                 // check si le pdf de ce livre existe
                 if (file_exists($info['pathpdf'])) {
-                    if (!file_exists($info['pathimg'])) {
+                    if (false){//!file_exists($info['pathimg'])) {
                         $output = $this->generatePdfFirstPageThumb($info['pathpdf'], $info['pathimg']);
                         $log[] = $output;
                     }
@@ -1149,13 +1182,13 @@ class Library_Controller {
                         'niveau_id' => $niveau
                     ));
                 }
-                $lines++;
                 $log[] = $info;
             }
             fclose($handle);
             return array(
                 'success' => true,
-                'lines' => $lines,
+                'total' => $lines,
+                'next' => $start < $lines,
                 'log' => $log
             );
         }
@@ -1191,11 +1224,6 @@ class Library_Controller {
             'folder' => $line[5],
             'file' => $line[6],
         );
-
-        // si le livre existe déjà dans la base, on shop
-        if (in_array(Library_Util::getSlug($csv['titre']), $this->importBooks['slug'])) {
-            return false;
-        }
 
         // données rajoutées
         $file = substr($csv['file'], 0, strrpos($csv['file'], '.'));

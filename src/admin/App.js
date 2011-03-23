@@ -44,12 +44,12 @@ Library.admin.App = Ext.extend(Library.App, {
                 if (!total) total = json.total;
                 // nombre d'elements traites jusqu'a present
                 start++;
+                // on modifie le tableau de resultat affiche a la fin du processus
                 result = result.concat(json.data || []);
                 if (json.success) {
                     if (json.next && !json.stop) {
                         // on continue, donc on modifie la progressbar
                         mask.updateProgress(start / total || 1, String.format(Library.wording.book_moved, start, total));
-                        // on modifie le tableau de resultat affiche a la fin du processus
                         // on lance une nouvelle fois la requete
                         this.checkForNewBooks(mask, start, total, result);
                     } else {
@@ -66,7 +66,38 @@ Library.admin.App = Ext.extend(Library.App, {
                 mask.hide();
                 Library.Main.failure(response);
             }
-        })
+        });
+    },
+
+    startImport: function(win, mask, start) {
+        Ext.Ajax.request({
+            url: Library.Main.config().controller,
+            params: {
+                cmd: 'importSegment',
+                start: start
+            },
+            scope: this,
+            success: function(response) {
+                var json = Library.Main.getJson(response);
+                if (json.success) {
+                    if (json.next) {
+                        start++;
+                        // on continue, donc on modifie la progressbar
+                        mask.updateProgress(start / json.total || 1, String.format(Library.wording.book_moved, start, json.total));
+                        // on lance une nouvelle fois la requete
+                        this.startImport(win, mask, start);
+                    } else {
+                        mask.hide();
+                        this.getGrid().getStore().reload();
+                        win.close();
+                    }
+                }
+            },
+            failure: function(response) {
+                mask.hide();
+                Library.Main.failure(response);
+            }
+        });
     },
 
     importBooks: function(btn) {
@@ -103,8 +134,8 @@ Library.admin.App = Ext.extend(Library.App, {
                             scope: this,
                             success: function(form, action) {
                                 win._mask.hide();
-                                this.getGrid().getStore().reload();
-                                win.close();
+                                var mask = Ext.Msg.progress(Library.wording.import_book_button, '', Library.wording.book_moved_first);
+                                this.startImport(win, mask, 0);
                             },
                             failure: function(form, action) {
                                 win._mask.hide();
