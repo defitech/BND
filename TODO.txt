@@ -4,8 +4,6 @@ A faire appli Defitech:
 
 - important: upload de maxi gros fichier pour les PDFs (utiliser flash ou java)
 
-- gérer l'import csv de façon progressive, avec xhr (genre 10 lignes à la
-  fois max)
 - au moment de générer le thumb ou d'ulpoader le thumb, il faudrait le
   redimensionner automatiquement aux dimensions 258x397 max
 - boutons "précédents" et "suivant" dans la popup livre, pour naviguer d'un
