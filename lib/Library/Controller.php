@@ -341,6 +341,9 @@ class Library_Controller {
 
     protected function checkNewBooks() {
         Library_Config::getInstance()->testIssetAuser();
+        if ($this->getParam('start', 0) == 0) {
+            Library_Util::backupDb();
+        }
         $generate_thumb = $this->getParam('withThumb', true);
         $stop = false;
 
@@ -1098,6 +1101,9 @@ class Library_Controller {
         $log = array();
         // on check si on peut ouvrir ce fichier uploadé
         if ($file['error'] == UPLOAD_ERR_OK && $file['type'] == 'text/csv' && ($handle = fopen($file['tmp_name'], 'r')) !== false) {
+            // backup de la bd
+            Library_Util::backupDb();
+
             $table = new Library_Book();
             $lines = 0;
             $continue = true;

@@ -58,4 +58,22 @@ class Library_Util {
         }
     }
 
+    /**
+     * Backup la base de données
+     *
+     * @return boolean true si la copie s'est bien déroulée, false sinon
+     */
+    public static function backupDb() {
+        Library_Config::getInstance()->testIssetAuser();
+        $path = Library_Config::getInstance()->getData()->path->backup;
+        if (!is_dir($path)) {
+            mkdir($path, 0777);
+        }
+        $name = 'db_backup_' . date('Ymd_hi') . '.txt';
+        $cp = copy(Library_Config::getInstance()->getData()->db->name, $path . $name);
+
+        Library_Config::log(sprintf('Base de donnees backupee: %s', $cp));
+        return $cp;
+    }
+
 }
