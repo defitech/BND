@@ -6,6 +6,8 @@ A faire appli Defitech:
 
 - gérer l'import csv de façon progressive, avec xhr (genre 10 lignes à la
   fois max)
+- au moment de générer le thumb ou d'ulpoader le thumb, il faudrait le
+  redimensionner automatiquement aux dimensions 258x397 max
 - boutons "précédents" et "suivant" dans la popup livre, pour naviguer d'un
   livre à l'autre sans avoir à passer par la grid
 - ramener le focus sur la grid après chaque action (avec raccourcis clavier)

@@ -59,7 +59,7 @@ class Library_Book extends Zend_Db_Table_Abstract {
     public static function getThumbFolder() {
         return 'resources/books/';
     }
-    
+
     /**
      * Retourne le chemin vers le dossier d'upload pdf
      *
@@ -72,6 +72,20 @@ class Library_Book extends Zend_Db_Table_Abstract {
 
     public static function getUploadPdfFolder() {
         return 'upload/';
+    }
+
+    /**
+     * Retourne le chemin vers le dossier temporaire des pdf
+     *
+     * @param boolean $full true pour retourner le chemin complet racine
+     * @return string
+     */
+    public static function getTmpPdfPath($full = false) {
+        return ($full ? Library_Config::getInstance()->getData()->path->pdf : '') . self::getTmpPdfFolder();
+    }
+
+    public static function getTmpPdfFolder() {
+        return 'tmp/';
     }
 
 }

@@ -101,7 +101,13 @@ Library.wording = {
     error_title: 'Erreur serveur',
     loading: 'Chargement...',
     bad_json: 'Json mal form\u00e9',
-    failure: 'Pas de r\u00e9ponse du serveur. Probl\u00e8me r\u00e9seau.'
+    failure: 'Pas de r\u00e9ponse du serveur. Probl\u00e8me r\u00e9seau.',
+
+    search_for_new_books: "Vérifier s'il y a de nouveaux livres PDF",
+    search_for_new_books_title: 'Nouveaux livres PDF',
+    book_moved: '{0} fichiers PDF traités sur {1}',
+    book_moved_first: 'Traitement du 1er fichier PDF',
+    book_moved_finish: '{0} PDFs ont été ajouté'
 
 };
 

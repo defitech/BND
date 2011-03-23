@@ -2,8 +2,69 @@ Ext.ns('Library.admin')
 
 Library.admin.App = Ext.extend(Library.App, {
 
+    checkForNewBooksTpl: new Ext.XTemplate(
+        '<div class="book-help">',
+            '<p>{text}</p>',
+            '<ul>',
+                '<tpl for="data">',
+                '<li class"book-new-check-{success}}">{title} ({file}). Miniature: {thumb}</li>',
+                '</tpl>',
+            '</ul>',
+        '</div>'
+    ),
+
     addBook: function(btn) {
         this.getGrid().getBookInfo(null, {modal: true});
+    },
+
+    checkForNewBooks: function(mask, start, total, result) {
+        if (!mask) {
+            // creation de la progressbar si elle n'existe pas
+            mask = Ext.Msg.progress(Library.wording.search_for_new_books_title, '', Library.wording.book_moved_first);
+        }
+        // element a traiter dans la pile
+        start = start || 0;
+        result = result || [];
+        // envoi de la requete
+        Ext.Ajax.request({
+            url: Library.Main.config().controller,
+            params: {
+                cmd: 'checkNewBooks',
+                start: start
+            },
+            scope: this,
+            success: function(response) {
+                var json = Library.Main.getJson(response);
+                // recuperation du total. Il est pris sur le nombre de pdf presents
+                // dans le dossier temporaire. Ce nombre va en diminuant a chaque
+                // nouvelle requete car les fichiers sont deplaces au fur et a
+                // mesure dans le dossier d'upload. On ne prend donc en compte
+                // que le premier total qui correspond au nombre total courant
+                // de pdf, avant traitement
+                if (!total) total = json.total;
+                // nombre d'elements traites jusqu'a present
+                start++;
+                result = result.concat(json.data || []);
+                if (json.next && !json.stop) {
+                    // on continue, donc on modifie la progressbar
+                    mask.updateProgress(start / total || 1, String.format(Library.wording.book_moved, start, total));
+                    // on modifie le tableau de resultat affiche a la fin du processus
+                    // on lance une nouvelle fois la requete
+                    this.checkForNewBooks(mask, start, total, result);
+                } else {
+                    // on a fini le processus. On affiche le resultat
+                    mask.hide();
+                    Ext.Msg.alert(Library.wording.search_for_new_books_title, this.checkForNewBooksTpl.apply({
+                        data: result,
+                        text: String.format(Library.wording.book_moved_finish, total)
+                    }));
+                }
+            },
+            failure: function(response) {
+                mask.hide();
+                Library.Main.failure(response);
+            }
+        })
     },
 
     importBooks: function(btn) {
@@ -175,11 +236,22 @@ Library.admin.App = Ext.extend(Library.App, {
                 users.show();
             }
         }, '-', {
+            xtype: 'splitbutton',
             text: Library.wording.add_book_button,
             iconCls: 'book-add',
             scale: 'medium',
             scope: this,
-            handler: this.addBook
+            handler: this.addBook,
+            menu: {
+                items: [{
+                    text: Library.wording.search_for_new_books,
+                    scope: this,
+                    iconCls: 'book-search-import',
+                    handler: function() {
+                        this.checkForNewBooks();
+                    }
+                }]
+            }
         },{
             text: Library.wording.delete_book_button,
             iconCls: 'book-delete',

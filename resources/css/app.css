@@ -182,6 +182,10 @@ body.book-background-montagnes {
     background-image: url('../images/csv.png') !important;
 }
 
+.book-search-import {
+    background-image: url('../images/searchimport.png') !important;
+}
+
 .book-menu-title {
     border: 1px solid #CCCCCC;
     background-color: #FFFFFF;
