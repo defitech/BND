@@ -59,5 +59,19 @@ class Library_Book extends Zend_Db_Table_Abstract {
     public static function getThumbFolder() {
         return 'resources/books/';
     }
+    
+    /**
+     * Retourne le chemin vers le dossier d'upload pdf
+     *
+     * @param boolean $full true pour retourner le chemin complet racine
+     * @return string
+     */
+    public static function getUploadPdfPath($full = false) {
+        return ($full ? Library_Config::getInstance()->getData()->path->pdf : '') . self::getUploadPdfFolder();
+    }
+
+    public static function getUploadPdfFolder() {
+        return 'upload/';
+    }
 
 }

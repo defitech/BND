@@ -114,7 +114,7 @@ class Library_Config {
      */
     public function testIssetAuser($right = 1) {
         if (!$this->getUser($right)) {
-            throw new Exception('Pas de user connecté');
+            throw new Exception(Library_Wording::get('no_connected_user'));
         }
     }
 

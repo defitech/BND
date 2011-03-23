@@ -15,7 +15,7 @@ try {
     $fieldname = 'Filedata';
 
     $upload = new Zend_File_Transfer_Adapter_Http();
-    $upload->setDestination(Library_Config::getInstance()->getData()->path->pdf . 'upload/');
+    $upload->setDestination(Library_Book::getUploadPdfPath(true));
 
     if (!$upload->isUploaded($fieldname)) {
         throw new Exception('Fichier PDF non fourni');

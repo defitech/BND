@@ -255,7 +255,8 @@ class Library_Controller {
                 $row->thumb = Library_Book::getThumbFolder() . $img;
             } else {
                 $success = false;
-                $msg = Library_Wording::get('bad_thumb_type');
+                $msg = Library_Wording::get('bad_thumb_type')
+                    . '. ' . Library_Wording::get('book_still_save');
             }
         }
 
@@ -263,7 +264,7 @@ class Library_Controller {
         $pdf = $_FILES['pdffile'];
         if ($pdf['error'] == UPLOAD_ERR_OK) {
             if ($pdf['type'] == 'application/pdf' || $pdf['type'] == 'application/download') {
-                $path = $config->getData()->path->pdf . 'upload/';
+                $path = Library_Book::getUploadPdfPath(true);
                 if (!is_dir($path)) {
                     mkdir($path, 0766);
                 }
@@ -275,8 +276,13 @@ class Library_Controller {
                     // set du nouveau pdf et de son thumb seulement s'il n'y a
                     // pas eu d'erreur pendant la génération du thumb
                     $row->thumb = Library_Book::getThumbFolder() . $i;
+                } else {
+                    // la miniature n'a pas pu être générée
+                    $success = false;
+                    $msg = Library_Wording::get('thumb_doesnt_generate', $i, $p)
+                        . '. ' . Library_Wording::get('book_still_save');
                 }
-                $row->filename = 'upload/' . $p;
+                $row->filename = Library_Book::getUploadPdfFolder() . $p;
             } else {
                 $success = false;
                 $msg = Library_Wording::get('bad_pdf_type');
@@ -348,8 +354,7 @@ class Library_Controller {
         echo "</pre>";
         $content = ob_get_contents();
         ob_end_clean();
-        Library_Config::log('Creation de thumb. Output ci-dessous:');
-        Library_Config::log()->debug($content);
+        Library_Config::log()->debug(Library_Wording::get('thumb_generation') . $content);
 
         return $output;
     }
@@ -423,20 +428,28 @@ class Library_Controller {
         if (file_exists($pdf) && is_file($pdf)) {
             $output = $this->generatePdfFirstPageThumb($pdf, Library_Book::getThumbPath(true). $i);
             $thumb = Library_Book::getThumbPath() . $i;
-            // s'il y a un livre défini, on lui set son thumb. On check aussi
-            // s'il n'y a pas eu d'erreur pendant la génération du thumb
-            if ($book && count($output) == 1) {
-                $book->thumb = Library_Book::getThumbPath() . $i;
-                $book->save();
-            } elseif ($book) {
+            // On check s'il n'y a pas eu d'erreur pendant la génération du thumb
+            if (count($output) == 1) {
+                // // s'il y a un livre défini, on lui set son thumb
+                if ($book) {
+                    $book->thumb = Library_Book::getThumbPath() . $i;
+                    $book->save();
+                }
+                return array(
+                    'success' => true,
+                    'thumb' => $thumb
+                );
+            } else {
                 // s'il y a un livre mais que la génération a planté, on renvoie
                 // le thumb actuel du bouquin
-                $thumb = $book->thumb;
+                if ($book) {
+                    $thumb = $book->thumb;
+                }
+                return array(
+                    'success' => false,
+                    'error' => sprintf(Library_Wording::get('thumb_doesnt_generate'), $i, $pdfname)
+                );
             }
-            return array(
-                'success' => true,
-                'thumb' => $thumb
-            );
         } else {
             return array(
                 'success' => false,

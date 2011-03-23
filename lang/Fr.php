@@ -15,6 +15,9 @@ class Fr {
         'book_download' => 'telechargement du livre: %s (%s)',
 
         'pdf_doesnt_exists' => "Le fichier [%s] n'existe pas",
+        'thumb_doesnt_generate' => "La miniature [%s] du pdf [%s] n'a pas pu être générée",
+        'thumb_generation' => 'Création de la miniature: ',
+        'book_still_save' => 'Le livre a quand même été sauvegardé',
 
         'type_delete' => 'suppression de la matiere: %s',
         'editor_delete' => "suppression de l'editeur: %s",
@@ -22,7 +25,8 @@ class Fr {
 
         'own_deletion_not_allowed' => 'Impossible de se supprimer soi-même',
         'user_delete_confirm' => 'Cet utilisateur a %s téléchargements à son actif. Supprimer quand même?',
-        'user_delete' => "suppression de l'utilisateur: %s"
+        'user_delete' => "suppression de l'utilisateur: %s",
+        'no_connected_user' => "Pas d'utilisateur connecté"
 
     );
 
