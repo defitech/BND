@@ -69,8 +69,7 @@ Library.admin.App = Ext.extend(Library.App, {
         });
     },
 
-    startImport: function(win, mask, start) {
-        var total;
+    startImport: function(win, mask, start, total) {
         Ext.Ajax.request({
             url: Library.Main.config().controller,
             params: {
@@ -83,11 +82,10 @@ Library.admin.App = Ext.extend(Library.App, {
                 if (json.success) {
                     if (json.next) {
                         start++;
-                        total = json.total;
                         // on continue, donc on modifie la progressbar
                         mask.updateProgress(start / json.total || 1, String.format(Library.wording.book_moved, start, json.total));
                         // on lance une nouvelle fois la requete
-                        this.startImport(win, mask, start);
+                        this.startImport(win, mask, start, json.total);
                     } else {
                         mask.hide();
                         this.getGrid().getStore().reload();
@@ -99,7 +97,7 @@ Library.admin.App = Ext.extend(Library.App, {
                 // on continue, donc on modifie la progressbar
                 mask.updateProgress(start / total || 1, String.format(Library.wording.book_moved, start, total));
                 // on lance une nouvelle fois la requete
-                this.startImport(win, mask, start);
+                this.startImport(win, mask, start, total);
             }
         });
     },
@@ -139,7 +137,7 @@ Library.admin.App = Ext.extend(Library.App, {
                             success: function(form, action) {
                                 win._mask.hide();
                                 var mask = Ext.Msg.progress(Library.wording.import_book_button, Library.wording.book_import_csv_error, Library.wording.book_moved_first);
-                                this.startImport(win, mask, 0);
+                                this.startImport(win, mask, 0, 0);
                             },
                             failure: function(form, action) {
                                 win._mask.hide();
