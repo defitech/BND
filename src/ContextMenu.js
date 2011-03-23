@@ -10,17 +10,21 @@ Library.ContextMenu = Ext.extend(Ext.menu.Menu, {
                 items: [{
                     text: String.format(Library.wording.filter_editor, this.record.get('editor_id')),
                     scope: this,
+                    disabled: !this.record.get('editor_id'),
                     handler: function() {
                         this.fireEvent('bookfilter', this, this.record, 'editor_id', this.record.get('editorid'));
                     }
                 },{
                     text: String.format(Library.wording.filter_type, this.record.get('type_id')),
                     scope: this,
+                    disabled: !this.record.get('type_id'),
                     handler: function() {
                         this.fireEvent('bookfilter', this, this.record, 'type_id', this.record.get('typeid'));
                     }
                 },
-                    this.initMenuNiveaux()
+                    this.initMenuNiveaux({
+                        disabled: !this.record.get('niveau_id')
+                    })
                 ]
             }
         }, {
@@ -34,17 +38,17 @@ Library.ContextMenu = Ext.extend(Ext.menu.Menu, {
         }];
     },
 
-    initMenuNiveaux: function() {
+    initMenuNiveaux: function(config) {
         var niveaux = this.record.get('niveau_id').split(',');
         if (niveaux.length <= 1) {
             // menu de filtre s'il n'y a qu'un seul niveau
-            return {
+            return Ext.apply({
                 text: String.format(Library.wording.filter_niveau, this.record.get('niveau_id')),
                 scope: this,
                 handler: function() {
                     this.fireEvent('bookfilter', this, this.record, 'niveau_id', this.record.get('niveauid'));
                 }
-            };
+            }, config || {});
         } else {
             // menu imbrique de filtres s'il y a plusieurs niveaux
             var ns = [];
@@ -60,12 +64,12 @@ Library.ContextMenu = Ext.extend(Ext.menu.Menu, {
                     }
                 });
             }
-            return {
+            return Ext.apply({
                 text: Library.wording.filter_niveaux,
                 menu: {
                     items: ns
                 }
-            };
+            }, config || {});
         }
     },
 
