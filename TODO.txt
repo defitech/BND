@@ -1,6 +1,6 @@
 A faire appli Defitech:
 
-(dernière màj le 22.03.2011)
+(dernière màj le 23.03.2011)
 
 - important: upload de maxi gros fichier pour les PDFs (utiliser flash ou java)
 

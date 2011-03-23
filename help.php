@@ -30,6 +30,7 @@ le mot-clé <strong>new</strong> dans la barre de filtre.</p>
     <li>
         Créer un fichier CSV de la forme suivante:
         <ul>
+            <li><strong>Séparateur:</strong> virgule, et guillemets pour entourer les champs</li>
             <li><strong>ligne 1:</strong> doit être la ligne des entêtes</li>
             <li><strong>colonne A:</strong> matière (string) ex: Français | Anglais | etc.</li>
             <li><strong>colonne B:</strong> éditeur (string) ex: Hachette | Payot | etc.</li>
