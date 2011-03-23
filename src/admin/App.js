@@ -100,7 +100,6 @@ Library.admin.App = Ext.extend(Library.App, {
                 mask.updateProgress(start / total || 1, String.format(Library.wording.book_moved, start, total));
                 // on lance une nouvelle fois la requete
                 this.startImport(win, mask, start);
-                Library.Main.failure(response);
             }
         });
     },
