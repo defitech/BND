@@ -134,7 +134,7 @@ Library.admin.App = Ext.extend(Library.App, {
                             scope: this,
                             success: function(form, action) {
                                 win._mask.hide();
-                                var mask = Ext.Msg.progress(Library.wording.import_book_button, '', Library.wording.book_moved_first);
+                                var mask = Ext.Msg.progress(Library.wording.import_book_button, Library.wording.book_import_csv_error, Library.wording.book_moved_first);
                                 this.startImport(win, mask, 0);
                             },
                             failure: function(form, action) {
