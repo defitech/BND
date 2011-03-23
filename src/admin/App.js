@@ -70,6 +70,7 @@ Library.admin.App = Ext.extend(Library.App, {
     },
 
     startImport: function(win, mask, start) {
+        var total;
         Ext.Ajax.request({
             url: Library.Main.config().controller,
             params: {
@@ -82,6 +83,7 @@ Library.admin.App = Ext.extend(Library.App, {
                 if (json.success) {
                     if (json.next) {
                         start++;
+                        total = json.total;
                         // on continue, donc on modifie la progressbar
                         mask.updateProgress(start / json.total || 1, String.format(Library.wording.book_moved, start, json.total));
                         // on lance une nouvelle fois la requete
@@ -94,7 +96,10 @@ Library.admin.App = Ext.extend(Library.App, {
                 }
             },
             failure: function(response) {
-                mask.hide();
+                // on continue, donc on modifie la progressbar
+                mask.updateProgress(start / total || 1, String.format(Library.wording.book_moved, start, total));
+                // on lance une nouvelle fois la requete
+                this.startImport(win, mask, start);
                 Library.Main.failure(response);
             }
         });
