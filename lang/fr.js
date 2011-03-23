@@ -107,7 +107,7 @@ Library.wording = {
     search_for_new_books_title: 'Nouveaux livres PDF',
     book_moved: '{0} fichiers PDF traités sur {1}',
     book_moved_first: 'Traitement du 1er fichier PDF',
-    book_moved_finish: '{0} PDFs ont été ajouté'
+    book_moved_finish: "{0} PDFs ont été ajouté. Vous pourrez les retrouver en cherchant <strong>new</strong> dans la barre de filtre principale. N'oubliez pas d'enlever ce mot-clé ensuite!"
 
 };
 

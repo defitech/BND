@@ -28,7 +28,7 @@ Library.login.Form = Ext.extend(Ext.Window, {
             var win = new Ext.Window({
                 modal: true,
                 width: 680,
-                height: 600,
+                height: 610,
                 title: Library.wording.library_conditions,
                 iconCls: 'book-main',
                 layout: 'fit',
