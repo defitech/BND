@@ -483,12 +483,12 @@ class Library_Controller {
         $pdf = Library_Config::getInstance()->getData()->path->pdf . $pdfname;
         if (file_exists($pdf) && is_file($pdf)) {
             $output = $this->generatePdfFirstPageThumb($pdf, Library_Book::getThumbPath(true). $i);
-            $thumb = Library_Book::getThumbPath() . $i;
+            $thumb = Library_Book::getThumbFolder() . $i;
             // On check s'il n'y a pas eu d'erreur pendant la génération du thumb
             if (count($output) == 1) {
                 // // s'il y a un livre défini, on lui set son thumb
                 if ($book) {
-                    $book->thumb = Library_Book::getThumbPath() . $i;
+                    $book->thumb = $thumb;
                     $book->save();
                 }
                 return array(
