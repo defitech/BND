@@ -28,7 +28,7 @@ class Library_Controller {
                 }
                 return $tab;
             }
-            return $data ? recurse($data) : array('success' => false);
+            return $data ? recurse($data) : array('success' => false, 'error' => $data);
         } catch (Exception $e) {
             return array(
                 'success' => false,
