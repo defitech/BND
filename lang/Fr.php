@@ -15,7 +15,7 @@ class Fr {
         'book_download' => 'telechargement du livre: %s (%s)',
 
         'pdf_doesnt_exists' => "Le fichier [%s] n'existe pas",
-        'thumb_doesnt_generate' => "La miniature [%s] du pdf [%s] n'a pas pu être générée",
+        'thumb_doesnt_generate' => "La miniature [%s] du pdf [%s] n'a pas pu être générée. Le PDF est peut-être trop lourd. Plus d'informations dans les logs.",
         'thumb_generation' => 'Création de la miniature: ',
         'book_still_save' => 'Le livre a quand même été sauvegardé',
 
