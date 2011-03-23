@@ -1157,7 +1157,7 @@ class Library_Controller {
 
                 // check si le pdf de ce livre existe
                 if (file_exists($info['pathpdf'])) {
-                    if (false){//!file_exists($info['pathimg'])) {
+                    if (!file_exists($info['pathimg'])) {
                         $output = $this->generatePdfFirstPageThumb($info['pathpdf'], $info['pathimg']);
                         $log[] = $output;
                     }
