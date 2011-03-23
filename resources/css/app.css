@@ -32,11 +32,11 @@ body.book-background-montagnes {
     text-align: justify;
 }
 
-.book-conditions p {
+.book-conditions p, .book-help p {
     margin: 5px 0;
 }
 
-.book-conditions ol {
+.book-conditions ol, .book-help ol {
     list-style-type: decimal;
     margin: 0 0 10px 30px;
 }
@@ -61,6 +61,10 @@ body.book-background-montagnes {
 
 .book-help strong {
     font-weight: bold;
+}
+
+.book-help em {
+    font-style: italic;
 }
 
 

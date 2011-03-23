@@ -5,14 +5,14 @@ Library.App = Ext.extend(Ext.Viewport, {
     showHelpScreen: function() {
         var win = new Ext.Window({
             modal: true,
-            width: 400,
+            width: 500,
             height: 400,
             title: Library.wording.help,
             layout: 'fit',
             items: [{
                 xtype: 'panel',
                 cls: 'book-help',
-                autoLoad: 'help.html',
+                autoLoad: 'help.php',
                 border: false,
                 autoScroll: true
             }],
