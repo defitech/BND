@@ -29,3 +29,7 @@ Erreurs d'uploads.
 Parfois, le thumb ne se crée pas. Loin d'être un hasard, voici des pistes:
 - fichier PDF trop gros, le script exec() plante (peut-être un timeout?)
 - le PDF n'a pas été trouvé sur le serveur (problème de nom ou d'accent)
+- dès fois, l'import plante complètement sans message d'erreur. Ce doit être
+  le convert qui fait carrément planter momentanément le serveur. En tous les
+  cas, le seul moyen de revenir à la normale, c'est de redémarrer le
+  navigateur...

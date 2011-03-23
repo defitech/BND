@@ -21,7 +21,7 @@ Library.admin.App = Ext.extend(Library.App, {
         this.getGrid().getBookInfo(null, {modal: true});
     },
 
-    checkForNewBooks: function(mask, start, total, result) {
+    checkForNewBooks: function(mask, start, total, result, skipThumb) {
         if (!mask) {
             // creation de la progressbar si elle n'existe pas
             mask = Ext.Msg.progress(Library.wording.search_for_new_books_title, '', Library.wording.book_moved_first);
@@ -34,7 +34,8 @@ Library.admin.App = Ext.extend(Library.App, {
             url: Library.Main.config().controller,
             params: {
                 cmd: 'checkNewBooks',
-                start: start
+                start: start,
+                skipThumb: skipThumb ? 1 : 0
             },
             scope: this,
             success: function(response) {
@@ -73,12 +74,13 @@ Library.admin.App = Ext.extend(Library.App, {
         });
     },
 
-    startImport: function(win, mask, start, total) {
+    startImport: function(win, mask, start, total, skipThumb) {
         Ext.Ajax.request({
             url: Library.Main.config().controller,
             params: {
                 cmd: 'importSegment',
-                start: start
+                start: start,
+                skipThumb: skipThumb ? 1 : 0
             },
             scope: this,
             success: function(response) {
@@ -107,7 +109,7 @@ Library.admin.App = Ext.extend(Library.App, {
                 // on continue, donc on modifie la progressbar
                 mask.updateProgress(start / total || 1, String.format(Library.wording.book_moved, start, total));
                 // on lance une nouvelle fois la requete
-                this.startImport(win, mask, start, total);
+                this.startImport(win, mask, start, total, true);
             }
         });
     },

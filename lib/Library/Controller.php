@@ -344,7 +344,7 @@ class Library_Controller {
         if ($this->getParam('start', 0) == 0) {
             Library_Util::backupDb();
         }
-        $generate_thumb = $this->getParam('withThumb', true);
+        $skip_thumb = $this->getParam('skipThumb');
         $stop = false;
 
         $files = glob(Library_Book::getTmpPdfPath(true) . '*.pdf');
@@ -357,10 +357,10 @@ class Library_Controller {
             // on déplace ce fichier dans le dossier d'upload
             $filename = Library_Book::getUploadPdfPath(true) . $tmp;
             $success = @rename($file, $filename);
-            $thumb = $generate_thumb;
+            $thumb = !$skip_thumb;
             if ($success) {
                 // on essaie de générer le thumb
-                if ($generate_thumb) {
+                if (!$skip_thumb) {
                     $output = $this->generatePdfFirstPageThumb($filename, Library_Book::getThumbPath(true). $tmp . '.jpg');
                     if (count($output) != 1) {
                         $success = false;
@@ -1121,6 +1121,8 @@ class Library_Controller {
         ini_set('max_execution_time', 120);
         ini_set('memory_limit', '128M');
 
+        $skip_thumb = $this->getParam('skipThumb', false);
+
         $file = Library_Config::getInstance()->getData()->path->log . 'import.csv';
         $log = array();
         // on check si on peut ouvrir ce fichier uploadé
@@ -1157,7 +1159,7 @@ class Library_Controller {
 
                 // check si le pdf de ce livre existe
                 if (file_exists($info['pathpdf'])) {
-                    if (!file_exists($info['pathimg'])) {
+                    if (!file_exists($info['pathimg']) && !$skip_thumb) {
                         $output = $this->generatePdfFirstPageThumb($info['pathpdf'], $info['pathimg']);
                         $log[] = $output;
                     }
