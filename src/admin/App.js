@@ -13,6 +13,10 @@ Library.admin.App = Ext.extend(Library.App, {
         '</div>'
     ),
 
+    maxRequestTry: 3,
+
+    currentRequestTry: 0,
+
     addBook: function(btn) {
         this.getGrid().getBookInfo(null, {modal: true});
     },
@@ -94,6 +98,12 @@ Library.admin.App = Ext.extend(Library.App, {
                 }
             },
             failure: function(response) {
+                this.currentRequestTry++;
+                if (this.currentRequestTry >= this.maxRequestTry) {
+                    mask.hide();
+                    Library.Main.failure(response);
+                    return;
+                }
                 // on continue, donc on modifie la progressbar
                 mask.updateProgress(start / total || 1, String.format(Library.wording.book_moved, start, total));
                 // on lance une nouvelle fois la requete
