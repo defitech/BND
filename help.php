@@ -24,7 +24,7 @@ if ($user->right <= 2) {
 <ul>
     <li>Se connecter au FTP de <em><?php echo $_SERVER['HTTP_HOST']; ?></em></li>
     <li>
-        Transférer le(s) PDF dans le dossier contenant tous les livres, soit <strong><?php echo Library_Book::getTmpPdfPath(true); ?></strong>
+        Transférer le(s) PDF dans le dossier temporaire du dossier contenant tous les livres, soit <strong><?php echo Library_Book::getTmpPdfPath(true); ?></strong>
         <p><em>Note: l'extension <strong>.pdf</strong> doit être en <strong>minuscule</strong> pour que le fichier soit reconnu.</em></p>
     </li>
     <li>Se connecter à l'interface BND</li>
