@@ -3,6 +3,71 @@
 class Library_Book_ImportController extends Library_Controller {
 
 
+    /**
+     * --------------------------------------------------------------
+     *              Méthodes pour l'importation depuis tmp/
+     * --------------------------------------------------------------
+     */
+
+    protected function checkNewBooks() {
+        Library_Config::getInstance()->testIssetAuser(2);
+        if ($this->getParam('start', 0) == 0) {
+            Library_Util::backupDb();
+        }
+        $skip_thumb = $this->getParam('skipThumb');
+        $stop = false;
+
+        // on chope tous les PDF dont l'extension est en minuscule
+        $files = glob(Library_Book::getTmpPdfPath(true) . '*.pdf');
+        $msg = array();
+        $table = new Library_Book();
+        foreach ($files as $file) {
+            // on chope le slug du fichier
+            $tmp = str_replace(Library_Book::getTmpPdfPath(true), '', $file);
+            $title = Library_Util::getSlug($tmp);
+            // on déplace ce fichier dans le dossier d'upload
+            $filename = Library_Book::getUploadPdfPath(true) . $tmp;
+            $success = @rename($file, $filename);
+            $thumb = !$skip_thumb;
+            if ($success) {
+                // on essaie de générer le thumb
+                if (!$skip_thumb) {
+                    $output = $this->generatePdfFirstPageThumb($filename, Library_Book::getThumbPath(true). $tmp . '.jpg');
+                    if (count($output) != 1) {
+                        $success = false;
+                        $thumb = false;
+                    }
+                }
+                // on crée l'entrée dans la base
+                $table->insert(array(
+                    'title' => $title,
+                    'thumb' => $thumb ? Library_Book::getThumbFolder() . $tmp . '.jpg' : '',
+                    'filename' => Library_Book::getUploadPdfFolder() . $tmp,
+                    'tags' => 'new'
+                ));
+            }
+            // sécurité. Si la copie ne s'est pas bien passée, on stoppe le
+            // processus coté javascript
+            $stop = !$success;
+
+            $msg[] = array(
+                'title' => $title,
+                'file' => $tmp,
+                'success' => $success,
+                'thumb' => $thumb
+            );
+            // on en traite qu'un seul à la fois. Le flux est géré dans le js
+            break;
+        }
+
+        return array(
+            'success' => true,
+            'total' => count($files),
+            'next' => count($files) > 1,
+            'data' => $msg,
+            'stop' => $stop
+        );
+    }
 
 
     /**
@@ -57,7 +122,7 @@ class Library_Book_ImportController extends Library_Controller {
      * @return array
      */
     protected function import() {
-        Library_Config::getInstance()->testIssetAuser(1);
+        Library_Config::getInstance()->testIssetAuser(2);
 
         $file = $_FILES['csv'];
         // on check si on peut ouvrir ce fichier uploadé
@@ -81,7 +146,7 @@ class Library_Book_ImportController extends Library_Controller {
     }
 
     protected function importSegment() {
-        Library_Config::getInstance()->testIssetAuser(1);
+        Library_Config::getInstance()->testIssetAuser(2);
         // set des paramètres PHP pour favoriser l'upload au mieux
         ini_set('max_execution_time', 120);
         ini_set('memory_limit', '128M');
