@@ -77,6 +77,14 @@ dont la génération de la miniature pose problème. Il sera alors facile de ret
 <p><em>Note: le système essaiera 3x de refaire l'importation qui a échouée, à la suite de quoi
     un message d'erreur sera affiché.</em></p>
 <br/>
+<h1>Backup de la base de données</h1>
+<p>Afin de générer un backup (il n'y a pas de cron job pour ça), il y a deux méthodes:</p>
+<ul>
+    <li>(recommandé) Cliquer sur la <em>flèche droite</em> du bouton <em>Ajouter</em> et sélectionner
+        <strong>Vérifier s'il y a de nouveaux livres PDF</strong>, même s'il n'y en a pas.</li>
+    <li>Importer un fichier CSV vide (s'il n'est pas vide, le backup se fera quand même)</li>
+</ul>
+<br/>
 <?php
 } // Fin if user->right <= 2
 ?>
