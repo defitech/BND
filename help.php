@@ -99,9 +99,9 @@ dont la génération de la miniature pose problème. Il sera alors facile de ret
     <li><strong>Shift + Droite</strong> : Aller à la dernière page</li>
     <li><strong>Shift + Gauche</strong> : Aller à la première page</li>
 </ul>
-<ul>
-    <li><strong>Shift + Alt + E</strong> : Filtre par "même éditeur"</li>
+<ul
     <li><strong>Shift + Alt + M</strong> : Filtre par "même matière"</li>
+    <li><strong>Shift + Alt + E</strong> : Filtre par "même éditeur"</li>
     <li><strong>Shift + Alt + N</strong> : Filtre par "même niveau"</li>
     <li><strong>Shift + Alt + U</strong> : Annuler tous les filtres</li>
 </ul>
