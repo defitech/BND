@@ -59,6 +59,8 @@ le mot-clé <strong>new</strong> dans la barre de filtre.</p>
         <ol>
             <li>Le nom du fichier correspond bien à l'un de ceux transféré précédemment</li>
             <li>Le fichier est bien transféré dans le bon sous-dossier (Anglais, Maths, ou autre)</li>
+            <li>Le nom du fichier ne contient pas de caractères spéciaux (une apostrophe, un espace, un accent, etc.).
+                Les tirets et les soulignés peuvent être utilisés.</li>
         </ol>
     </li>
     <li>Se connecter à l'interface BND</li>
