@@ -255,9 +255,9 @@ Library.admin.App = Ext.extend(Library.App, {
         };
     },
 
-    initActionButtons: function() {
+    initUserPanel: function() {
         var users = null;
-        return [{
+        return {
             text: Library.wording.user_button,
             iconCls: 'book-user',
             scale: 'medium',
@@ -282,7 +282,18 @@ Library.admin.App = Ext.extend(Library.App, {
                 }
                 users.show();
             }
-        }, '-', {
+        };
+    },
+
+    initActionButtons: function() {
+        var items = [];
+        if (Library.Main.config().rid == 1) {
+            items = items.concat([
+                this.initUserPanel(),
+                '-'
+            ]);
+        }
+        return items.concat([{
             xtype: 'splitbutton',
             text: Library.wording.add_book_button,
             iconCls: 'book-add',
@@ -315,7 +326,7 @@ Library.admin.App = Ext.extend(Library.App, {
             scale: 'medium',
             scope: this,
             handler: this.importBooks
-        }, '-'];
+        }, '-']);
     },
 
     initComponent: function() {

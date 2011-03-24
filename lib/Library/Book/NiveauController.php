@@ -49,7 +49,7 @@ class Library_Book_NiveauController extends Library_Controller {
     }
 
     protected function addNiveau() {
-        Library_Config::getInstance()->testIssetAuser();
+        Library_Config::getInstance()->testIssetAuser(2);
         $table = new Library_Niveau();
         $table->insert(array(
             'label' => $this->getParam('text')
@@ -61,7 +61,7 @@ class Library_Book_NiveauController extends Library_Controller {
     }
 
     protected function editNiveau() {
-        Library_Config::getInstance()->testIssetAuser();
+        Library_Config::getInstance()->testIssetAuser(2);
         $niveaux = $this->getGroupParam('niveau');
         $table = new Library_Niveau();
 
@@ -83,7 +83,7 @@ class Library_Book_NiveauController extends Library_Controller {
     }
 
     protected function removeNiveau() {
-        Library_Config::getInstance()->testIssetAuser();
+        Library_Config::getInstance()->testIssetAuser(2);
         $ns = $this->getGroupParam('niveau');
         $niveaux = array_keys($ns);
         if (!$this->getParam('forceConfirm', false)) {

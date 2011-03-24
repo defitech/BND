@@ -10,7 +10,7 @@ class Library_User_DownloadController extends Library_Controller {
      */
 
     protected function getUserDownloadList() {
-        Library_Config::getInstance()->testIssetAuser();
+        Library_Config::getInstance()->testIssetAuser(1);
         $items = array();
         $table = Zend_Registry::get('db');
         $rowset = $table->fetchAll($table
@@ -36,7 +36,7 @@ class Library_User_DownloadController extends Library_Controller {
 
     protected function exportUserDownloadCav() {
         header('Content-Type: text/plain');
-        Library_Config::getInstance()->testIssetAuser();
+        Library_Config::getInstance()->testIssetAuser(1);
 
         $table = Zend_Registry::get('db');
         $rowset = $table->fetchAll($table

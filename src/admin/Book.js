@@ -552,9 +552,9 @@ Library.admin.Book = Ext.extend(Library.Book, {
             autoHeight: true,
             collapsible: true,
             collapsed: true,
-            anchor: '100%',
+            anchor: '95%',
             defaults: {
-                anchor: '95%'
+                anchor: '100%'
             },
             items: [{
                 xtype: 'compositefield',
@@ -583,9 +583,9 @@ Library.admin.Book = Ext.extend(Library.Book, {
             title: Library.wording.filepdf_fieldset,
             autoHeight: true,
             collapsible: true,
-            anchor: '100%',
+            anchor: '95%',
             defaults: {
-                anchor: '95%'
+                anchor: '100%'
             },
             items: [{
                 xtype: 'compositefield',

@@ -75,7 +75,7 @@ class Library_Config {
      * @param integer $right le niveau de droit souhaité
      * @return Library_User un User s'il y en a, false sinon
      */
-    public function issetAUser($right = 1) {
+    public function issetAUser($right = null) {
         // récupération de la session
         $session = new Zend_Session_Namespace('Library');
         // check si un login + pass sont stockés dans la session
@@ -87,9 +87,13 @@ class Library_Config {
                 ->where('pass = ?', $session->pass)
             );
             if ($result) {
+                // si on a pas demandé de droit particulier, on est ok
+                if ($right === null) return $result;
                 // si la row existe et que ses droits sont bons, on retourne
-                // le user
-                return $result->right >= $right ? $result : false;
+                // le user. Plus le droit tend vers 1, plus il est admin. Donc
+                // si le droit de l'utilisateur connecté est plus petit que
+                // celui demandé, ça passe.
+                return $result->right <= $right ? $result : false;
             }
         }
         return false;
@@ -101,7 +105,7 @@ class Library_Config {
      * @param integer $right le niveau de droit souhaité
      * @return Library_User
      */
-    public function getUser($right = 1) {
+    public function getUser($right = null) {
         return $this->issetAUser($right);
     }
 
@@ -112,7 +116,7 @@ class Library_Config {
      * @return boolean
      * @throws Exception
      */
-    public function testIssetAuser($right = 1) {
+    public function testIssetAuser($right = null) {
         if (!$this->getUser($right)) {
             throw new Exception(Library_Wording::get('no_connected_user'));
         }

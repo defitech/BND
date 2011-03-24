@@ -8,6 +8,7 @@ $user = Library_Config::getInstance()->getUser();
 $config = array(
     'sid' => session_id(),
     'cid' => $user ? $user->id : 0,
+    'rid' => $user ? $user->right : 0,
     'libspath' => $path . '../',
     'background' => 'foretcanada'
 );

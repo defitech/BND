@@ -125,7 +125,6 @@ class Library_Book_Controller extends Library_Controller {
             $book = $table->createRow();
         }
 
-        // récupération de tous les niveaux
         $c = new Library_Book_NiveauController($this->getParams());
         $e = new Library_Book_EditorController($this->getParams());
         $t = new Library_Book_TypeController($this->getParams());
@@ -141,7 +140,7 @@ class Library_Book_Controller extends Library_Controller {
     }
 
     protected function saveBook() {
-        Library_Config::getInstance()->testIssetAuser();
+        Library_Config::getInstance()->testIssetAuser(2);
         // set des paramètres PHP pour favoriser l'upload au mieux
         ini_set('max_execution_time', 120);
         ini_set('memory_limit', '128M');
@@ -170,9 +169,9 @@ class Library_Book_Controller extends Library_Controller {
         $config = Library_Config::getInstance();
 
         // si un thumb est envoyé en fichier
-        $valid_extensions = array('image/jpeg', 'image/jpg', 'image/png', 'image/gif');
         $thumb = $_FILES['thumbfile'];
         if ($thumb['error'] == UPLOAD_ERR_OK) {
+            $valid_extensions = array('image/jpeg', 'image/jpg', 'image/png', 'image/gif');
             if (in_array($thumb['type'], $valid_extensions)) {
                 $img = Library_Util::getSlug($row->title) . strrchr($thumb['name'], '.');
                 move_uploaded_file($thumb['tmp_name'], Library_Book::getThumbPath(true) . $img);
@@ -188,7 +187,8 @@ class Library_Book_Controller extends Library_Controller {
         // si un pdf est envoyé en fichier
         $pdf = $_FILES['pdffile'];
         if ($pdf['error'] == UPLOAD_ERR_OK) {
-            if ($pdf['type'] == 'application/pdf' || $pdf['type'] == 'application/download') {
+            $valid_extensions = array('application/pdf', 'application/download');
+            if (in_array($pdf['type'], $valid_extensions)) {
                 $path = Library_Book::getUploadPdfPath(true);
                 if (!is_dir($path)) {
                     mkdir($path, 0766);
@@ -210,7 +210,8 @@ class Library_Book_Controller extends Library_Controller {
                 $row->filename = Library_Book::getUploadPdfFolder() . $p;
             } else {
                 $success = false;
-                $msg = Library_Wording::get('bad_pdf_type');
+                $msg = Library_Wording::get('bad_pdf_type')
+                    . '. ' . Library_Wording::get('book_still_save');
             }
         }
 
@@ -235,17 +236,17 @@ class Library_Book_Controller extends Library_Controller {
     }
 
     protected function removeBook() {
-        Library_Config::getInstance()->testIssetAuser();
+        Library_Config::getInstance()->testIssetAuser(2);
         $ids = $this->getParam('ids');
         if (!$this->getParam('forceConfirm', false)) {
-            // check si plusieurs livres on l'élément
+            // check si ce livre a été téléchargé au moins 1x
             $table = new Library_User_Download();
             $rowset = $table->fetchAll($table
                 ->select()
                 ->where('book_id IN(?)', $ids)
             );
             if ($rowset->count() > 0) {
-                // il y a d'autres livres concernés par cette suppression. On
+                // il y a des téléchargements concernant ce livre. On
                 // renvoie au navigateur la demande de confirmation
                 return array(
                     'success' => true,
@@ -265,13 +266,14 @@ class Library_Book_Controller extends Library_Controller {
     }
 
     protected function checkNewBooks() {
-        Library_Config::getInstance()->testIssetAuser();
+        Library_Config::getInstance()->testIssetAuser(1);
         if ($this->getParam('start', 0) == 0) {
             Library_Util::backupDb();
         }
         $skip_thumb = $this->getParam('skipThumb');
         $stop = false;
 
+        // on chope tous les PDF dont l'extension est en minuscule
         $files = glob(Library_Book::getTmpPdfPath(true) . '*.pdf');
         $msg = array();
         $table = new Library_Book();
@@ -367,7 +369,7 @@ class Library_Book_Controller extends Library_Controller {
     }
 
     protected function generatePdfThumb() {
-        Library_Config::getInstance()->testIssetAuser();
+        Library_Config::getInstance()->testIssetAuser(2);
         // set des paramètres PHP pour favoriser l'upload au mieux
         ini_set('max_execution_time', 240);
         ini_set('memory_limit', '256M');

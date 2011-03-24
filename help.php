@@ -10,12 +10,15 @@ if ($user->right == 1) {
 <h1>Ajout d'un PDF plus lourd que <?php echo ini_get('post_max_size'); ?></h1>
 <ul>
     <li>Se connecter au FTP de <em><?php echo $_SERVER['HTTP_HOST']; ?></em></li>
-    <li>Transférer le PDF dans le dossier contenant tous les livres, soit <strong><?php echo $config->getData()->path->pdf; ?>tmp/</strong></li>
+    <li>
+        Transférer le PDF dans le dossier contenant tous les livres, soit <strong><?php echo $config->getData()->path->pdf; ?>tmp/</strong>
+        <p><em>Note: l'extension <strong>.pdf</strong> doit être en <strong>minuscule</strong> pour que le fichier soit reconnu.</em></p>
+    </li>
     <li>Se connecter à l'interface BND</li>
     <li>Cliquer sur la <em>flèche droite</em> du bouton <strong>Ajouter</strong></li>
     <li>Sélectionner <strong>Vérifier s'il y a de nouveaux livres PDF</strong></li>
 </ul>
-<p>Les fichiers seront alors intégré au système. Ensuite, pour les retrouver, il suffira de chercher
+<p>Les fichiers seront alors intégrés au système. Ensuite, pour les retrouver, il suffira de chercher
 le mot-clé <strong>new</strong> dans la barre de filtre.</p>
 <p><em>Ne pas oublier d'enlever le mot-clé <strong>new</strong> une fois le livre édité.</em></p>
 

@@ -27,7 +27,7 @@ class Library_Book_EditorController extends Library_Controller {
     }
 
     protected function addEditor() {
-        Library_Config::getInstance()->testIssetAuser();
+        Library_Config::getInstance()->testIssetAuser(2);
         $table = new Library_Book_Editor();
         $table->insert(array(
             'editor' => $this->getParam('text')
@@ -39,7 +39,7 @@ class Library_Book_EditorController extends Library_Controller {
     }
 
     protected function editEditor() {
-        Library_Config::getInstance()->testIssetAuser();
+        Library_Config::getInstance()->testIssetAuser(2);
         $table = new Library_Book_Editor();
         $row = $table->fetchRow($table->select()->where('id = ?', $this->getParam('id')));
 
@@ -52,7 +52,7 @@ class Library_Book_EditorController extends Library_Controller {
     }
 
     protected function removeEditor() {
-        Library_Config::getInstance()->testIssetAuser();
+        Library_Config::getInstance()->testIssetAuser(2);
         $id = $this->getParam('id');
         if (!$this->getParam('forceConfirm', false)) {
             // check si plusieurs livres on l'élément

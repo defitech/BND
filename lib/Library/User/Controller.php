@@ -61,7 +61,7 @@ class Library_User_Controller extends Library_Controller {
      */
 
     protected function getUserList() {
-        Library_Config::getInstance()->testIssetAuser();
+        Library_Config::getInstance()->testIssetAuser(1);
         $table = new Library_User();
         $rowset = $table->fetchAll($table->select()
             ->order($this->getParam('sort', 'login') . ' ' . $this->getParam('dir', 'ASC'))
@@ -80,7 +80,7 @@ class Library_User_Controller extends Library_Controller {
     }
 
     protected function saveUser() {
-        Library_Config::getInstance()->testIssetAuser();
+        Library_Config::getInstance()->testIssetAuser(1);
 
         $id = $this->getParam('id');
         $table = new Library_User();
@@ -104,7 +104,7 @@ class Library_User_Controller extends Library_Controller {
     }
 
     protected function removeUser() {
-        Library_Config::getInstance()->testIssetAuser();
+        Library_Config::getInstance()->testIssetAuser(1);
         $id = $this->getParam('id');
 
         $user = Library_Config::getInstance()->getUser();

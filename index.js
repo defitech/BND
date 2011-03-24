@@ -1,5 +1,5 @@
 Ext.onReady(function() {
-    if (Library.Main.config().cid == 1) {
+    if (Library.Main.config().rid <= 2) {
         new Library.admin.App({
             renderTo: Ext.getBody()
         });

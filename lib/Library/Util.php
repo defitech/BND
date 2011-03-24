@@ -72,7 +72,7 @@ class Library_Util {
         $name = 'db_backup_' . date('Ymd_hi') . '.txt';
         $cp = copy(Library_Config::getInstance()->getData()->db->name, $path . $name);
 
-        Library_Config::log(sprintf('Base de donnees backupee: %s', $cp));
+        Library_Config::log(sprintf(Library_Wording::get('db_backup_done'), $cp));
         return $cp;
     }
 

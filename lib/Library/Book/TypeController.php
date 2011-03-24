@@ -28,7 +28,7 @@ class Library_Book_TypeController extends Library_Controller {
     }
 
     protected function addType() {
-        Library_Config::getInstance()->testIssetAuser();
+        Library_Config::getInstance()->testIssetAuser(2);
         $table = new Library_Book_Type();
         $table->insert(array(
             'label' => $this->getParam('text')
@@ -40,7 +40,7 @@ class Library_Book_TypeController extends Library_Controller {
     }
 
     protected function editType() {
-        Library_Config::getInstance()->testIssetAuser();
+        Library_Config::getInstance()->testIssetAuser(2);
         $table = new Library_Book_Type();
         $row = $table->fetchRow($table->select()->where('id = ?', $this->getParam('id')));
 
@@ -53,7 +53,7 @@ class Library_Book_TypeController extends Library_Controller {
     }
 
     protected function removeType() {
-        Library_Config::getInstance()->testIssetAuser();
+        Library_Config::getInstance()->testIssetAuser(2);
         $id = $this->getParam('id');
         if (!$this->getParam('forceConfirm', false)) {
             // check si plusieurs livres on l'élément

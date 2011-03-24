@@ -57,7 +57,7 @@ class Library_Book_ImportController extends Library_Controller {
      * @return array
      */
     protected function import() {
-        Library_Config::getInstance()->testIssetAuser();
+        Library_Config::getInstance()->testIssetAuser(1);
 
         $file = $_FILES['csv'];
         // on check si on peut ouvrir ce fichier uploadé
@@ -81,7 +81,7 @@ class Library_Book_ImportController extends Library_Controller {
     }
 
     protected function importSegment() {
-        Library_Config::getInstance()->testIssetAuser();
+        Library_Config::getInstance()->testIssetAuser(1);
         // set des paramètres PHP pour favoriser l'upload au mieux
         ini_set('max_execution_time', 120);
         ini_set('memory_limit', '128M');
