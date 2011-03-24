@@ -5,8 +5,19 @@ include_once 'config.php';
 $config = Library_Config::getInstance();
 $user = $config->getUser();
 
-if ($user->right == 1) {
+if ($user->right <= 2) {
+    if ($user->right == 1) {
 ?>
+<h1>Niveaux de droits</h1>
+<ol>
+    <li>Le droit de niveau 1 est le droit <strong>super admin</strong>. Il peut tout faire, c'est formidable.</li>
+    <li>Le droit de niveau 2 peut apporter des modifications/suppression/ajout à la bibliothèque entière.
+        Sa seule limite est la gestion utilisateur, qui est inaccessible.</li>
+    <li>Les autres droits ne permettent que d'interagir en lecture avec la bibliothèque.</li>
+</ol>
+<br/>
+
+<?php } ?>
 <h1>Ajout d'un PDF plus lourd que <?php echo ini_get('post_max_size'); ?></h1>
 <ul>
     <li>Se connecter au FTP de <em><?php echo $_SERVER['HTTP_HOST']; ?></em></li>
@@ -55,10 +66,12 @@ le mot-clé <strong>new</strong> dans la barre de filtre.</p>
     <li>Sélectionner le fichier CSV fraichement créé</li>
     <li>Attendre... et voilà</li>
 </ul>
-<p>A noter que par moment, la connexion peut planter (HTTP error 400 Aborted). Le système tient
+<p>A noter que par moment, la connexion peut planter (HTTP error Aborted). Le système tient
 compte de ça et renvoie une nouvelle requête droit derrière. Cette erreur est causée par un PDF
 dont la génération de la miniature pose problème. Il sera alors facile de retrouver le(s)
 élément(s) qui a(ont) posé problème en cherchant les miniatures cassées ou inexistantes.</p>
+<p><em>Note: le système essaiera 3x de refaire l'importation qui a échouée, à la suite de quoi
+    un message d'erreur sera affiché.</em></p>
 <br/>
 <?php
 }
