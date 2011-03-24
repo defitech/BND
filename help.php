@@ -16,7 +16,10 @@ if ($user->right <= 2) {
     <li>Les autres droits ne permettent que d'interagir en lecture avec la bibliothèque.</li>
 </ol>
 <br/>
-
+<h1>Visualisation des logs</h1>
+<p>Un fichier de logs mensuel est généré dans <strong><?php echo $config->getData()->path->log; ?></strong>.
+Ils sont nommés <em>logs_YYYY-MM.txt</em> et contiennent des informations de debug, notamment sur la génération des thumbs.</p>
+<br/>
 <?php
     } // Fin If user->right == 1
 ?>
