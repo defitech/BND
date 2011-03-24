@@ -23,7 +23,7 @@ le mot-clé <strong>new</strong> dans la barre de filtre.</p>
 <h1>Importation via CSV</h1>
 <ul>
     <li>Se connecter au FTP de <em><?php echo $_SERVER['HTTP_HOST']; ?></em></li>
-    <li>Transférer les PDF dans leurs dossiers correspondant, soit quelque part dans l'arborescence
+    <li>Transférer les PDF dans leur dossier correspondant, soit quelque part dans l'arborescence
     <strong><?php echo $config->getData()->path->pdf; ?></strong></li>
 </ul>
 <ul>
@@ -41,7 +41,7 @@ le mot-clé <strong>new</strong> dans la barre de filtre.</p>
             <li><strong>colonne G:</strong> nom du fichier PDF avec l'extension (string) ex: fichier_livre.pdf | etc.</li>
         </ul>
     </li>
-    <li>Bien s'assurer que:
+    <li>Bien s'assurer pour chaque ligne que:
         <ol>
             <li>Le nom du fichier correspond bien à l'un de ceux transféré précédemment</li>
             <li>Le fichier est bien transféré dans le bon sous-dossier (Anglais, Maths, ou autre)</li>
