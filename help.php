@@ -17,7 +17,9 @@ if ($user->right <= 2) {
 </ol>
 <br/>
 
-<?php } ?>
+<?php
+    } // Fin If user->right == 1
+?>
 <h1>Ajout d'un PDF plus lourd que <?php echo ini_get('post_max_size'); ?></h1>
 <ul>
     <li>Se connecter au FTP de <em><?php echo $_SERVER['HTTP_HOST']; ?></em></li>
@@ -76,7 +78,7 @@ dont la génération de la miniature pose problème. Il sera alors facile de ret
     un message d'erreur sera affiché.</em></p>
 <br/>
 <?php
-}
+} // Fin if user->right <= 2
 ?>
 <h1>Raccourcis clavier</h1>
 <ul>
@@ -87,7 +89,7 @@ dont la génération de la miniature pose problème. Il sera alors facile de ret
     <li><strong>END</strong> : Aller à la dernière ligne</li>
 </ul>
 <ul>
-    <?php if ($user->right == 1) { ?>
+    <?php if ($user->right <= 2) { ?>
     <li><strong>Shift + D</strong> : Supprimer</li>
     <li><strong>Shift + N</strong> : Nouveau</li>
     <?php } ?>
