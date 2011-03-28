@@ -102,6 +102,7 @@ Library.admin.App = Ext.extend(Library.App, {
             failure: function(response) {
                 this.currentRequestTry++;
                 if (this.currentRequestTry >= this.maxRequestTry) {
+                    this.currentRequestTry = 0;
                     mask.hide();
                     Library.Main.failure(response);
                     return;

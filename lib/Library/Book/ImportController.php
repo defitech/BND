@@ -182,19 +182,22 @@ class Library_Book_ImportController extends Library_Controller {
                 $lines++;
                 if ($start != $lines) continue;
 
-                // si le livre existe déjà dans la base, on shop
-                if (in_array(Library_Util::getSlug($info['titre']), $this->importBooks['slug'])) {
+                // il la méthode makeDataFromImportLine signale qu'il faut
+                // appeler continue, on le fait. C'est pour pouvoir augmenter
+                // $lines tout en ne faisant pas la suite (cas des doublons)
+                if (isset($info['countButContinue']) && $info['countButContinue']) {
                     continue;
                 }
 
                 // check si le pdf de ce livre existe
+                $thumb_exists = file_exists($info['pathimg']);
                 if (file_exists($info['pathpdf'])) {
-                    if (!file_exists($info['pathimg']) && !$skip_thumb) {
+                    if (!$thumb_exists && !$skip_thumb) {
                         $output = $this->generatePdfFirstPageThumb($info['pathpdf'], $info['pathimg']);
                         $log[] = $output;
                     }
                 } else {
-                    $info['thumb'] = null;
+                    $info['thumb'] = $thumb_exists ? $info['thumb'] : null;
                 }
                 // on insère le nouveau livre
                 $table->insert(array(
@@ -215,6 +218,8 @@ class Library_Book_ImportController extends Library_Controller {
                     ));
                 }
                 $log[] = $info;
+                $this->importBooks['slug'][] = Library_Util::getSlug($info['titre']);
+                $this->importBooks['filename'][] = Library_Util::getSlug($info['filename']);
             }
             fclose($handle);
             return array(
@@ -242,9 +247,7 @@ class Library_Book_ImportController extends Library_Controller {
         $line = array_map('trim', $line);
 
         // si la 1ère ligne est vide, on arrête le traitement
-        if (!$line[0]) {
-            return false;
-        }
+        if (!$line[0]) return false;
 
         // données du fichier CSV
         $csv = array(
@@ -256,6 +259,13 @@ class Library_Book_ImportController extends Library_Controller {
             'folder' => $line[5],
             'file' => $line[6],
         );
+
+        if (!$csv['titre']) return false;
+
+        // si le livre existe déjà dans la base, on skip
+        if (in_array(Library_Util::getSlug($csv['titre']), $this->importBooks['slug'])) {
+            return array('countButContinue' => true);
+        }
 
         // données rajoutées
         $file = substr($csv['file'], 0, strrpos($csv['file'], '.'));

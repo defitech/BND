@@ -103,21 +103,26 @@ Library.wording = {
     bad_json: 'Json mal form\u00e9',
     failure: 'Pas de r\u00e9ponse du serveur. Probl\u00e8me r\u00e9seau.',
 
-    search_for_new_books: "Vérifier s'il y a de nouveaux livres PDF",
+    search_for_new_books: "V\u00e9rifier s'il y a de nouveaux livres PDF",
     search_for_new_books_title: 'Nouveaux livres PDF',
-    search_for_new_books_confirm: "Voulez-vous importer les PDFs présents dans le dossier temporaire (s'il y en a) vers l'application?",
-    book_moved: '{0} fichiers PDF traités sur {1}',
+    search_for_new_books_confirm: "Voulez-vous importer les PDFs pr\u00e9sents dans le dossier temporaire (s'il y en a) vers l'application?",
+    book_moved: '{0} fichiers PDF trait\u00e9s sur {1}',
     book_moved_first: 'Traitement du 1er fichier PDF',
-    book_moved_finish: "<strong>{0}</strong> PDFs ont été ajouté. Vous pourrez les retrouver en cherchant <strong>new</strong> dans la barre de filtre principale. N'oubliez pas d'enlever ce mot-clé une fois le livre édité correctement!",
-    book_import_csv_error: "Si une erreur serveur survient, il faut réimporter le fichier. Les doublons seront ignorés et l'importation pourra continuer gentiment."
+    book_moved_finish: "<strong>{0}</strong> PDFs ont \u00e9t\u00e9 ajout\u00e9. Vous pourrez les retrouver en cherchant <strong>new</strong> dans la barre de filtre principale. N'oubliez pas d'enlever ce mot-cl\u00e9 une fois le livre \u00e9dit\u00e9 correctement!",
+    book_import_csv_error: "Si une erreur serveur survient, il faut r\u00e9importer le fichier. Les doublons seront ignor\u00e9s et l'importation pourra continuer gentiment."
 
 };
 
-if (typeof Ext.ux != 'undefined' && typeof Ext.ux.grid != 'undefined') {
+
+Ext.ns('Ext.ux.grid');
+if (typeof Ext.ux.grid.GridFilters != 'undefined') {
     Ext.override(Ext.ux.grid.GridFilters, {
         menuFilterText: 'Filtres'
     });
+}
 
+Ext.ns('Ext.ux.menu');
+if (typeof Ext.ux.menu.ListMenu != 'undefined') {
     Ext.override(Ext.ux.menu.ListMenu, {
         loadingText: Library.wording.loading
     });
