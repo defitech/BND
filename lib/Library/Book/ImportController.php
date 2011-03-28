@@ -43,7 +43,7 @@ class Library_Book_ImportController extends Library_Controller {
                     'title' => $title,
                     'thumb' => $thumb ? Library_Book::getThumbFolder() . $tmp . '.jpg' : '',
                     'filename' => Library_Book::getUploadPdfFolder() . $tmp,
-                    'tags' => 'new'
+                    'tags' => Library_Util::getSlug($title, ',') . ',new'
                 ));
             }
             // sécurité. Si la copie ne s'est pas bien passée, on stoppe le
@@ -107,17 +107,7 @@ class Library_Book_ImportController extends Library_Controller {
     private $niveauxSeparator = '-';
 
     /**
-     * Fonction d'importation d'un fichier CSV. Le fichier CSV doit avoir cette tête:
-     *
-     * - ligne   1: doit être la ligne des entêtes
-     *
-     * - colonne A: matière (string) ex: Français | Anglais | etc.
-     * - colonne B: éditeur (string) ex: Hachette | Payot | etc.
-     * - colonne C: titre (string) ex: le titre du livre
-     * - colonne D: niveau (separated-string) ex: 1ère-2e | 7e-8e-9e | 5e | etc.
-     * - colonne E: isbn (string) ex: le numéro ISBN du livre
-     * - colonne F: chemin vers le fichier PDF, depuis le dossier racine des livres (path) ex: Anglais/5e/ | Allemand/ | etc.
-     * - colonne G: nom du fichier PDF avec l'extension (string) ex: fichier_livre.pdf | etc.
+     * Fonction d'importation d'un fichier CSV
      *
      * @return array
      */
