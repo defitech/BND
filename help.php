@@ -3,10 +3,9 @@
 include_once 'config.php';
 
 $config = Library_Config::getInstance();
-$user = $config->getUser();
 
-if ($user->right <= 2) {
-    if ($user->right == 1) {
+if (Library_User::right(2)) {
+    if (Library_User::right(1)) {
 ?>
 <h1>Niveaux de droits</h1>
 <ol>
@@ -101,7 +100,7 @@ dont la génération de la miniature pose problème. Il sera alors facile de ret
     <li><strong>END</strong> : Aller à la dernière ligne</li>
 </ul>
 <ul>
-    <?php if ($user->right <= 2) { ?>
+    <?php if (Library_User::right(2)) { ?>
     <li><strong>Shift + D</strong> : Supprimer</li>
     <li><strong>Shift + N</strong> : Nouveau</li>
     <?php } ?>

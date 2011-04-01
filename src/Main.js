@@ -21,6 +21,12 @@ Library.Main = {
         Ext.apply(Library.Main.cfg, obj);
     },
 
+    right: function(right) {
+        // on check si le droit vaut quelque chose (!=null ou 0) et qu'il est
+        // plus petit ou egal au droit de l'utilisateur connecte (1=admin)
+        return Library.Main.config().rid && Library.Main.config().rid <= right;
+    },
+
     getJson: function(response) {
         try {
             var json = eval('(' + response.responseText + ')');

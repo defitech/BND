@@ -16,4 +16,8 @@ class Library_User extends Zend_Db_Table_Abstract {
 
     protected $_dependentTables = array('Library_User_Download');
 
+    public static function right($right) {
+        return Library_Config::getInstance()->getUser($right) ? true : false;
+    }
+
 }

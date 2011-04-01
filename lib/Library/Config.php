@@ -93,7 +93,7 @@ class Library_Config {
                 // le user. Plus le droit tend vers 1, plus il est admin. Donc
                 // si le droit de l'utilisateur connecté est plus petit que
                 // celui demandé, ça passe.
-                return $result->right <= $right ? $result : false;
+                return $result->right && $result->right <= $right ? $result : false;
             }
         }
         return false;

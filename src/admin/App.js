@@ -288,7 +288,7 @@ Library.admin.App = Ext.extend(Library.App, {
 
     initActionButtons: function() {
         var items = [];
-        if (Library.Main.config().rid == 1) {
+        if (Library.Main.right(1)) {
             items = items.concat([
                 this.initUserPanel(),
                 '-'
