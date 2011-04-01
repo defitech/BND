@@ -117,6 +117,10 @@ body.book-background-montagnes {
     background-image: url('../images/import.png') !important;
 }
 
+.book-import-small {
+    background-image: url('../images/importsmall.png') !important;
+}
+
 .book-add {
     background-image: url('../images/add.png') !important;
 }

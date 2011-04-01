@@ -49,7 +49,7 @@ le mot-clé <strong>new</strong> dans la barre de filtre.</p>
     <li>
         Créer un fichier CSV de la forme suivante:
         <ul>
-            <li><strong>Séparateur:</strong> virgule, et guillemets pour entourer les champs</li>
+            <li><strong>séparateur:</strong> virgule, et guillemets pour entourer les champs</li>
             <li><strong>ligne 1:</strong> doit être la ligne des entêtes</li>
             <li><strong>colonne A:</strong> matière (string) ex: Français | Anglais | etc.</li>
             <li><strong>colonne B:</strong> éditeur (string) ex: Hachette | Payot | etc.</li>
@@ -69,7 +69,8 @@ le mot-clé <strong>new</strong> dans la barre de filtre.</p>
         </ol>
     </li>
     <li>Se connecter à l'interface BND</li>
-    <li>Cliquer sur le bouton <strong>Importation CSV</strong></li>
+    <li>Cliquer sur la <em>flèche droite</em> du bouton <strong>Ajouter</strong></li>
+    <li>Sélectionner <strong>Importer CSV</strong></li>
     <li>Sélectionner le fichier CSV fraichement créé</li>
     <li>Attendre... et voilà</li>
 </ul>

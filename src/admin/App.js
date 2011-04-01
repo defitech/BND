@@ -313,6 +313,16 @@ Library.admin.App = Ext.extend(Library.App, {
                             }
                         }, this);
                     }
+                }, {
+                    text: Library.wording.import_book_button,
+                    iconCls: 'book-import-small',
+                    scope: this,
+                    handler: this.importBooks
+                }, '-',  {
+                    text: Library.wording.add_book_button,
+                    iconCls: 'book-add-small',
+                    scope: this,
+                    handler: this.addBook
                 }]
             }
         },{
@@ -321,12 +331,6 @@ Library.admin.App = Ext.extend(Library.App, {
             scale: 'medium',
             scope: this,
             handler: this.removeBooks
-        }, '-', {
-            text: Library.wording.import_book_button,
-            iconCls: 'book-import',
-            scale: 'medium',
-            scope: this,
-            handler: this.importBooks
         }, '-']);
     },
 
