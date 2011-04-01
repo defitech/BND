@@ -142,6 +142,11 @@ Library.admin.UserGrid = Ext.extend(Ext.grid.EditorGridPanel, {
             },
             columns: [
                 {
+                    header : 'ID',
+                    hidden: true,
+                    dataIndex : 'id'
+                },
+                {
                     header : Library.wording.connect_login,
                     dataIndex : 'login',
                     editor: new Ext.form.TextField({

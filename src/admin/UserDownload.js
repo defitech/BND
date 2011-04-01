@@ -41,6 +41,11 @@ Library.admin.UserDownload = Ext.extend(Ext.grid.GridPanel, {
             },
             columns: [
                 {
+                    header : Library.wording.user_id_book,
+                    hidden: true,
+                    dataIndex : 'id'
+                },
+                {
                     header : Library.wording.user_dl_book,
                     dataIndex : 'title'
                 },

@@ -77,6 +77,7 @@ Library.wording = {
     user_dl_book: 'Titre du livre',
     user_dl_nb: 'Nb t\u00e9l\u00e9chargements',
     user_dl_exportcsv: 'Exporter en CSV',
+    user_id_book: 'ID du livre',
 
     info_book_button: 'Informations',
     info_book_close: 'Fermer',
