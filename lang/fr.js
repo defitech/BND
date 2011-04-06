@@ -107,10 +107,13 @@ Library.wording = {
     search_for_new_books: "V\u00e9rifier s'il y a de nouveaux livres PDF",
     search_for_new_books_title: 'Nouveaux livres PDF',
     search_for_new_books_confirm: "Voulez-vous importer les PDFs pr\u00e9sents dans le dossier temporaire (s'il y en a) vers l'application?",
-    book_moved: '{0} fichiers PDF trait\u00e9s sur {1}',
-    book_moved_first: 'Traitement du 1er fichier PDF',
+    book_moved: '{0} fichiers trait\u00e9s sur {1}',
+    book_moved_first: 'Traitement du 1er fichier',
     book_moved_finish: "<strong>{0}</strong> PDFs ont \u00e9t\u00e9 ajout\u00e9. Vous pourrez les retrouver en cherchant <strong>new</strong> dans la barre de filtre principale. N'oubliez pas d'enlever ce mot-cl\u00e9 une fois le livre \u00e9dit\u00e9 correctement!",
-    book_import_csv_error: "Si une erreur serveur survient, il faut r\u00e9importer le fichier. Les doublons seront ignor\u00e9s et l'importation pourra continuer gentiment."
+    book_import_csv_error: "Si une erreur serveur survient, il faut r\u00e9importer le fichier. Les doublons seront ignor\u00e9s et l'importation pourra continuer gentiment.",
+
+    admin_redim_and_mini: "Redimensionner et recr\u00e9er tous les thumbs",
+    admin_redim_and_mini_finished: "{0} images ont \u00e9t\u00e9 redimendionn\u00e9es. S'il y a eu des erreurs, elles seront list\u00e9es ci-dessous."
 
 };
 

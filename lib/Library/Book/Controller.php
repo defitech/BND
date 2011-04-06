@@ -91,7 +91,7 @@ class Library_Book_Controller extends Library_Controller {
                 'editor_id' => isset($editors[$row->editor_id]) ? $editors[$row->editor_id] : $row->editor_id,
                 'typeid' => $row->type_id,
                 'type_id' => isset($types[$row->type_id]) ? $types[$row->type_id] : $row->type_id,
-                'thumb' => $row->thumb ? $row->thumb : 'resources/images/empty.jpg',
+                'thumb' => $row->thumb ? str_replace(Library_Book::getThumbFolder(), Library_Book::getMiniFolder(), $row->thumb) : 'resources/images/emptysmall.jpg',
                 'niveauid' => implode(',', $ns['id']),
                 'niveau_id' => implode(', ', $ns['label'])
             ));
@@ -175,6 +175,7 @@ class Library_Book_Controller extends Library_Controller {
             if (in_array($thumb['type'], $valid_extensions)) {
                 $img = Library_Util::getSlug($row->title) . strrchr($thumb['name'], '.');
                 move_uploaded_file($thumb['tmp_name'], Library_Book::getThumbPath(true) . $img);
+                $this->resizeThumbAndCreateMini($img);
                 // set du nouveau thumb
                 $row->thumb = Library_Book::getThumbFolder() . $img;
             } else {
@@ -198,6 +199,7 @@ class Library_Book_Controller extends Library_Controller {
                 move_uploaded_file($pdf['tmp_name'], $path . $p);
                 $output = $this->generatePdfFirstPageThumb($path . $p, Library_Book::getThumbPath(true). $i);
                 if (count($output) == 1) {
+                    $this->resizeThumbAndCreateMini($i);
                     // set du nouveau pdf et de son thumb seulement s'il n'y a
                     // pas eu d'erreur pendant la génération du thumb
                     $row->thumb = Library_Book::getThumbFolder() . $i;
@@ -232,6 +234,71 @@ class Library_Book_Controller extends Library_Controller {
             'success' => $success,
             'msg' => $msg,
             'infos' => $row->toArray()
+        );
+    }
+
+    public function resizeThumbAndCreateMini($img) {
+        Library_Config::getInstance()->testIssetAuser(2);
+
+        $i = Library_Book::getThumbPath(true) . $img;
+        $im = @imagecreatefromjpeg($i);
+
+        if (!$im) {
+            return false;
+        }
+
+        list($width, $height) = getimagesize($i);
+
+        // création de la mini (affichée dans la grid)
+        $mini_width = 55;
+        $mini_height = 80;
+        $tn = imagecreatetruecolor($mini_width, $mini_height);
+        imagecopyresampled($tn, $im, 0, 0, 0, 0, $mini_width, $mini_height, $width, $height);
+        $path = Library_Book::getMiniPath(true);
+        if (!is_dir($path)) {
+            mkdir($path, 0777);
+        }
+        imagejpeg($tn, $path . $img, 70);
+        imageDestroy($tn);
+
+        // redimensionnement de la thumb
+        $mini_width = 258;
+        $mini_height = 392;
+        $tn = imagecreatetruecolor($mini_width, $mini_height);
+        imagecopyresampled($tn, $im, 0, 0, 0, 0, $mini_width, $mini_height, $width, $height);
+        imagejpeg($tn, $i, 70);
+        imageDestroy($tn);
+
+        return true;
+    }
+
+    protected function resizeAllThumbs() {
+        Library_Config::getInstance()->testIssetAuser(2);
+        // on chope toutes les images du dossier
+        $files = glob(Library_Book::getThumbPath(true) . '*.jpg');
+
+        $msg = array();
+        $count = 0;
+        $msg = array();
+        $start = $this->getParam('start');
+        foreach ($files as $file) {
+            if ($start == $count) {
+                $tmp = str_replace(Library_Book::getThumbPath(true), '', $file);
+                $r = $this->resizeThumbAndCreateMini($tmp);
+                $msg[] = array(
+                    'img' => $tmp,
+                    'success' => $r ? 1 : 0
+                );
+                // on en traite qu'un seul à la fois. Le flux est géré dans le js
+                break;
+            }
+            $count++;
+        }
+        return array(
+            'success' => true,
+            'msg' => $msg,
+            'total' => count($files),
+            'next' => count($files) > $start + 1
         );
     }
 
@@ -336,6 +403,7 @@ class Library_Book_Controller extends Library_Controller {
             $thumb = Library_Book::getThumbFolder() . $i;
             // On check s'il n'y a pas eu d'erreur pendant la génération du thumb
             if (count($output) == 1) {
+                $this->resizeThumbAndCreateMini($i);
                 // // s'il y a un livre défini, on lui set son thumb
                 if ($book) {
                     $book->thumb = $thumb;

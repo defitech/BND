@@ -13,12 +13,70 @@ Library.admin.App = Ext.extend(Library.App, {
         '</div>'
     ),
 
+    resizeThumbsTpl: new Ext.XTemplate(
+        '<div class="book-help">',
+            '<p>{text}</p><br/>',
+            '<ul>',
+                '<tpl for="data">',
+                '<tpl if="!success">',
+                '<li class="book-new-check-{success}">{img}</li>',
+                '</tpl>',
+                '</tpl>',
+            '</ul>',
+        '</div>'
+    ),
+
     maxRequestTry: 3,
 
     currentRequestTry: 0,
 
     addBook: function(btn) {
         this.getGrid().getBookInfo(null, {modal: true});
+    },
+
+    resizeAndCreateThumbs: function(mask, start, result) {
+        if (!mask) {
+            // creation de la progressbar si elle n'existe pas
+            mask = Ext.Msg.progress(Library.wording.admin_redim_and_mini, '', Library.wording.book_moved_first);
+        }
+        // element a traiter dans la pile
+        start = start || 0;
+        // envoi de la requete
+        Ext.Ajax.request({
+            url: Library.Main.config().controller,
+            params: {
+                cmd: 'resizeAllThumbs',
+                start: start
+            },
+            scope: this,
+            success: function(response) {
+                var json = Library.Main.getJson(response);
+                // nombre d'elements traites jusqu'a present
+                start++;
+                result = result || [];
+                // on modifie le tableau de resultat affiche a la fin du processus
+                if (json.success) {
+                    result = result.concat(json.msg);
+                    if (json.next && !json.stop) {
+                        // on continue, donc on modifie la progressbar
+                        mask.updateProgress(start / json.total || 1, String.format(Library.wording.book_moved, start, json.total));
+                        // on lance une nouvelle fois la requete
+                        this.resizeAndCreateThumbs(mask, start, result);
+                    } else {
+                        // on a fini le processus. On affiche le resultat
+                        mask.hide();
+                        Ext.Msg.alert(Library.wording.admin_redim_and_mini, this.resizeThumbsTpl.apply({
+                            data: result,
+                            text: String.format(Library.wording.admin_redim_and_mini_finished, json.total)
+                        }));
+                    }
+                }
+            },
+            failure: function(response) {
+                mask.hide();
+                Library.Main.failure(response);
+            }
+        });
     },
 
     checkForNewBooks: function(mask, start, total, result, skipThumb) {
@@ -318,6 +376,16 @@ Library.admin.App = Ext.extend(Library.App, {
                     iconCls: 'book-import-small',
                     scope: this,
                     handler: this.importBooks
+                }, {
+                    text: Library.wording.admin_redim_and_mini,
+                    scope: this,
+                    handler: function() {
+                        Ext.Msg.confirm(Library.wording.admin_redim_and_mini, Library.wording.admin_redim_and_mini, function(choice){
+                            if (choice == 'yes') {
+                                this.resizeAndCreateThumbs();
+                            }
+                        }, this);
+                    }
                 }, '-',  {
                     text: Library.wording.add_book_button,
                     iconCls: 'book-add-small',

@@ -21,6 +21,7 @@ class Library_Book_ImportController extends Library_Controller {
         $files = glob(Library_Book::getTmpPdfPath(true) . '*.pdf');
         $msg = array();
         $table = new Library_Book();
+        $book_controller = new Library_Book_Controller($this->getParams());
         foreach ($files as $file) {
             // on chope le slug du fichier
             $tmp = str_replace(Library_Book::getTmpPdfPath(true), '', $file);
@@ -36,6 +37,8 @@ class Library_Book_ImportController extends Library_Controller {
                     if (count($output) != 1) {
                         $success = false;
                         $thumb = false;
+                    } else {
+                        $book_controller->resizeThumbAndCreateMini($tmp . '.jpg');
                     }
                 }
                 // on crée l'entrée dans la base
@@ -155,6 +158,7 @@ class Library_Book_ImportController extends Library_Controller {
             $this->importEditors = Library_Book_Editor::getListToArray();
             $this->importNiveaux = Library_Niveau::getListToArray();
             $this->importBooks = Library_Book::getListForImportDistinct();
+            $book_controller = new Library_Book_Controller($this->getParams());
             while (($data = fgetcsv($handle)) !== false) {
                 // on skip la 1ère ligne (ligne de titre)
                 if ($continue) {
@@ -184,6 +188,9 @@ class Library_Book_ImportController extends Library_Controller {
                 if (file_exists($info['pathpdf'])) {
                     if (!$thumb_exists && !$skip_thumb) {
                         $output = $this->generatePdfFirstPageThumb($info['pathpdf'], $info['pathimg']);
+                        if (count($output) == 1) {
+                            $book_controller->resizeThumbAndCreateMini($info['fileimage']);
+                        }
                         $log[] = $output;
                     }
                 } else {
@@ -263,6 +270,7 @@ class Library_Book_ImportController extends Library_Controller {
         $filepdf = $file ? $csv['folder'] . '/' . $csv['file'] : '';
         return array_merge($csv, array(
             'filename' => $filepdf,
+            'fileimage' => $fileimage,
             'thumb' => $file ? Library_Book::getThumbPath() . $fileimage : null,
             'pathimg' => Library_Book::getThumbPath(true) . $fileimage,
             'pathpdf' => Library_Config::getInstance()->getData()->path->pdf . $filepdf,

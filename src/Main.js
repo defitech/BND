@@ -40,7 +40,7 @@ Library.Main = {
         } catch (e) {
             Ext.Msg.show({
                 title: Library.wording.error_title,
-                msg: Library.wording.bad_json
+                msg: Library.wording.bad_json + ': ' + response.responseText
             });
             return {
                 success: false

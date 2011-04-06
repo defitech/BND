@@ -61,6 +61,20 @@ class Library_Book extends Zend_Db_Table_Abstract {
     }
 
     /**
+     * Retourne le chemin vers l'image mini de la grid
+     *
+     * @param boolean $full true pour retourner le chemin complet racine
+     * @return string
+     */
+    public static function getMiniPath($full = false) {
+        return ($full ? Library_Config::getInstance()->getRoot() : '') . self::getMiniFolder();
+    }
+
+    public static function getMiniFolder() {
+        return 'resources/books/mini/';
+    }
+
+    /**
      * Retourne le chemin vers le dossier d'upload pdf
      *
      * @param boolean $full true pour retourner le chemin complet racine

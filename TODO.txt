@@ -4,8 +4,6 @@ A faire appli BND:
 
 - important: upload de maxi gros fichier pour les PDFs (utiliser flash ou java)
 
-- au moment de générer le thumb ou d'ulpoader le thumb, il faudrait le
-  redimensionner automatiquement aux dimensions 258x397 max
 - boutons "précédents" et "suivant" dans la popup livre, pour naviguer d'un
   livre à l'autre sans avoir à passer par la grid
 - ramener le focus sur la grid après chaque action (avec raccourcis clavier)
