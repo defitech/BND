@@ -1,9 +1,12 @@
-A faire appli BND:
+Appli BND:
 
-(dernière màj le 24.03.2011)
+(dernière màj le 07.04.2011)
 
-- important: upload de maxi gros fichier pour les PDFs (utiliser flash ou java)
 
+
+A envisager de faire un jour:
+- upload de maxi gros fichier pour les PDFs (utiliser flash ou java). plupload
+  semble être quelque chose de pas mal (déjà téléchargé dans les extjsux)
 - boutons "précédents" et "suivant" dans la popup livre, pour naviguer d'un
   livre à l'autre sans avoir à passer par la grid
 - ramener le focus sur la grid après chaque action (avec raccourcis clavier)
@@ -11,7 +14,7 @@ A faire appli BND:
 
 
 
-Raccourcis clavier sur fenêtre d'information:
+Raccourcis clavier sur fenêtre d'information à faire:
 - Shift+Q: ferme la fenêtre
 - Shift+S: télécharger
 
@@ -21,6 +24,7 @@ Reflexions:
 - filtres pour la grid http://triin.net/temp/filter-row/ ?
 - téléchargement sécurisé? par php? ou par http? htaccess?
 - sortir du svn les miniatures? les mettre dans bndlibs?
+
 
 
 Erreurs d'uploads:
@@ -33,11 +37,12 @@ Parfois, le thumb ne se crée pas. Loin d'être un hasard, voici des pistes:
   navigateur...
 
 
+
 Technologies utilisées:
 - PHP (http://www.php.net) pour le développement serveur
 - Zend Framework (http://framework.zend.com) pour le modèle objet
 - Sqlite (http://www.sqlite.org) pour la base de données
 - ImageMagick (http://www.imagemagick.org) ainsi que...
 - GhostScript (http://www.ghostscript.com) pour la génération des thumbs
-- ExtJS (http://www.sencha.com) pour les interfaces utilisateurs
+- ExtJS (http://www.sencha.com/products/extjs) pour les interfaces utilisateurs
   (payant pour des projets non-opensource. Pas de licence prise pour BND.)
