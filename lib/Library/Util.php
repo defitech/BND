@@ -46,6 +46,16 @@ class Library_Util {
     }
 
     /**
+     * Retourne l'extension d'un fichier
+     *
+     * @param string $file
+     * @return string
+     */
+    public static function getExtension($file) {
+        return substr($file, strrpos($file, '.') + 1);
+    }
+
+    /**
      * Gère le traitement des fatal error
      *
      * @return void

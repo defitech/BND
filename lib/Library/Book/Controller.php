@@ -86,12 +86,22 @@ class Library_Book_Controller extends Library_Controller {
                 $ns['label'][] = $niveau->label;
                 $ns['id'][] = $niveau->id;
             }
+            $thumb = 'resources/images/emptysmall.jpg';
+            if ($row->thumb) {
+                // test de l'existence d'une mini
+                $tmp = str_replace(Library_Book::getThumbFolder(), '', $row->thumb);
+                if (file_exists(Library_Book::getMiniPath(true) . $tmp)) {
+                    $thumb = Library_Book::getMiniFolder() . $tmp;
+                } else {
+                    $thumb = Library_Book::getThumbFolder() . $tmp;
+                }
+            }
             $books[] = array_merge($row->toArray(), array(
                 'editorid' => $row->editor_id,
                 'editor_id' => isset($editors[$row->editor_id]) ? $editors[$row->editor_id] : $row->editor_id,
                 'typeid' => $row->type_id,
                 'type_id' => isset($types[$row->type_id]) ? $types[$row->type_id] : $row->type_id,
-                'thumb' => $row->thumb ? str_replace(Library_Book::getThumbFolder(), Library_Book::getMiniFolder(), $row->thumb) : 'resources/images/emptysmall.jpg',
+                'thumb' => $thumb,
                 'niveauid' => implode(',', $ns['id']),
                 'niveau_id' => implode(', ', $ns['label'])
             ));
@@ -239,9 +249,16 @@ class Library_Book_Controller extends Library_Controller {
 
     public function resizeThumbAndCreateMini($img) {
         Library_Config::getInstance()->testIssetAuser(2);
+        $ext = Library_Util::getExtension($img);
 
         $i = Library_Book::getThumbPath(true) . $img;
-        $im = @imagecreatefromjpeg($i);
+        switch ($ext) {
+            case 'jpg':
+            case 'jpeg': $im = @imagecreatefromjpeg($i); break;
+            case 'png': $im = @imagecreatefromjpng($i); break;
+            case 'gif': $im = @imagecreatefromgif($i); break;
+            default: return false;
+        }
 
         if (!$im) {
             return false;
@@ -275,7 +292,7 @@ class Library_Book_Controller extends Library_Controller {
     protected function resizeAllThumbs() {
         Library_Config::getInstance()->testIssetAuser(2);
         // on chope toutes les images du dossier
-        $files = glob(Library_Book::getThumbPath(true) . '*.jpg');
+        $files = glob(Library_Book::getThumbPath(true) . '*.*');
 
         $msg = array();
         $count = 0;
