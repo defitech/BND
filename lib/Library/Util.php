@@ -49,10 +49,12 @@ class Library_Util {
      * Retourne l'extension d'un fichier
      *
      * @param string $file
+     * @param boolean $toLower false pour avoir l'extension telle qu'elle est écrite (majuscule ou minuscule)
      * @return string
      */
-    public static function getExtension($file) {
-        return substr($file, strrpos($file, '.') + 1);
+    public static function getExtension($file, $toLower = true) {
+        $ext = substr($file, strrpos($file, '.') + 1);
+        return $toLower ? strtolower($ext) : $ext;
     }
 
     /**

@@ -172,6 +172,7 @@ class Library_Book_Controller extends Library_Controller {
         $row->title = stripslashes($this->getParam('title'));
         $row->isbn = $this->getParam('isbn');
         $row->thumb = $this->getParam('thumb');
+        $row->tags = $this->getParam('tags');
         $row->filename = $this->getParam('pdf');
         $row->editor_id = $this->getParam('editor_id');
         $row->type_id = $this->getParam('type_id');
