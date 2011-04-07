@@ -255,7 +255,7 @@ class Library_Book_Controller extends Library_Controller {
         switch ($ext) {
             case 'jpg':
             case 'jpeg': $im = @imagecreatefromjpeg($i); break;
-            case 'png': $im = @imagecreatefromjpng($i); break;
+            case 'png': $im = @imagecreatefrompng($i); break;
             case 'gif': $im = @imagecreatefromgif($i); break;
             default: return false;
         }
