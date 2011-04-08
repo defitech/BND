@@ -206,7 +206,7 @@ class Library_Book_Controller extends Library_Controller {
 
         if (Library_User::right(1)) {
             $rights = $this->getGroupParam('right');
-            $row->right = sprintf('|%s|', implode('|', array_keys($rights)));
+            $row->right = count($rights) ? sprintf('|%s|', implode('|', array_keys($rights))) : '';
         }
 
         $config = Library_Config::getInstance();
