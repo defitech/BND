@@ -1,13 +1,12 @@
 Appli BND:
-
-(dernière màj le 07.04.2011)
+dernière màj le 08.04.2011
 
 
 
 A envisager de faire un jour:
 - upload de maxi gros fichier pour les PDFs (utiliser flash ou java). plupload
   semble être quelque chose de pas mal (déjà téléchargé dans les extjsux)
-- boutons "précédents" et "suivant" dans la popup livre, pour naviguer d'un
+- boutons "précédent" et "suivant" dans la popup livre, pour naviguer d'un
   livre à l'autre sans avoir à passer par la grid
 - ramener le focus sur la grid après chaque action (avec raccourcis clavier)
 - la largeur du champ titre (grid des livres) se stoppe à ~1200px
@@ -24,25 +23,3 @@ Reflexions:
 - filtres pour la grid http://triin.net/temp/filter-row/ ?
 - téléchargement sécurisé? par php? ou par http? htaccess?
 - sortir du svn les miniatures? les mettre dans bndlibs?
-
-
-
-Erreurs d'uploads:
-Parfois, le thumb ne se crée pas. Loin d'être un hasard, voici des pistes:
-- fichier PDF trop gros, le script exec() plante (peut-être un timeout?)
-- le PDF n'a pas été trouvé sur le serveur (problème de nom ou d'accent)
-- dès fois, l'import plante complètement sans message d'erreur. Ce doit être
-  le convert qui fait carrément planter momentanément le serveur. En tous les
-  cas, le seul moyen de revenir à la normale, c'est de redémarrer le
-  navigateur...
-
-
-
-Technologies utilisées:
-- PHP (http://www.php.net) pour le développement serveur
-- Zend Framework (http://framework.zend.com) pour le modèle objet
-- Sqlite (http://www.sqlite.org) pour la base de données
-- ImageMagick (http://www.imagemagick.org) ainsi que...
-- GhostScript (http://www.ghostscript.com) pour la génération des thumbs
-- ExtJS (http://www.sencha.com/products/extjs) pour les interfaces utilisateurs
-  (payant pour des projets non-opensource. Pas de licence prise pour BND.)
