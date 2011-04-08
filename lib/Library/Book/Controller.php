@@ -138,8 +138,10 @@ class Library_Book_Controller extends Library_Controller {
                 ->select()
                 ->where('id = ?', $id)
             );
+            $rights = $this->getRightListForCheckboxGroup($book);
         } else {
             $book = $table->createRow();
+            $rights = array();
         }
 
         $c = new Library_Book_NiveauController($this->getParams());
@@ -151,7 +153,7 @@ class Library_Book_Controller extends Library_Controller {
                 'editors' => $e->getEditorList(),
                 'types' => $t->getTypeList(),
                 'niveaux' => $c->getNiveauListForCheckboxGroup($book),
-                'rights' => $this->getRightListForCheckboxGroup($book),
+                'rights' => $rights,
                 'maxpostsize' => ini_get('post_max_size')
             ))
         );
