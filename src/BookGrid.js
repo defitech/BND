@@ -98,10 +98,6 @@ Library.BookGrid = Ext.extend(Ext.grid.GridPanel, {
     },
 
     renderBookThumb: function(val, data, record){
-        console.log(val);
-        console.log(data);
-        console.log(record);
-        console.log('----------');
         var t = record.get('title').replace('"', "'");
         return '<img class="book-thumb" src="' + val + '" alt="' + t + '" title="' + t + '" />';
     },
