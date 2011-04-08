@@ -504,9 +504,40 @@ Library.admin.Book = Ext.extend(Library.Book, {
         };
     },
 
+    initRights: function() {
+        return {
+            xtype: 'fieldset',
+            title: Library.wording.right,
+            collapsed: true,
+            autoHeight: true,
+            collapsible: true,
+            anchor: '95%',
+            defaults: {
+                anchor: '100%'
+            },
+            items: [{
+                xtype: 'displayfield',
+                value: Library.wording.right_description
+            },{
+                xtype: 'checkboxgroup',
+                ref: '../../checkright',
+                fieldLabel: Library.wording.right_users,
+                columns: 2,
+                items: this.data.rights
+            }]
+        };
+    },
+
     initBookItems: function() {
         var items = [
             this.initFieldId({xtype: 'textfield', cls: 'book-item-id', readOnly: true}),
+        ];
+
+        if (Library.Main.right(1)) {
+            items.push(this.initRights());
+        }
+
+        items = items.concat([
             this.initFieldTitle({xtype: 'textfield'}),
             {xtype: 'hidden', name: 'cmd', value: 'saveBook'},
             {
@@ -523,8 +554,14 @@ Library.admin.Book = Ext.extend(Library.Book, {
                     .concat(this.initFieldsActions(this.addType, this.editType, this.removeType))
             },
             this.initFieldNiveaux(),
-            this.initFieldIsbn({xtype: 'textfield'})
-        ];
+            this.initFieldIsbn({xtype: 'textfield'}),
+            {
+                xtype: 'textfield',
+                name: 'tags',
+                fieldLabel: Library.wording.tags,
+                value: this.data.tags
+            }
+        ]);
 
 //        this.swfButton = new Ext.ux.PluploadButton({
 //            text: 'upload',
@@ -542,11 +579,6 @@ Library.admin.Book = Ext.extend(Library.Book, {
 //        });
 
         return items.concat([{
-            xtype: 'textfield',
-            name: 'tags',
-            fieldLabel: Library.wording.tags,
-            value: this.data.tags
-        },{
             xtype: 'fieldset',
             title: Library.wording.file_fieldset,
             autoHeight: true,

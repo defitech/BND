@@ -20,4 +20,21 @@ class Library_User extends Zend_Db_Table_Abstract {
         return Library_Config::getInstance()->getUser($right) ? true : false;
     }
 
+    public static function getList() {
+        $table = new self();
+        return $table->fetchAll($table
+            ->select()
+            ->order('login ASC')
+        );
+    }
+
+    public static function getListToArray() {
+        $rowset = self::getList();
+        $data = array();
+        foreach ($rowset as $row) {
+            $data[$row->id] = $row->login;
+        }
+        return $data;
+    }
+
 }

@@ -17,6 +17,9 @@ Library.wording = {
     isbn: 'N° ISBN',
     help: 'Aide',
     file: 'Fichier',
+    right: 'Restrictions de droits',
+    right_users: 'Ayants-droit',
+    right_description: "Vous pouvez ici limiter les droits d'affichage du livre. Si rien n'est coch\u00e9, il sera visible pour tout le monde. Dès que l'un des utilisateurs est s\u00e9lectionn\u00e9, le livre ne s'affichera plus que pour les admins (niveaux de droits 1 et 2) et l'utilisateur (ou les utilisateurs) en question.",
 
     filter_undo: 'Annuler les filtres',
     filter_title: 'Filtrer',

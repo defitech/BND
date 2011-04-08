@@ -31,6 +31,13 @@ class Library_Book_Controller extends Library_Controller {
             ->joinLeft(array('t' => 'library_book_type'), 'library_book.type_id = t.id', array())
             ->limit($limit, $start);
 
+        // check des droits
+        $user = Library_Config::getInstance()->getUser();
+        // s'il ne s'agit pas d'un admin, on ajoute la condition de droits
+        if (!Library_User::right(2)) {
+            $select->where('(library_book.right IS NULL OR library_book.right = "" OR library_book.right LIKE "%|' . $user->id . '|%")');
+        }
+
         switch($sort) {
             case 'editor_id': $select->order('e.editor ' . $dir); break;
             case 'type_id': $select->order('t.label ' . $dir); break;
@@ -144,9 +151,27 @@ class Library_Book_Controller extends Library_Controller {
                 'editors' => $e->getEditorList(),
                 'types' => $t->getTypeList(),
                 'niveaux' => $c->getNiveauListForCheckboxGroup($book),
+                'rights' => $this->getRightListForCheckboxGroup($book),
                 'maxpostsize' => ini_get('post_max_size')
             ))
         );
+    }
+
+    private function getRightListForCheckboxGroup($book) {
+        $users = Library_User::getListToArray();
+        // récupération ultra basique des droits: un champ varchar avec des
+        // ids entourés par des | (pipe)
+        $users_select = explode('|', trim($book->right, '|'));
+        $rights = array();
+        foreach ($users as $i => $u) {
+            // création du tableau pour le set de checkbox
+            $rights[] = array(
+                'boxLabel' => $u,
+                'checked' => in_array($i, $users_select) ? true : false,
+                'name' => 'right-' . $i
+            );
+        }
+        return $rights;
     }
 
     protected function saveBook() {
@@ -176,6 +201,9 @@ class Library_Book_Controller extends Library_Controller {
         $row->filename = $this->getParam('pdf');
         $row->editor_id = $this->getParam('editor_id');
         $row->type_id = $this->getParam('type_id');
+
+        $rights = $this->getGroupParam('right');
+        $row->right = sprintf('|%s|', implode('|', array_keys($rights)));
 
         $config = Library_Config::getInstance();
 

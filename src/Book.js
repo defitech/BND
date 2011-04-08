@@ -150,7 +150,7 @@ Library.Book = Ext.extend(Ext.Window, {
         this.addEvents('bookdownload');
         Ext.applyIf(this, {
             width: 700,
-            height: 480
+            height: 490
         });
         this.thumbId = Ext.id();
         Ext.apply(this, {

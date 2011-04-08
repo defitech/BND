@@ -6,14 +6,14 @@
 # Généré le: Friday 11th 2011f March 2011 03:01 pm
 # SQLite Version: 3.3.7
 # PHP Version: 5.2.13
-# Base de données: db.txt
+# Base de données: db_bnd.txt
 # --------------------------------------------------------
 
 #
 # Structure de la table: library_book
 #
 
-CREATE TABLE 'library_book' ( 'id' INTEGER NOT NULL PRIMARY KEY, 'type_id' INT, 'editor_id' INT, 'title' VARCHAR(200), 'thumb' VARCHAR(200), 'tags' TEXT, 'isbn' VARCHAR(150), 'filename' VARCHAR(100) );
+CREATE TABLE 'library_book' ( 'id' INTEGER NOT NULL PRIMARY KEY , 'type_id' INT , 'editor_id' INT , 'title' VARCHAR ( 200 ) , 'thumb' VARCHAR ( 200 ) , 'tags' TEXT , 'isbn' VARCHAR ( 150 ) , 'filename' VARCHAR ( 100 ) , 'right' VARCHAR ( 255 ) ) ;
 # --------------------------------------------------------
 
 
@@ -69,7 +69,8 @@ CREATE TABLE 'library_user_download' ( 'id' INTEGER NOT NULL PRIMARY KEY , 'book
 #
 
 INSERT INTO 'library_user' VALUES ('1', 'admin', 'c462ea29c64efa0f679b05d046205d41', '1', '2011-03-22 13:10:00');
-INSERT INTO 'library_user' VALUES ('2', 'defitech', 'ce47d07243bb6eaf5e1322c81baf9bbf', '2', '2011-03-22 13:10:14');
+INSERT INTO 'library_user' VALUES ('2', 'adherent', 'ce47d07243bb6eaf5e1322c81baf9bbf', '2', '2011-03-22 13:10:10');
+INSERT INTO 'library_user' VALUES ('3', 'defitech', 'ce47d07243bb6eaf5e1322c81baf9bbf', '3', '2011-03-22 13:10:14');
 # --------------------------------------------------------
 
 
