@@ -202,8 +202,10 @@ class Library_Book_Controller extends Library_Controller {
         $row->editor_id = $this->getParam('editor_id');
         $row->type_id = $this->getParam('type_id');
 
-        $rights = $this->getGroupParam('right');
-        $row->right = sprintf('|%s|', implode('|', array_keys($rights)));
+        if (Library_User::right(1)) {
+            $rights = $this->getGroupParam('right');
+            $row->right = sprintf('|%s|', implode('|', array_keys($rights)));
+        }
 
         $config = Library_Config::getInstance();
 
