@@ -138,10 +138,8 @@ class Library_Book_Controller extends Library_Controller {
                 ->select()
                 ->where('id = ?', $id)
             );
-            $rights = $this->getRightListForCheckboxGroup($book);
         } else {
             $book = $table->createRow();
-            $rights = array();
         }
 
         $c = new Library_Book_NiveauController($this->getParams());
@@ -153,13 +151,15 @@ class Library_Book_Controller extends Library_Controller {
                 'editors' => $e->getEditorList(),
                 'types' => $t->getTypeList(),
                 'niveaux' => $c->getNiveauListForCheckboxGroup($book),
-                'rights' => $rights,
+                'rights' => $this->getRightListForCheckboxGroup($book),
                 'maxpostsize' => ini_get('post_max_size')
             ))
         );
     }
 
     private function getRightListForCheckboxGroup($book) {
+        if (!Library_User::right(1)) return array();
+        
         $users = Library_User::getListToArray();
         // récupération ultra basique des droits: un champ varchar avec des
         // ids entourés par des | (pipe)
