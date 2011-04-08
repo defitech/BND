@@ -533,10 +533,6 @@ Library.admin.Book = Ext.extend(Library.Book, {
             this.initFieldId({xtype: 'textfield', cls: 'book-item-id', readOnly: true}),
         ];
 
-        if (Library.Main.right(1)) {
-            items.push(this.initRights());
-        }
-
         items = items.concat([
             this.initFieldTitle({xtype: 'textfield'}),
             {xtype: 'hidden', name: 'cmd', value: 'saveBook'},
@@ -578,7 +574,7 @@ Library.admin.Book = Ext.extend(Library.Book, {
 //            }
 //        });
 
-        return items.concat([{
+        items = items.concat([{
             xtype: 'fieldset',
             title: Library.wording.file_fieldset,
             autoHeight: true,
@@ -652,6 +648,12 @@ Library.admin.Book = Ext.extend(Library.Book, {
                 }]
             }]
         }]);
+
+        if (Library.Main.right(1)) {
+            items.push(this.initRights());
+        }
+
+        return items;
     },
 
     initFieldsActions: function(add, edit, remove) {
