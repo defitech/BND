@@ -86,9 +86,10 @@ class Library_User_DownloadController extends Library_Controller {
             ->from(array('b' => 'library_book'), array('btitle' => 'b.title', 'bid' => 'b.id', 'eid' => 'b.editor_id'))
             ->join(array('d' => 'library_user_download'), 'd.book_id = b.id', array('nb' => 'COUNT(*)'))
             ->join(array('u' => 'library_user'), 'd.user_id = u.id', array('tid' => 'u.type_id'))
-            ->group('d.book_id', 'u.type_id')
-            ->order('b.title', 'ASC')
+            ->group('d.book_id')
+            ->group('u.type_id')
             ->order('u.type_id', 'ASC')
+            ->order('b.title', 'ASC')
         );
         
         $editors = Library_Book_Editor::getListToArray();
