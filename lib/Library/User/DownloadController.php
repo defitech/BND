@@ -85,13 +85,17 @@ class Library_User_DownloadController extends Library_Controller {
             ->select()
             ->from(array('b' => 'library_book'), array('btitle' => 'b.title', 'bid' => 'b.id', 'eid' => 'b.editor_id'))
             ->join(array('d' => 'library_user_download'), 'd.book_id = b.id', array('nb' => 'COUNT(*)'))
-            ->group('d.book_id')
+            ->join(array('u' => 'library_user'), 'd.user_id = u.id', array('tid' => 'u.type_id'))
+            ->group('d.book_id', 'u.type_id')
+            ->order('b.title', 'ASC')
+            ->order('u.type_id', 'ASC')
         );
         
         $editors = Library_Book_Editor::getListToArray();
+        $types = Library_User_Type::getListToArray();
         
         $items = array(
-            array('livre id', 'livre titre', 'editeur', 'nb downloads')
+            array('livre id', 'livre titre', 'editeur', 'type utilisateur', 'nb downloads')
         );
         foreach ($rowset as $row) {
             $editor = str_replace("\n", "", isset($editors[$row['eid']]) ? $editors[$row['eid']] : $row['eid']);
@@ -100,6 +104,7 @@ class Library_User_DownloadController extends Library_Controller {
                 $row['bid'],
                 '"'. str_replace('"', "'", $row['btitle']) .'"',
                 $editor,
+                isset($types[$row['tid']]) ? $types[$row['tid']] : 'Aucun',
                 $row['nb']
             );
         }
