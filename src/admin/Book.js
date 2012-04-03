@@ -41,6 +41,7 @@ Library.admin.Book = Ext.extend(Library.Book, {
                     Ext.apply(this.data, action.result.infos);
                     frm.findField('id').setValue(this.data.id);
                     frm.findField('pdf').setValue(this.data.filename);
+                    frm.findField('tags').setValue(action.result.infos.tags);
                     if (this.data.thumb) {
                         this.setThumbInfo(action.result.infos.thumb);
                     }

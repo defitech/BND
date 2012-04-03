@@ -3,7 +3,7 @@ Ext.ns('Library.admin');
 Library.admin.UserDownload = Ext.extend(Ext.grid.GridPanel, {
 
     exportCsv: function() {
-        window.location.href = Library.Main.config().controller + '?cmd=exportUserDownloadCav&user_id=' + this.record.get('id')
+        window.location.href = Library.Main.config().controller + '?cmd=exportUserDownloadCsv&user_id=' + this.record.get('id')
     },
 
     setUserRecord: function(record) {

@@ -48,19 +48,23 @@ class Library_Book_Controller extends Library_Controller {
 
         // ajout des filtres non-grid s'il y en a
         if (isset($filters['fullsearch'])) {
-            // définition des champs touchés par le fullsearch
-            $fullsearch_fields = array(
-                'library_book.title', 'library_book.tags', 'library_book.isbn',
-                'e.editor',
-                't.label',
-                'n.label'
-            );
-            // création du bout de requête sql
-            $tmp = array();
-            foreach ($fullsearch_fields as $field) {
-                $tmp[] = $field . ' LIKE "%' . $filters['fullsearch'] . '%"';
+            $terms = str_replace('"', '', $filters['fullsearch']);
+            $terms = explode(' ', Library_Util::getSlug(trim($terms), ' '));
+            foreach ($terms as $term) {
+                // définition des champs touchés par le fullsearch
+                $fullsearch_fields = array(
+                    'library_book.title', 'library_book.tags', 'library_book.isbn',
+                    'e.editor',
+                    't.label',
+                    'n.label'
+                );
+                // création du bout de requête sql
+                $tmp = array();
+                foreach ($fullsearch_fields as $field) {
+                    $tmp[] = $field . ' LIKE "%' . $term . '%"';
+                }
+                $select->where('(' . implode(' OR ', $tmp) . ')');
             }
-            $select->where('(' . implode(' OR ', $tmp) . ')');
         }
 
         // ajout des filtres grid s'il y en a
@@ -195,11 +199,27 @@ class Library_Book_Controller extends Library_Controller {
         } else {
             $row = $table->createRow();
         }
+        
+        // création des tags automatiques par rapport au titre
+        $old_tags = explode('-', Library_Util::getSlug($row->title));
+        $new_tags = explode('-', Library_Util::getSlug($this->getParam('title')));
+        
+        $tags = explode(',', $this->getParam('tags'));
+        $ok_tags = array();
+        foreach ($tags as $tag) {
+            // on supprime les tags qui correspondent à l'ancien titre et qui ne
+            // sont pas dans le nouveau
+            if (in_array($tag, $old_tags) && !in_array($tag, $new_tags)) continue;
+            
+            $ok_tags[] = $tag;
+        }
+        // on ajoute les tags du nouveau titre
+        $ok_tags = array_unique(array_merge($ok_tags, $new_tags));
 
         $row->title = stripslashes($this->getParam('title'));
         $row->isbn = $this->getParam('isbn');
         $row->thumb = $this->getParam('thumb');
-        $row->tags = $this->getParam('tags');
+        $row->tags = implode(',', $ok_tags);
         $row->filename = $this->getParam('pdf');
         $row->editor_id = $this->getParam('editor_id');
         $row->type_id = $this->getParam('type_id');
@@ -208,8 +228,6 @@ class Library_Book_Controller extends Library_Controller {
             $rights = $this->getGroupParam('right');
             $row->right = count($rights) ? sprintf('|%s|', implode('|', array_keys($rights))) : '';
         }
-
-        $config = Library_Config::getInstance();
 
         // si un thumb est envoyé en fichier
         $thumb = $_FILES['thumbfile'];

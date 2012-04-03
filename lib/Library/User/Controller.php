@@ -64,12 +64,15 @@ class Library_User_Controller extends Library_Controller {
         Library_Config::getInstance()->testIssetAuser(1);
         $table = new Library_User();
         $rowset = $table->fetchAll($table->select()
+            ->order('type_id', 'ASC')
             ->order($this->getParam('sort', 'login') . ' ' . $this->getParam('dir', 'ASC'))
         );
         $data = array();
+        $types = Library_User_Type::getListToArray();
         foreach ($rowset as $row) {
             $data[] = array_merge($row->toArray(), array(
-                'pass' => ''
+                'pass' => '',
+                'type_text' => isset($types[$row->type_id]) ? $types[$row->type_id] : 'Aucun'
             ));
         }
         return array(

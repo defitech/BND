@@ -7,7 +7,8 @@ Library.admin.UserGrid = Ext.extend(Ext.grid.EditorGridPanel, {
         var u = new User({
             login: '',
             pass: '',
-            right: 0
+            right: 0,
+            type_id: null
         });
         this.stopEditing();
         this.getStore().insert(0, u);
@@ -115,7 +116,18 @@ Library.admin.UserGrid = Ext.extend(Ext.grid.EditorGridPanel, {
     },
 
     initUserStore: function() {
-        return new Ext.data.JsonStore({
+        return new Ext.data.GroupingStore({
+            reader: new Ext.data.JsonReader({
+                root: 'users',
+                fields: [
+                    {name: 'id'},
+                    {name: 'login'},
+                    {name: 'pass'},
+                    {name: 'right'},
+                    {name: 'type_id'},
+                    {name: 'type_text'}
+                ]
+            }),
             url: Library.Main.config().controller,
             baseParams: {
                 cmd: 'getUserList'
@@ -125,17 +137,12 @@ Library.admin.UserGrid = Ext.extend(Ext.grid.EditorGridPanel, {
                 direction : 'ASC'
             },
             remoteSort: true,
-            root: 'users',
-            fields: [
-                {name: 'id'},
-                {name: 'login'},
-                {name: 'pass'},
-                {name: 'right'}
-            ]
+            groupField: 'type_text'
         });
     },
 
     initUsersHeader: function() {
+        var me = this;
         return new Ext.grid.ColumnModel({
             defaults: {
                 sortable: true
@@ -169,6 +176,34 @@ Library.admin.UserGrid = Ext.extend(Ext.grid.EditorGridPanel, {
                         allowNegative: false,
                         maxValue: 10
                     })
+                },
+                {
+                    header : '&nbsp;',
+                    dataIndex : 'type_text',
+                    hidden: true,
+                    hideable: false
+                },
+                {
+                    header: Library.wording.user_type,
+                    dataIndex: 'type_id',
+                    editor: new Ext.form.ComboBox({
+                        allowBlank: false,
+                        mode: 'local',
+                        displayField: 'value',
+                        valueField: 'id',
+                        store: new Ext.data.ArrayStore({
+                            fields: ['id', 'value'],
+                            data: Library.Main.config().userTypes
+                        })
+                    }),
+                    renderer: function(value, metaData, record, rowIndex, colIndex){
+                        if (!value) return '';
+                        
+                        var combo = me.getColumnModel().getCellEditor(colIndex, rowIndex).field;
+                        var index = combo.getStore().find('id', value);
+                        var r = combo.getStore().getAt(index);
+                        return r.get('value');
+                    }
                 }
             ]
         });
@@ -181,10 +216,13 @@ Library.admin.UserGrid = Ext.extend(Ext.grid.EditorGridPanel, {
             loadMask: true,
             columnLines: false,
             colModel: this.initUsersHeader(),
-            viewConfig: {
+            view: new Ext.grid.GroupingView({
                 forceFit: true,
-                stripeRows: true
-            },
+                stripeRows: true,
+                enableGroupingMenu: false,
+                enableNoGroups: false,
+                groupTextTpl: Library.wording.user_group_text
+            }),
             tbar: [{
                 text: Library.wording.add_book_button,
                 iconCls: 'book-add-small',
@@ -202,6 +240,12 @@ Library.admin.UserGrid = Ext.extend(Ext.grid.EditorGridPanel, {
                 iconCls: 'book-download-small',
                 scope: this,
                 handler: this.showDownloads
+            }, '-', {
+                iconCls: 'book-refresh',
+                scope: this,
+                handler: function() {
+                    this.getStore().load();
+                }
             }],
             listeners: {
                 afterrender: {scope: this, fn: function(grid){
@@ -210,6 +254,12 @@ Library.admin.UserGrid = Ext.extend(Ext.grid.EditorGridPanel, {
                 afteredit: {scope: this, fn: this.saveUserData},
                 rowclick: {scope: this, fn: function(){
                     this.removebutton.enable();
+                }},
+                cellclick: {scope: this, fn: function(grid, row, column){
+                    // si on est sur la colonne du login, on affiche les livres
+                    // telecharges de la personne
+                    if (grid.getColumnModel().getDataIndex(column) == 'login')
+                        this.showDownloads(this.getStore().getAt(row));
                 }},
                 rowcontextmenu: {scope: this, fn: function(grid, index, e){
                     var contextmenu = this.initContextMenu(grid.getStore().getAt(index));

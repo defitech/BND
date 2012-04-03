@@ -213,6 +213,10 @@ body.book-background-montagnes {
     background-image: url('../images/user-add.png') !important;
 }
 
+.book-refresh {
+    background-image: url('../images/refresh.png') !important;
+}
+
 .x-grid3-cell-inner {
     white-space: normal;
 }

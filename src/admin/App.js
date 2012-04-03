@@ -326,8 +326,8 @@ Library.admin.App = Ext.extend(Library.App, {
                     users = new Ext.Window({
                         modal: true,
                         title: Library.wording.user_title,
-                        width: 700,
-                        height: 300,
+                        width: 900,
+                        height: 400,
                         layout: 'fit',
                         closeAction: 'hide',
                         items: new Library.admin.UserPanel({
@@ -410,6 +410,26 @@ Library.admin.App = Ext.extend(Library.App, {
             }}
         };
         Library.admin.App.superclass.initComponent.apply(this, arguments);
+        
+        // Recuperation des diverses valeurs de config liees specifiquement
+        // au niveau de droit de la personne connectee
+        Ext.Ajax.request({
+            url: Library.Main.config().controller,
+            params: {
+                cmd: 'getRightConfig'
+            },
+            scope: this,
+            success: function(response) {
+                var json = Library.Main.getJson(response);
+                if (json.success) {
+                    Library.Main.addConfig(json.config);
+                } else
+                    Library.Main.failure(response);
+            },
+            failure: function(response) {
+                Library.Main.failure(response);
+            }
+        });
     }
 
 });

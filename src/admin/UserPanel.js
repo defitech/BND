@@ -1,6 +1,10 @@
 Ext.ns('Library.admin');
 
 Library.admin.UserPanel = Ext.extend(Ext.Panel, {
+    
+    getBooksDownloads: function() {
+        window.location.href = Library.Main.config().controller + '?cmd=exportBooksDownloadCsv';
+    },
 
     showDownloadsForUser: function(grid, record) {
         var dl = this.getDownloadGrid();
@@ -17,6 +21,12 @@ Library.admin.UserPanel = Ext.extend(Ext.Panel, {
         Ext.apply(this, {
             layout: 'border',
             border: false,
+            tbar: ['->', {
+                text: Library.wording.user_books_exportcsv,
+                iconCls: 'book-export-csv',
+                scope: this,
+                handler: this.getBooksDownloads
+            }],
             items: [
                 new Library.admin.UserGrid({
                     region: 'center',

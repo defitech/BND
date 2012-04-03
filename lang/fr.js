@@ -70,17 +70,21 @@ Library.wording = {
     connect_password: 'Mot de passe',
 
     user_right: 'Droit (1 = admin)',
+    user_type: 'Type',
     user_title: 'Gestion des utilisateurs',
     user_button: 'Utilisateurs',
     user_button_dl: 'Voir les t\u00e9l\u00e9chargements',
     user_delete_title: 'Suppression d\'un utilisateur',
     user_delete: 'Voulez-vous supprimer l\'utilisateur {0}?',
+    user_group_text: '{text} ({[values.rs.length]} personnes)',
 
     user_dl_title: 'Livres t\u00e9l\u00e9charg\u00e9s par {0}',
     user_dl_book: 'Titre du livre',
     user_dl_nb: 'Nb t\u00e9l\u00e9chargements',
     user_dl_exportcsv: 'Exporter en CSV',
     user_id_book: 'ID du livre',
+    
+    user_books_exportcsv: 'Statistiques de t\u00e9l\u00e9chargement pour chaque livre',
 
     info_book_button: 'Informations',
     info_book_close: 'Fermer',

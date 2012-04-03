@@ -102,6 +102,18 @@ class Library_Controller {
      *              Méthodes partagées entre les contrôleurs
      * --------------------------------------------------------------
      */
+    
+    protected function getRightConfig() {
+        Library_Config::getInstance()->testIssetAuser(1);
+                
+        $config = array();
+        $config['userTypes'] = Library_User_Type::getComboList();
+        
+        return array(
+            'success' => true,
+            'config' => $config
+        );
+    }
 
     protected function generatePdfFirstPageThumb($pdf, $img) {
         $path_convert = Library_Config::getInstance()->getData()->path->convert;
