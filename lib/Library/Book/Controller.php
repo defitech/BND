@@ -420,8 +420,18 @@ class Library_Book_Controller extends Library_Controller {
         header("Content-Lenght: " . (string)(filesize($filelocation)));
         header("Content-Transfer-Encoding: Binary"); // added
         header('Content-Disposition: attachment; filename="'.$filename.'"');
-
-        fpassthru(fopen($filelocation,'rb'));
+        session_write_close();
+		ob_end_clean();
+		if($file = fopen($filelocation, 'rb')){
+        	while( (!feof($file)) && (connection_status()==0) ){
+            print(fread($file, 1024*8));
+            flush();
+        	}
+        	
+        	fclose($file);
+   		 }
+		
+        //fpassthru(fopen($filelocation,'rb'));
         exit;
     }
 
