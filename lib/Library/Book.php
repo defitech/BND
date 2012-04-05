@@ -53,11 +53,12 @@ class Library_Book extends Zend_Db_Table_Abstract {
      * @return string
      */
     public static function getThumbPath($full = false) {
-        return ($full ? Library_Config::getInstance()->getRoot() : '') . self::getThumbFolder();
+        $data = Library_Config::getInstance()->getData();
+        return ($full ? $data->path->pdf : $data->web->pdf) . self::getThumbFolder();
     }
 
     public static function getThumbFolder() {
-        return 'resources/books/';
+        return 'images/';
     }
 
     /**
@@ -67,11 +68,12 @@ class Library_Book extends Zend_Db_Table_Abstract {
      * @return string
      */
     public static function getMiniPath($full = false) {
-        return ($full ? Library_Config::getInstance()->getRoot() : '') . self::getMiniFolder();
+        $data = Library_Config::getInstance()->getData();
+        return ($full ? $data->path->pdf : $data->web->pdf) . self::getMiniFolder();
     }
 
     public static function getMiniFolder() {
-        return 'resources/books/mini/';
+        return 'images/mini/';
     }
 
     /**

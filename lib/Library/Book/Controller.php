@@ -100,11 +100,11 @@ class Library_Book_Controller extends Library_Controller {
             $thumb = 'resources/images/emptysmall.jpg';
             if ($row->thumb) {
                 // test de l'existence d'une mini
-                $tmp = str_replace(Library_Book::getThumbFolder(), '', $row->thumb);
+                $tmp = $row->thumb;
                 if (file_exists(Library_Book::getMiniPath(true) . $tmp)) {
-                    $thumb = Library_Book::getMiniFolder() . $tmp;
-                } else {
-                    $thumb = Library_Book::getThumbFolder() . $tmp;
+                    $thumb = Library_Book::getMiniPath() . $tmp;
+                } elseif (file_exists(Library_Book::getThumbPath(true) . $tmp)) {
+                    $thumb = Library_Book::getThumbPath() . $tmp;
                 }
             }
             $books[] = array_merge($row->toArray(), array(
@@ -156,6 +156,7 @@ class Library_Book_Controller extends Library_Controller {
                 'types' => $t->getTypeList(),
                 'niveaux' => $c->getNiveauListForCheckboxGroup($book),
                 'rights' => $this->getRightListForCheckboxGroup($book),
+                'thumbBasePath' => Library_Book::getThumbPath(),
                 'maxpostsize' => ini_get('post_max_size')
             ))
         );
@@ -235,10 +236,12 @@ class Library_Book_Controller extends Library_Controller {
             $valid_extensions = array('image/jpeg', 'image/jpg', 'image/png', 'image/gif');
             if (in_array($thumb['type'], $valid_extensions)) {
                 $img = Library_Util::getSlug($row->title) . strrchr($thumb['name'], '.');
-                move_uploaded_file($thumb['tmp_name'], Library_Book::getThumbPath(true) . $img);
+                if (!move_uploaded_file($thumb['tmp_name'], Library_Book::getThumbPath(true) . $img))
+                    Library_Config::log()->err(sprintf('Upload image %s echoué', Library_Book::getThumbPath(true) . $img));
                 $this->resizeThumbAndCreateMini($img);
                 // set du nouveau thumb
-                $row->thumb = Library_Book::getThumbFolder() . $img;
+                Library_Config::log('Sauve image ' . $thumb['tmp_name'] . ' vers ' . Library_Book::getThumbPath(true) . $img);
+                $row->thumb = $img;
             } else {
                 $success = false;
                 $msg = Library_Wording::get('bad_thumb_type')
@@ -257,12 +260,15 @@ class Library_Book_Controller extends Library_Controller {
                 }
                 $p = Library_Util::getSlug($row->title) . '.pdf';
                 $i = Library_Util::getSlug($row->title) . '.jpg';
-                move_uploaded_file($pdf['tmp_name'], $path . $p);
+                if (!move_uploaded_file($pdf['tmp_name'], $path . $p))
+                    Library_Config::log()->err(sprintf('Move PDF %s échoué', $path . $p));
+                        
                 $output = $this->generatePdfFirstPageThumb($path . $p, Library_Book::getThumbPath(true). $i);
                 if (count($output) == 1) {
                     $this->resizeThumbAndCreateMini($i);
                     // set du nouveau pdf et de son thumb seulement s'il n'y a
                     // pas eu d'erreur pendant la génération du thumb
+                    Library_Config::log('Sauve image depuis PDF (' . $p . ') ' . $pdf['tmp_name'] . ' vers ' . $i);
                     $row->thumb = Library_Book::getThumbFolder() . $i;
                 } else {
                     // la miniature n'a pas pu être générée
@@ -290,7 +296,7 @@ class Library_Book_Controller extends Library_Controller {
                 'niveau_id' => $key
             ));
         }
-
+        
         return array(
             'success' => $success,
             'msg' => $msg,
@@ -435,7 +441,7 @@ class Library_Book_Controller extends Library_Controller {
         header('Date: ' . date("D M j G:i:s T Y"));
         header('Last-Modified: ' . date("D M j G:i:s T Y"));
         header("Content-Type: application/force-download"); // changed to force download
-        header("Content-Lenght: " . (string)(filesize($filelocation)));
+        header("Content-Length: " . (string)(filesize($filelocation)));
         header("Content-Transfer-Encoding: Binary"); // added
         header('Content-Disposition: attachment; filename="'.$filename.'"');
         session_write_close();

@@ -43,6 +43,7 @@ Library.admin.Book = Ext.extend(Library.Book, {
                     frm.findField('pdf').setValue(this.data.filename);
                     frm.findField('tags').setValue(action.result.infos.tags);
                     if (this.data.thumb) {
+                        console.log(action)
                         this.setThumbInfo(action.result.infos.thumb);
                     }
                     this.fireEvent('bookapply', this, Ext.apply(this.data, {
@@ -67,8 +68,9 @@ Library.admin.Book = Ext.extend(Library.Book, {
         this.data.thumb = thumb;
         this.getForm().getForm().findField('thumb').setValue(thumb);
         var img = Ext.get(this.thumbId);
-        img.set({src: thumb});
-        this.fireEvent('bookthumbchange', this, thumb);
+        console.log(this.data.thumbBasePath + thumb)
+        img.set({src: this.data.thumbBasePath + thumb});
+        this.fireEvent('bookthumbchange', this, this.data.thumbBasePath + thumb);
     },
 
     createThumbFromPdf: function() {
