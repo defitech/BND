@@ -1,6 +1,164 @@
 Ext.ns('Library.admin');
 
 Library.admin.UserGrid = Ext.extend(Ext.grid.EditorGridPanel, {
+    
+    /**
+     * Envoie au serveur l'information d'ajout ou de suppression d'un type
+     * d'utilisateur
+     * 
+     * @param {String} action
+     * @param {Ext.Window} win
+     * @return void
+     */
+    manageUserType: function(action, win) {
+        win._mask.show();
+        var form = win.getComponent(0).getForm();
+        var combo = form.findField('type_id');
+        // preparation de la requete ajax
+        Ext.Ajax.request({
+            url: Library.Main.config().controller,
+            params: {
+                // formation de la commande en fonction de l'action
+                cmd: action + 'UserType',
+                // l'id du type selectionne, si suppression
+                id: combo.getValue(),
+                // la valeur du nouveau type, si ajout
+                value: form.findField('newtype').getValue()
+            },
+            success: function(response) {
+                win._mask.hide();
+                var json = Library.Main.getJson(response);
+                if (json.success) {
+                    // on envoie un event pour informer que l'action s'est bien
+                    // deroulee cote serveur
+                    win.fireEvent('usertypeaction', win, action, json);
+                    // on recupere le record selectionne
+                    var r = combo.findRecord('id', combo.getValue());
+                    switch (action) {
+                        case 'add':
+                            // on ajoute le record dans le store de la popup
+                            combo.getStore().add(new Ext.data.Record({
+                                id: json.id,
+                                value: json.value
+                            }));
+                            // on vide le champ
+                            form.findField('newtype').reset()
+                            break;
+                        case 'remove':
+                            // on supprime le record du store de la popup
+                            combo.getStore().remove(r);
+                            // on remet a zero l'affichage du combo
+                            combo.reset();
+                    }
+                }
+            },
+            failure: function(response) {
+                win._mask.hide();
+                Library.Main.failure(response);
+            }
+        });
+    },
+    
+    getUserTypeWindow: function() {
+        var me = this;
+        // definition du store du combo des types d'utilisateur
+        var store = {
+            xtype: 'arraystore',
+            proxy: new Ext.data.HttpProxy({
+                url: Library.Main.config().controller
+            }),
+            baseParams: {
+                cmd: 'getUserTypes'
+            },
+            fields: ['id', 'value']
+        };
+        // definition de la fenetre de gestion des types d'utilisateur
+        var win = new Ext.Window({
+            title: Library.wording.user_type_title,
+            modal: true,
+            width: 350,
+            height: 100,
+            layout: 'fit',
+            items: [{
+                xtype: 'form',
+                border: false,
+                bodyStyle: 'padding: 10px',
+                items: [{
+                    xtype: 'compositefield',
+                    fieldLabel: Library.wording.user_type_edit,
+                    items: [{
+                        xtype: 'combo',
+                        hiddenName: 'type_id',
+                        mode: 'remote',
+                        triggerAction: 'all',
+                        store: store,
+                        displayField: 'value',
+                        valueField: 'id',
+                        emptyText: 'choisir',
+                        flex: 1
+                    }, {
+                        xtype: 'button',
+                        iconCls: 'book-relation-remove',
+                        handler: function() {
+                            Ext.Msg.confirm(Library.wording.user_type_title, Library.wording.user_type_remove, function(choice){
+                                if (choice == 'yes')
+                                    me.manageUserType('remove', win);
+                            });
+                        }
+                    }]
+                },{
+                    xtype: 'compositefield',
+                    fieldLabel: Library.wording.add_book_button,
+                    items: [{
+                        xtype: 'textfield',
+                        name: 'newtype',
+                        flex: 1
+                    }, {
+                        xtype: 'button',
+                        iconCls: 'book-relation-add',
+                        handler: function() {
+                            me.manageUserType('add', win);
+                        }
+                    }]
+                }]
+            }],
+            listeners: {
+                afterrender: function(cmp) {
+                    cmp._mask = new Ext.LoadMask(cmp.bwrap);
+                },
+                destroy: function(cmp) {
+                    delete cmp._mask;
+                },
+                usertypeaction: function(w, action, json) {
+                    // ici, on est juste apres la reussite du serveur quant a
+                    // l'action sur un type d'utiliateur
+                    var i = 0;
+                    // on va recuperer la position de la colonne du type
+                    while (me.getColumnModel().getDataIndex(i)) {
+                        if (me.getColumnModel().getDataIndex(i) == 'type_id')
+                            break;
+                        i++;
+                    }
+                    // on recupere le combo de la cellule (CellEditor)
+                    var field = me.getColumnModel().getCellEditor(i, 0).field;
+                    var r = field.findRecord('id', json.id);
+                    switch (action) {
+                        case 'add':
+                            // si on ajoutait un type, on le met dans le store
+                            field.getStore().add(new Ext.data.Record({
+                                id: json.id,
+                                value: json.value
+                            }));
+                            break;
+                        case 'remove':
+                            // si on supprimait un type, on l'enleve du store
+                            field.getStore().remove(r);
+                    }
+                }
+            }
+        });
+        return win;
+    },
 
     addUser: function() {
         var User = this.getStore().recordType;
@@ -202,7 +360,7 @@ Library.admin.UserGrid = Ext.extend(Ext.grid.EditorGridPanel, {
                         var combo = me.getColumnModel().getCellEditor(colIndex, rowIndex).field;
                         var index = combo.getStore().find('id', value);
                         var r = combo.getStore().getAt(index);
-                        return r.get('value');
+                        return r ? r.get('value') : '';
                     }
                 }
             ]
@@ -240,6 +398,13 @@ Library.admin.UserGrid = Ext.extend(Ext.grid.EditorGridPanel, {
                 iconCls: 'book-download-small',
                 scope: this,
                 handler: this.showDownloads
+            }, '-', {
+                iconCls: 'book-user-type',
+                scope: this,
+                handler: function() {
+                    var win = this.getUserTypeWindow();
+                    win.show();
+                }
             }, '-', {
                 iconCls: 'book-refresh',
                 scope: this,

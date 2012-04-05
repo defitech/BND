@@ -145,6 +145,62 @@ class Library_User_Controller extends Library_Controller {
             'success' => true
         );
     }
+    
+
+
+    /**
+     * --------------------------------------------------------------
+     *              Méthodes de gestion des types d'utilisateur
+     * --------------------------------------------------------------
+     */
+    
+    protected function getUserTypes() {
+        return Library_User_Type::getComboList();
+    }
+    
+    protected function addUserType() {
+        Library_Config::getInstance()->testIssetAuser(1);
+
+        $table = new Library_User_Type();
+
+        $row = $table->createRow();
+
+        $row->user_type = $this->getParam('value');
+        $row->save();
+
+        return array(
+            'success' => true,
+            'id' => $row->id,
+            'value' => $row->user_type
+        );
+    }
+    
+    protected function editUserType() {
+        Library_Config::getInstance()->testIssetAuser(1);
+
+        $table = new Library_User_Type();
+
+        $row = $table->fetchRow($table->select()->where('id = ?', $this->getParam('id')));
+
+        $row->user_type = $this->getParam('value');
+        $row->save();
+
+        return array(
+            'success' => true
+        );
+    }
+    
+    protected function removeUserType() {
+        Library_Config::getInstance()->testIssetAuser(1);
+        
+        $table = new Library_User_Type();
+        $table->delete($table->getAdapter()->quoteInto('id = ?', $this->getParam('id')));
+
+        Library_Config::log(sprintf(Library_Wording::get('user_type_delete'), $this->getParam('id')));
+        return array(
+            'success' => true
+        );
+    }
 
 
 

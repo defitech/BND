@@ -77,6 +77,10 @@ Library.wording = {
     user_delete_title: 'Suppression d\'un utilisateur',
     user_delete: 'Voulez-vous supprimer l\'utilisateur {0}?',
     user_group_text: '{text} ({[values.rs.length]} personnes)',
+    
+    user_type_title: "Types d'utilisateurs",
+    user_type_remove: "Voulez-vous supprimer ce type d'utilisateur?",
+    user_type_edit: "Editer le type",
 
     user_dl_title: 'Livres t\u00e9l\u00e9charg\u00e9s par {0}',
     user_dl_book: 'Titre du livre',
