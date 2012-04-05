@@ -26,6 +26,7 @@ class Fr {
         'own_deletion_not_allowed' => 'Impossible de se supprimer soi-même',
         'user_delete_confirm' => 'Cet utilisateur a %s téléchargements à son actif. Supprimer quand même?',
         'user_delete' => "suppression de l'utilisateur: %s",
+        'user_type_delete' => "suppression du type d'utilisateur: %s",
         'no_connected_user' => "Droits d'accès insuffisants",
 
         'db_backup_done' => 'Base de données backupée (ok? %s)'
