@@ -3,8 +3,12 @@ Ext.ns('Library');
 Library.Book = Ext.extend(Ext.Window, {
 
     tplImage: new Ext.XTemplate(
-        '<img id="{id}" class="book-thumb-big" src="{src}" title="{title}" alt="{title}" />'
+        '<img id="{id}" class="book-thumb-big" src="lib/image.php?i={src}&t=1" title="{title}" alt="{title}" />'
     ),
+        
+    setBookImageSrc: function(src) {
+        
+    },
 
     getForm: function() {
         return this.getComponent(1);
@@ -165,7 +169,7 @@ Library.Book = Ext.extend(Ext.Window, {
                 border: false,
                 bodyStyle: 'padding: 4px;',
                 html: this.tplImage.apply({
-                    src: this.data.thumbBasePath + (this.data.thumb || 'empty.jpg'),
+                    src: this.data.thumb || 'empty.jpg',
                     title: this.data.title,
                     id: this.thumbId
                 })

@@ -98,13 +98,16 @@ class Library_Book_Controller extends Library_Controller {
                 $ns['id'][] = $niveau->id;
             }
             $thumb = 'resources/images/emptysmall.jpg';
+            $thumbName = '';
             if ($row->thumb) {
                 // test de l'existence d'une mini
                 $tmp = $row->thumb;
                 if (file_exists(Library_Book::getMiniPath(true) . $tmp)) {
                     $thumb = Library_Book::getMiniPath() . $tmp;
+                    $thumbName = $row->thumb;
                 } elseif (file_exists(Library_Book::getThumbPath(true) . $tmp)) {
                     $thumb = Library_Book::getThumbPath() . $tmp;
+                    $thumbName = $row->thumb;
                 }
             }
             $books[] = array_merge($row->toArray(), array(
@@ -113,6 +116,7 @@ class Library_Book_Controller extends Library_Controller {
                 'typeid' => $row->type_id,
                 'type_id' => isset($types[$row->type_id]) ? $types[$row->type_id] : $row->type_id,
                 'thumb' => $thumb,
+                'thumbName' => $thumbName,
                 'niveauid' => implode(',', $ns['id']),
                 'niveau_id' => implode(', ', $ns['label'])
             ));

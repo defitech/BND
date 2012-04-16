@@ -99,7 +99,11 @@ Library.BookGrid = Ext.extend(Ext.grid.GridPanel, {
 
     renderBookThumb: function(val, data, record){
         var t = record.get('title').replace('"', "'");
-        return '<img class="book-thumb" src="' + val + '" alt="' + t + '" title="' + t + '" />';
+        if (record.get('thumbName'))
+            return '<img class="book-thumb" src="lib/image.php?i=' + record.get('thumbName') + '" alt="' + t + '" title="' + t + '" />';
+        
+        else
+            return '<img class="book-thumb" src="' + val + '" alt="' + t + '" title="' + t + '" />';
     },
 
     initBookStore: function() {
@@ -117,7 +121,7 @@ Library.BookGrid = Ext.extend(Ext.grid.GridPanel, {
             fields: [
                 {name: 'id'},
                 {name: 'title'},
-                {name: 'thumb'},
+                {name: 'thumb'}, {name: 'thumbName'},
                 {name: 'isbn'},
                 {name: 'filename'},
                 // correspond au label (texte)
