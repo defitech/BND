@@ -13,11 +13,6 @@ $config = array(
     'background' => 'foretcanada'
 );
 
-if ($user && $user->right == 1) {
-    Library_Util::renameThumbs();
-    Library_Util::regenerateTags();
-}
-
 ?>
 <html>
     <head>
