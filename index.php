@@ -13,9 +13,6 @@ $config = array(
     'background' => 'foretcanada'
 );
 
-//Library_Util::renameThumbs();
-//Library_Util::regenerateTags();
-
 ?>
 <html>
     <head>
