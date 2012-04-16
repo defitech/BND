@@ -67,8 +67,8 @@ Library.admin.Book = Ext.extend(Library.Book, {
         this.data.thumb = thumb;
         this.getForm().getForm().findField('thumb').setValue(thumb);
         var img = Ext.get(this.thumbId);
-        img.set({src: this.data.thumbBasePath + thumb});
-        this.fireEvent('bookthumbchange', this, this.data.thumbBasePath + thumb);
+        img.set({src: String.format(Library.Main.config().image, thumb)});
+        this.fireEvent('bookthumbchange', this, thumb);
     },
 
     createThumbFromPdf: function() {

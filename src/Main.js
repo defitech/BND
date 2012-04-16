@@ -10,7 +10,8 @@ Library.Main = {
     cfg: {
         nb: 25,
         controller: 'lib/controller.php',
-        upload: 'lib/upload.php'
+        upload: 'lib/upload.php',
+        image: 'lib/image.php?i={0}&t={1}'
     },
 
     config: function() {

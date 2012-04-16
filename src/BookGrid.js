@@ -100,7 +100,7 @@ Library.BookGrid = Ext.extend(Ext.grid.GridPanel, {
     renderBookThumb: function(val, data, record){
         var t = record.get('title').replace('"', "'");
         if (record.get('thumbName'))
-            return '<img class="book-thumb" src="lib/image.php?i=' + record.get('thumbName') + '" alt="' + t + '" title="' + t + '" />';
+            return '<img class="book-thumb" src="' + String.format(Library.Main.config().image, record.get('thumbName')) + '" alt="' + t + '" title="' + t + '" />';
         
         else
             return '<img class="book-thumb" src="' + val + '" alt="' + t + '" title="' + t + '" />';

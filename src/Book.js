@@ -3,12 +3,8 @@ Ext.ns('Library');
 Library.Book = Ext.extend(Ext.Window, {
 
     tplImage: new Ext.XTemplate(
-        '<img id="{id}" class="book-thumb-big" src="lib/image.php?i={src}&t=1" title="{title}" alt="{title}" />'
+        '<img id="{id}" class="book-thumb-big" src="' + String.format(Library.Main.config().image, '{src}', 1) + '" title="{title}" alt="{title}" />'
     ),
-        
-    setBookImageSrc: function(src) {
-        
-    },
 
     getForm: function() {
         return this.getComponent(1);

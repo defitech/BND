@@ -26,6 +26,7 @@ Library.admin.BookGrid = Ext.extend(Library.BookGrid, {
                     }},
                     bookthumbchange: {scope: this, fn: function(cmp, thumb){
                         if (!record) return;
+                        record.set('thumbName', thumb);
                         record.set('thumb', thumb);
                         record.commit();
                     }}
