@@ -182,11 +182,13 @@ class Library_User_Controller extends Library_Controller {
 
         $row = $table->fetchRow($table->select()->where('id = ?', $this->getParam('id')));
 
-        $row->user_type = $this->getParam('value');
+        $row->user_type = $this->getParam('new_value');
         $row->save();
 
         return array(
-            'success' => true
+            'success' => true,
+            'value' => $row->user_type,
+            'id' => $row->id
         );
     }
     
@@ -198,7 +200,8 @@ class Library_User_Controller extends Library_Controller {
 
         Library_Config::log(sprintf(Library_Wording::get('user_type_delete'), $this->getParam('id')));
         return array(
-            'success' => true
+            'success' => true,
+            'id' => $this->getParam('id')
         );
     }
 

@@ -13,30 +13,8 @@ $config = array(
     'background' => 'foretcanada'
 );
 
-function renameThumbs() {
-    // migration des images du svn vers le dossier des livres
-    $table = new Library_Book();
-    $rowset = $table->fetchAll();
-    foreach ($rowset as $row) {
-        $row->thumb = str_replace('resources/books/', '', $row->thumb);
-        $row->save();
-    }
-}
-
-function regenerateTags() {
-    // mise en place des tags du titre en slug
-    $table = new Library_Book();
-    $rowset = $table->fetchAll();
-    foreach ($rowset as $row) {
-        $old_tags = array_map('trim', explode(',', $row->tags));
-        $new_tags = explode('-', Library_Util::getSlug($row->title));
-        $ok_tags = array_unique(array_merge($new_tags, $old_tags));
-        $row->tags = implode(',', $ok_tags);
-        $row->save();
-    }
-}
-//renameThumbs();
-//regenerateTags();
+//Library_Util::renameThumbs();
+//Library_Util::regenerateTags();
 
 ?>
 <html>

@@ -8,9 +8,10 @@ Library.admin.UserGrid = Ext.extend(Ext.grid.EditorGridPanel, {
      * 
      * @param {String} action
      * @param {Ext.Window} win
+     * @param {String} newValue la nouvelle valeur dans un cas d'edition
      * @return void
      */
-    manageUserType: function(action, win) {
+    manageUserType: function(action, win, newValue) {
         win._mask.show();
         var form = win.getComponent(0).getForm();
         var combo = form.findField('type_id');
@@ -23,7 +24,9 @@ Library.admin.UserGrid = Ext.extend(Ext.grid.EditorGridPanel, {
                 // l'id du type selectionne, si suppression
                 id: combo.getValue(),
                 // la valeur du nouveau type, si ajout
-                value: form.findField('newtype').getValue()
+                value: form.findField('newtype').getValue(),
+                // le nouveau texte du type dans un cas d'edition
+                new_value: newValue
             },
             success: function(response) {
                 win._mask.hide();
@@ -44,6 +47,10 @@ Library.admin.UserGrid = Ext.extend(Ext.grid.EditorGridPanel, {
                             // on vide le champ
                             form.findField('newtype').reset()
                             break;
+                        case 'edit':
+                            r.set('value', json.value);
+                            combo.setValue(json.id);
+                            break;
                         case 'remove':
                             // on supprime le record du store de la popup
                             combo.getStore().remove(r);
@@ -59,6 +66,55 @@ Library.admin.UserGrid = Ext.extend(Ext.grid.EditorGridPanel, {
         });
     },
     
+    /**
+     * Cree la fenetre d'edition d'un type d'utilisateur
+     * 
+     * @param {String} text le texte par defaut du champ d'edition
+     * @return {Ext.Window}
+     */
+    getUserTypeEditWindow: function(text) {
+        var win = new Ext.Window({
+            modal: true,
+            title: Library.wording.user_type_edit,
+            width: 300,
+            height: 110,
+            layout: 'fit',
+            items: {
+                xtype: 'form',
+                bodyStyle: 'padding: 10px;',
+                border: false,
+                items: {
+                    xtype: 'textfield',
+                    name: 'value',
+                    anchor: '100%',
+                    value: text,
+                    fieldLabel: Library.wording.user_type_label
+                }
+            },
+            buttons: [{
+                text: Library.wording.info_book_save,
+                iconCls: 'book-relation-edit',
+                handler: function() {
+                    var field = win.getComponent(0).getForm().findField('value');
+                    win.fireEvent('save', field.getValue());
+                }
+            }, {
+                text: Library.wording.info_book_cancel,
+                iconCls: 'book-relation-remove',
+                handler: function() {
+                    win.close();
+                }
+            }]
+        });
+        return win;
+    },
+    
+    /**
+     * Cree la fenetre qui permet d'ajouter, modifier ou supprimer un type
+     * d'utilisateur
+     * 
+     * @return {Ext.Window}
+     */
     getUserTypeWindow: function() {
         var me = this;
         // definition du store du combo des types d'utilisateur
@@ -94,12 +150,29 @@ Library.admin.UserGrid = Ext.extend(Ext.grid.EditorGridPanel, {
                         store: store,
                         displayField: 'value',
                         valueField: 'id',
-                        emptyText: 'choisir',
+                        emptyText: Library.wording.user_type_choose,
                         flex: 1
+                    }, {
+                        xtype: 'button',
+                        iconCls: 'book-relation-edit',
+                        handler: function() {
+                            var combo = win.getComponent(0).getForm().findField('type_id');
+                            if (!combo.getValue()) return;
+                            
+                            var wine = me.getUserTypeEditWindow(combo.getRawValue());
+                            wine.on('save', function(value){
+                                me.manageUserType('edit', win, value);
+                                wine.close();
+                            });
+                            wine.show();
+                        }
                     }, {
                         xtype: 'button',
                         iconCls: 'book-relation-remove',
                         handler: function() {
+                            var combo = win.getComponent(0).getForm().findField('type_id');
+                            if (!combo.getValue()) return;
+                            
                             Ext.Msg.confirm(Library.wording.user_type_title, Library.wording.user_type_remove, function(choice){
                                 if (choice == 'yes')
                                     me.manageUserType('remove', win);
@@ -149,6 +222,9 @@ Library.admin.UserGrid = Ext.extend(Ext.grid.EditorGridPanel, {
                                 id: json.id,
                                 value: json.value
                             }));
+                            break;
+                        case 'edit':
+                            r.set('value', json.value);
                             break;
                         case 'remove':
                             // si on supprimait un type, on l'enleve du store
@@ -400,6 +476,7 @@ Library.admin.UserGrid = Ext.extend(Ext.grid.EditorGridPanel, {
                 handler: this.showDownloads
             }, '-', {
                 iconCls: 'book-user-type',
+                tooltip: Library.wording.user_type_title,
                 scope: this,
                 handler: function() {
                     var win = this.getUserTypeWindow();

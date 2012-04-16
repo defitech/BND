@@ -119,7 +119,7 @@ class Library_Controller {
         $path_convert = Library_Config::getInstance()->getData()->path->convert;
 
         $argpdf = $pdf . '[0]';
-        $cmd = $path_convert . "convert " . escapeshellarg($argpdf) . " " . escapeshellarg($img);
+        $cmd = $path_convert . "convert " . escapeshellarg($argpdf) . " " . escapeshellarg($img) . " 2>&1";
         $output = array($cmd);
         exec($cmd, $output);
 

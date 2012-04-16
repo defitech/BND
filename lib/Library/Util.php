@@ -87,5 +87,47 @@ class Library_Util {
         Library_Config::log(sprintf(Library_Wording::get('db_backup_done'), $cp));
         return $cp;
     }
+    
+    
+    
+    
+    
+    
+    
+    
+    /**
+     * Renomme les thumbs en enlevant le path qui avait été mis dans la 1ère
+     * version du programme.
+     * 
+     * @return void 
+     */
+    public static function renameThumbs() {
+        // migration des images du svn vers le dossier des livres
+        $table = new Library_Book();
+        $rowset = $table->fetchAll();
+        foreach ($rowset as $row) {
+            $row->thumb = str_replace('resources/books/', '', $row->thumb);
+            $row->save();
+        }
+    }
+    
+    /**
+     * Régénère les tags de tous les livres en fonction de leur titre, pour
+     * pouvoir matcher des recherches avec ou sans accents.
+     * 
+     * @return void
+     */
+    public static function regenerateTags() {
+        // mise en place des tags du titre en slug
+        $table = new Library_Book();
+        $rowset = $table->fetchAll();
+        foreach ($rowset as $row) {
+            $old_tags = array_map('trim', explode(',', $row->tags));
+            $new_tags = explode('-', Library_Util::getSlug($row->title));
+            $ok_tags = array_unique(array_merge($new_tags, $old_tags));
+            $row->tags = implode(',', $ok_tags);
+            $row->save();
+        }
+    }
 
 }

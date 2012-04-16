@@ -269,7 +269,7 @@ class Library_Book_Controller extends Library_Controller {
                     // set du nouveau pdf et de son thumb seulement s'il n'y a
                     // pas eu d'erreur pendant la génération du thumb
                     Library_Config::log('Sauve image depuis PDF (' . $p . ') ' . $pdf['tmp_name'] . ' vers ' . $i);
-                    $row->thumb = Library_Book::getThumbFolder() . $i;
+                    $row->thumb = $i;
                 } else {
                     // la miniature n'a pas pu être générée
                     $success = false;
@@ -484,7 +484,7 @@ class Library_Book_Controller extends Library_Controller {
         $pdf = Library_Config::getInstance()->getData()->path->pdf . $pdfname;
         if (file_exists($pdf) && is_file($pdf)) {
             $output = $this->generatePdfFirstPageThumb($pdf, Library_Book::getThumbPath(true). $i);
-            $thumb = Library_Book::getThumbFolder() . $i;
+            $thumb = $i;
             // On check s'il n'y a pas eu d'erreur pendant la génération du thumb
             if (count($output) == 1) {
                 $this->resizeThumbAndCreateMini($i);

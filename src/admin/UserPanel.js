@@ -30,16 +30,19 @@ Library.admin.UserPanel = Ext.extend(Ext.Panel, {
             items: [
                 new Library.admin.UserGrid({
                     region: 'center',
-                    margins: '4 2 4 4',
+                    margins: '0 2 0 0',
+                    border: false,
                     listeners: {
                         showdownloads: {scope: this, fn: this.showDownloadsForUser}
                     }
                 }),
                 new Library.admin.UserDownload({
                     region: 'east',
-                    margins: '4 4 4 2',
+                    margins: '0 0 0 2',
                     width: 350,
+                    border: false,
                     collapsible: true,
+                    split: true,
                     listeners: {
                         bookget: {scope: this, fn: function(grid, record){
                             this.fireEvent('bookget', this, record);

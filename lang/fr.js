@@ -80,8 +80,10 @@ Library.wording = {
     
     user_type_title: "Types d'utilisateurs",
     user_type_remove: "Voulez-vous supprimer ce type d'utilisateur?",
-    user_type_edit: "Editer le type",
-
+    user_type_edit: "G\u00e9rer le type",
+    user_type_label: 'Type',
+    user_type_choose: '- - - Choisir un type - - -'
+,
     user_dl_title: 'Livres t\u00e9l\u00e9charg\u00e9s par {0}',
     user_dl_book: 'Titre du livre',
     user_dl_nb: 'Nb t\u00e9l\u00e9chargements',
