@@ -80,6 +80,10 @@ dont la génération de la miniature pose problème. Il sera alors facile de ret
 <p><em>Note: le système essaiera 3x de refaire l'importation qui a échouée, à la suite de quoi
     un message d'erreur sera affiché.</em></p>
 <br/>
+<h1>Emplacement des images</h1>
+<p>Pour chaque PDF se crée, normalement, une image et une mini image. Celles-ci sont
+    sauvegardées dans le dossier <strong><?php echo Library_Book::getThumbPath(true); ?></strong>.</p>
+<br/>
 <h1>Backup de la base de données</h1>
 <p>Afin de générer un backup (il n'y a pas de cron job pour ça), il y a deux méthodes:</p>
 <ul>
