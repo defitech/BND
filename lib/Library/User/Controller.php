@@ -62,11 +62,23 @@ class Library_User_Controller extends Library_Controller {
 
     protected function getUserList() {
         Library_Config::getInstance()->testIssetAuser(1);
+        $gridFilters = $this->getParam('filter', array());
         $table = new Library_User();
-        $rowset = $table->fetchAll($table->select()
+        
+        $select = $table->select()
             ->order('type_id', 'ASC')
-            ->order($this->getParam('sort', 'login') . ' ' . $this->getParam('dir', 'ASC'))
-        );
+            ->order($this->getParam('sort', 'login') . ' ' . $this->getParam('dir', 'ASC'));
+        
+        // ajout des filtres grid s'il y en a
+        foreach ($gridFilters as $filter) {
+            switch ($filter['data']['type']) {
+                case 'string':
+                    $select->where('' . $filter['field'] . ' LIKE "%' . $filter['data']['value'] . '%"');
+                    break;
+            }
+        }
+        
+        $rowset = $table->fetchAll($select);
         $data = array();
         $types = Library_User_Type::getListToArray();
         foreach ($rowset as $row) {
@@ -182,7 +194,7 @@ class Library_User_Controller extends Library_Controller {
 
         $row = $table->fetchRow($table->select()->where('id = ?', $this->getParam('id')));
 
-        $row->user_type = $this->getParam('new_value');
+        $row->user_type = $this->getParam('value');
         $row->save();
 
         return array(

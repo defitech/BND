@@ -80,7 +80,8 @@ Library.wording = {
     
     user_type_title: "Types d'utilisateurs",
     user_type_remove: "Voulez-vous supprimer ce type d'utilisateur?",
-    user_type_edit: "G\u00e9rer le type",
+    user_type_edit: "Modifier le type",
+    user_type_add: "Ajouter un type d'utilisateur",
     user_type_label: 'Type',
     user_type_choose: '- - - Choisir un type - - -'
 ,

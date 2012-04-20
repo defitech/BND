@@ -43,4 +43,3 @@ Raccourcis clavier sur fenêtre d'information à faire:
 Reflexions:
 - filtres pour la grid http://triin.net/temp/filter-row/ ?
 - téléchargement sécurisé? par php? ou par http? htaccess?
-- sortir du svn les miniatures? les mettre dans bndlibs?

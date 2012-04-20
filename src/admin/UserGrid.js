@@ -24,9 +24,7 @@ Library.admin.UserGrid = Ext.extend(Ext.grid.EditorGridPanel, {
                 // l'id du type selectionne, si suppression
                 id: combo.getValue(),
                 // la valeur du nouveau type, si ajout
-                value: form.findField('newtype').getValue(),
-                // le nouveau texte du type dans un cas d'edition
-                new_value: newValue
+                value: newValue
             },
             success: function(response) {
                 win._mask.hide();
@@ -45,7 +43,7 @@ Library.admin.UserGrid = Ext.extend(Ext.grid.EditorGridPanel, {
                                 value: json.value
                             }));
                             // on vide le champ
-                            form.findField('newtype').reset()
+                            combo.reset()
                             break;
                         case 'edit':
                             r.set('value', json.value);
@@ -64,49 +62,6 @@ Library.admin.UserGrid = Ext.extend(Ext.grid.EditorGridPanel, {
                 Library.Main.failure(response);
             }
         });
-    },
-    
-    /**
-     * Cree la fenetre d'edition d'un type d'utilisateur
-     * 
-     * @param {String} text le texte par defaut du champ d'edition
-     * @return {Ext.Window}
-     */
-    getUserTypeEditWindow: function(text) {
-        var win = new Ext.Window({
-            modal: true,
-            title: Library.wording.user_type_edit,
-            width: 300,
-            height: 110,
-            layout: 'fit',
-            items: {
-                xtype: 'form',
-                bodyStyle: 'padding: 10px;',
-                border: false,
-                items: {
-                    xtype: 'textfield',
-                    name: 'value',
-                    anchor: '100%',
-                    value: text,
-                    fieldLabel: Library.wording.user_type_label
-                }
-            },
-            buttons: [{
-                text: Library.wording.info_book_save,
-                iconCls: 'book-relation-edit',
-                handler: function() {
-                    var field = win.getComponent(0).getForm().findField('value');
-                    win.fireEvent('save', field.getValue());
-                }
-            }, {
-                text: Library.wording.info_book_cancel,
-                iconCls: 'book-relation-remove',
-                handler: function() {
-                    win.close();
-                }
-            }]
-        });
-        return win;
     },
     
     /**
@@ -132,8 +87,8 @@ Library.admin.UserGrid = Ext.extend(Ext.grid.EditorGridPanel, {
         var win = new Ext.Window({
             title: Library.wording.user_type_title,
             modal: true,
-            width: 350,
-            height: 100,
+            width: 380,
+            height: 120,
             layout: 'fit',
             items: [{
                 xtype: 'form',
@@ -154,17 +109,26 @@ Library.admin.UserGrid = Ext.extend(Ext.grid.EditorGridPanel, {
                         flex: 1
                     }, {
                         xtype: 'button',
+                        iconCls: 'book-relation-add',
+                        handler: function() {
+                            Ext.Msg.prompt(Library.wording.user_type_title, Library.wording.user_type_add, function(choice, txt){
+                                if (choice == 'ok' && txt) {
+                                    me.manageUserType('add', win, txt);
+                                }
+                            });
+                        }
+                    }, {
+                        xtype: 'button',
                         iconCls: 'book-relation-edit',
                         handler: function() {
                             var combo = win.getComponent(0).getForm().findField('type_id');
                             if (!combo.getValue()) return;
                             
-                            var wine = me.getUserTypeEditWindow(combo.getRawValue());
-                            wine.on('save', function(value){
-                                me.manageUserType('edit', win, value);
-                                wine.close();
-                            });
-                            wine.show();
+                            Ext.Msg.prompt(Library.wording.user_type_title, Library.wording.user_type_edit, function(choice, txt){
+                                if (choice == 'ok' && txt) {
+                                    me.manageUserType('edit', win, txt);
+                                }
+                            }, this, false, combo.getRawValue());
                         }
                     }, {
                         xtype: 'button',
@@ -179,21 +143,15 @@ Library.admin.UserGrid = Ext.extend(Ext.grid.EditorGridPanel, {
                             });
                         }
                     }]
-                },{
-                    xtype: 'compositefield',
-                    fieldLabel: Library.wording.add_book_button,
-                    items: [{
-                        xtype: 'textfield',
-                        name: 'newtype',
-                        flex: 1
-                    }, {
-                        xtype: 'button',
-                        iconCls: 'book-relation-add',
-                        handler: function() {
-                            me.manageUserType('add', win);
-                        }
-                    }]
                 }]
+            }],
+            buttons: [{
+                text: Library.wording.info_book_close,
+                iconCls: 'book-window-close',
+                scale: 'medium',
+                handler: function() {
+                    win.close();
+                }
             }],
             listeners: {
                 afterrender: function(cmp) {
@@ -235,6 +193,10 @@ Library.admin.UserGrid = Ext.extend(Ext.grid.EditorGridPanel, {
         });
         return win;
     },
+    
+    
+    
+    
 
     addUser: function() {
         var User = this.getStore().recordType;
@@ -443,10 +405,21 @@ Library.admin.UserGrid = Ext.extend(Ext.grid.EditorGridPanel, {
         });
     },
 
+    initFilters: function() {
+        return new Ext.ux.grid.GridFilters({
+            filters: [{
+                type: 'string',
+                dataIndex: 'login'
+            }]
+        });
+    },
+
     initComponent: function() {
         this.addEvents('showdownloads');
+        var filters = this.initFilters();
         Ext.apply(this, {
             store: this.initUserStore(),
+            plugins: [filters],
             loadMask: true,
             columnLines: false,
             colModel: this.initUsersHeader(),
