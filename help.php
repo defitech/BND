@@ -92,6 +92,14 @@ dont la génération de la miniature pose problème. Il sera alors facile de ret
     <li>Importer un fichier CSV vide (s'il n'est pas vide, le backup se fera quand même)</li>
 </ul>
 <br/>
+<h1>FAQ</h1>
+<ul>
+    <li><em>Quelqu'un se plaint de ne pas trouver un livre, alors que l'admin constate qu'il
+    est bien là</em>:<ul><li> C'est très probablement qu'il y a des droits qui ont été mis sur le
+    livre, accidentellement ou non. Pour résoudre ce cas, il faudra soit décocher tous les
+    droits particuliers (du coup tout le monde pourra voir le livre), soit ajouter le plaignant
+    dans les droits particuliers.</li></ul></li>
+</ul>
 <?php
 } // Fin if user->right <= 2
 ?>
