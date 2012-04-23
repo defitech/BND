@@ -122,7 +122,11 @@ Library.App = Ext.extend(Ext.Viewport, {
                         selectionchange: {scope: this, fn: function(grid, model) {
                             if (model.getCount() == 1) {
                                 this.bookinfo.enable();
-                                this.bookdownload.enable();
+                                var record = model.getSelected();
+                                if (record.get('filename'))
+                                    this.bookdownload.enable();
+                                else
+                                    this.bookdownload.disable();
                             } else {
                                 this.bookinfo.disable();
                                 this.bookdownload.disable();
