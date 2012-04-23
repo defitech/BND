@@ -205,6 +205,8 @@ class Library_Book_Controller extends Library_Controller {
             $row = $table->createRow();
         }
         
+        $old_type = $row->type_id;
+        
         // création des tags automatiques par rapport au titre
         $old_tags = explode('-', Library_Util::getSlug($row->title));
         $new_tags = explode('-', Library_Util::getSlug($this->getParam('title')));
@@ -299,6 +301,16 @@ class Library_Book_Controller extends Library_Controller {
                 'book_id' => $row->id,
                 'niveau_id' => $key
             ));
+        }
+        
+        // on bouge le PDF dans le bon répertoire si nécessaire
+        if ($old_type != $row->type_id) {
+            $old = explode('/', $row->filename);
+            array_pop($old);
+            $return = $this->doMoveUploadedBooksToGoodFolder($row, implode('/', $old) . '/');
+            if (!$return['success']) {
+                return $return;
+            }
         }
         
         return array(
@@ -406,6 +418,12 @@ class Library_Book_Controller extends Library_Controller {
             );
         }
         
+        return array_merge($this->doMoveUploadedBooksToGoodFolder($book), array(
+            'total' => $total
+        ));
+    }
+    
+    protected function doMoveUploadedBooksToGoodFolder($book, $oldPath = '') {        
         // on détermine le bon dossier en fonction de la matière, en checkant
         // sur le label de la matière du livre sélectionné
         $ttype = new Library_Book_Type();
@@ -430,7 +448,7 @@ class Library_Book_Controller extends Library_Controller {
         }
         
         // on déplace le fichier PDF au bon endroit
-        $name = str_replace(Library_Book::getUploadPdfFolder(), '', $book->filename);
+        $name = str_replace(array($oldPath, Library_Book::getUploadPdfFolder()), '', $book->filename);
         $source = Library_Config::getInstance()->getData()->path->pdf . $book->filename;
         if (!@rename($source, $new_path . $name)) {
             $e = error_get_last();
@@ -443,7 +461,6 @@ class Library_Book_Controller extends Library_Controller {
         
         return array(
             'success' => true,
-            'total' => $total,
             'next' => true
         );
     }
