@@ -127,7 +127,9 @@ Library.wording = {
     book_import_csv_error: "Si une erreur serveur survient, il faut r\u00e9importer le fichier. Les doublons seront ignor\u00e9s et l'importation pourra continuer gentiment.",
 
     admin_redim_and_mini: "Redimensionner et recr\u00e9er tous les thumbs",
-    admin_redim_and_mini_finished: "{0} images ont \u00e9t\u00e9 redimendionn\u00e9es. S'il y a eu des erreurs, elles seront list\u00e9es ci-dessous."
+    admin_redim_and_mini_finished: "{0} images ont \u00e9t\u00e9 redimendionn\u00e9es. S'il y a eu des erreurs, elles seront list\u00e9es ci-dessous.",
+    admin_move_to_good_folder: "D\u00e9placer les PDFs dans les bons sous-dossiers",
+    admin_move_to_good_folder_finished: "Les PDFs ont \u00e9t\u00e9 d\u00e9plac\u00e9s avec succ\u00e8s."
 
 };
 

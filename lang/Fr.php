@@ -28,6 +28,9 @@ class Fr {
         'user_delete' => "suppression de l'utilisateur: %s",
         'user_type_delete' => "suppression du type d'utilisateur: %s",
         'no_connected_user' => "Droits d'accès insuffisants",
+        
+        'move_pdf_to_good_folder_notype' => "Le livre [%s] n'a pas de matière. Il faut lui en donner une!",
+        'move_pdf_to_good_folder_error' => "Le déplacement de [%s] vers [%s] a échouée (erreur: %s)",
 
         'db_backup_done' => 'Base de données backupée (ok? %s)'
 

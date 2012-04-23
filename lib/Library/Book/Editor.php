@@ -7,6 +7,14 @@ class Library_Book_Editor extends Zend_Db_Table_Abstract {
     protected $_name = 'library_book_editor';
 
     protected $_dependentTables = array('Library_Book');
+    
+    protected $_referenceMap = array(
+        'Book' => array(
+            'columns' => 'id',
+            'refTableClass' => 'Library_Book',
+            'refColumns' => 'editor_id'
+        ),
+    );
 
     public static function getList() {
         $table = new self();

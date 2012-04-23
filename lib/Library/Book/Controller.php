@@ -379,6 +379,74 @@ class Library_Book_Controller extends Library_Controller {
             'next' => count($files) > $start + 1
         );
     }
+    
+    /**
+     * Déplace les PDF contenus dans le dossier d'upload vers les dossiers
+     * de rangement (de upload/ vers Math/, Histoire/, etc.) 
+     * 
+     * @return array
+     */
+    protected function moveUploadedBooksToGoodFolder() {
+        $total = null;
+        $table = new Library_Book();
+        
+        // si on lance le processus (start = 0) on calcule le nombre total de
+        // livres qui ont leur PDF dans le dossier d'upload
+        if (!$this->getParam('start', 0)) {
+            $count = $table->fetchAll($table->select()->where('filename LIKE ?', Library_Book::getUploadPdfFolder() . '%'));
+            $total = count($count);
+        }
+        
+        // on récupère le 1er tuple qui a son PDF dans le dossier d'upload
+        $book = $table->fetchRow($table->select()->where('filename LIKE ?', Library_Book::getUploadPdfFolder() . '%'));
+        if (!$book) {
+            return array(
+                'success' => true,
+                'next' => false
+            );
+        }
+        
+        // on détermine le bon dossier en fonction de la matière, en checkant
+        // sur le label de la matière du livre sélectionné
+        $ttype = new Library_Book_Type();
+        $type = $ttype->fetchRow($ttype->select()->where('id = ?', $book->type_id));
+        
+        // il peut ne pas y avoir de type. Du coup, on lance un message d'erreur
+        if (!$type) {
+            return array(
+                'success' => false,
+                'error' => sprintf(Library_Wording::get('move_pdf_to_good_folder_notype'), $book->title)
+            );
+        }
+        
+        $label = $type->label;
+        $co = Library_Book_Type::$correspondance;
+
+        $label = (isset($co[$label]) ? $co[$label] : $label) . '/';
+        $new_path = Library_Config::getInstance()->getData()->path->pdf . $label;
+        
+        if (!is_dir($new_path)) {
+            mkdir($new_path, 0777);
+        }
+        
+        // on déplace le fichier PDF au bon endroit
+        $name = str_replace(Library_Book::getUploadPdfFolder(), '', $book->filename);
+        $source = Library_Config::getInstance()->getData()->path->pdf . $book->filename;
+        if (!@rename($source, $new_path . $name)) {
+            $e = error_get_last();
+            throw new Exception(sprintf(Library_Wording::get('move_pdf_to_good_folder_error'), $source, $new_path . $name, $e['message']));
+        }
+        
+        // on change le filename du livre
+        $book->filename = $label . $name;
+        $book->save();
+        
+        return array(
+            'success' => true,
+            'total' => $total,
+            'next' => true
+        );
+    }
 
     protected function removeBook() {
         Library_Config::getInstance()->testIssetAuser(2);
@@ -448,8 +516,8 @@ class Library_Book_Controller extends Library_Controller {
         header("Content-Length: " . (string)(filesize($filelocation)));
         header("Content-Transfer-Encoding: Binary"); // added
         header('Content-Disposition: attachment; filename="'.$filename.'"');
-        session_write_close();
-        ob_end_clean();
+        @session_write_close();
+        @ob_end_clean();
         if($file = fopen($filelocation, 'rb')){
             while( (!feof($file)) && (connection_status()==0) ){
                 print(fread($file, 1024*8));

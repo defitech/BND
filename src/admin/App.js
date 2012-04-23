@@ -79,6 +79,47 @@ Library.admin.App = Ext.extend(Library.App, {
         });
     },
 
+    moveToGoodFolder: function(mask, start, total) {
+        if (!mask) {
+            // creation de la progressbar si elle n'existe pas
+            mask = Ext.Msg.progress(Library.wording.admin_move_to_good_folder, '', Library.wording.book_moved_first);
+        }
+        // element a traiter dans la pile
+        start = start || 0;
+        // envoi de la requete
+        Ext.Ajax.request({
+            url: Library.Main.config().controller,
+            params: {
+                cmd: 'moveUploadedBooksToGoodFolder',
+                start: start
+            },
+            scope: this,
+            success: function(response) {
+                var json = Library.Main.getJson(response);
+                // nombre d'elements traites jusqu'a present
+                start++;
+                // on modifie le tableau de resultat affiche a la fin du processus
+                if (json.success) {
+                    total = total || json.total;
+                    if (json.next) {
+                        // on continue, donc on modifie la progressbar
+                        mask.updateProgress(start / total || 1, String.format(Library.wording.book_moved, start, total));
+                        // on lance une nouvelle fois la requete
+                        this.moveToGoodFolder(mask, start, total);
+                    } else {
+                        // on a fini le processus. On affiche le resultat
+                        mask.hide();
+                        Ext.Msg.alert(Library.wording.admin_move_to_good_folder, Library.wording.admin_move_to_good_folder_finished);
+                    }
+                }
+            },
+            failure: function(response) {
+                mask.hide();
+                Library.Main.failure(response);
+            }
+        });
+    },
+
     checkForNewBooks: function(mask, start, total, result, skipThumb) {
         if (!mask) {
             // creation de la progressbar si elle n'existe pas
@@ -376,7 +417,7 @@ Library.admin.App = Ext.extend(Library.App, {
                     iconCls: 'book-import-small',
                     scope: this,
                     handler: this.importBooks
-                }, {
+                }, '-', {
                     text: Library.wording.admin_redim_and_mini,
                     scope: this,
                     handler: function() {
@@ -385,6 +426,12 @@ Library.admin.App = Ext.extend(Library.App, {
                                 this.resizeAndCreateThumbs();
                             }
                         }, this);
+                    }
+                }, {
+                    text: Library.wording.admin_move_to_good_folder,
+                    scope: this,
+                    handler: function() {
+                        this.moveToGoodFolder();
                     }
                 }, '-',  {
                     text: Library.wording.add_book_button,
