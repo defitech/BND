@@ -260,7 +260,8 @@ class Library_Book_Controller extends Library_Controller {
         if ($pdf['error'] == UPLOAD_ERR_OK) {
             $valid_extensions = array('application/pdf', 'application/download');
             if (in_array($pdf['type'], $valid_extensions)) {
-                $path = Library_Book::getUploadPdfPath(true);
+                $npath = Library_Book::getPdfPath($row);
+                $path = $npath ? $npath['fullpath'] : Library_Book::getUploadPdfPath(true);
                 if (!is_dir($path)) {
                     mkdir($path, 0766);
                 }
@@ -282,7 +283,7 @@ class Library_Book_Controller extends Library_Controller {
                     $msg = Library_Wording::get('thumb_doesnt_generate', $i, $p)
                         . '. ' . Library_Wording::get('book_still_save');
                 }
-                $row->filename = Library_Book::getUploadPdfFolder() . $p;
+                $row->filename = ($npath ? $npath['label'] : Library_Book::getUploadPdfFolder()) . $p;
             } else {
                 $success = false;
                 $msg = Library_Wording::get('bad_pdf_type')
@@ -423,40 +424,26 @@ class Library_Book_Controller extends Library_Controller {
         ));
     }
     
-    protected function doMoveUploadedBooksToGoodFolder($book, $oldPath = '') {        
-        // on détermine le bon dossier en fonction de la matière, en checkant
-        // sur le label de la matière du livre sélectionné
-        $ttype = new Library_Book_Type();
-        $type = $ttype->fetchRow($ttype->select()->where('id = ?', $book->type_id));
-        
+    protected function doMoveUploadedBooksToGoodFolder($book, $oldPath = '') {
+        $path = Library_Book::getPdfPath($book);
         // il peut ne pas y avoir de type. Du coup, on lance un message d'erreur
-        if (!$type) {
+        if (!$path) {
             return array(
                 'success' => false,
                 'error' => sprintf(Library_Wording::get('move_pdf_to_good_folder_notype'), $book->title)
             );
         }
         
-        $label = $type->label;
-        $co = Library_Book_Type::$correspondance;
-
-        $label = (isset($co[$label]) ? $co[$label] : $label) . '/';
-        $new_path = Library_Config::getInstance()->getData()->path->pdf . $label;
-        
-        if (!is_dir($new_path)) {
-            mkdir($new_path, 0777);
-        }
-        
         // on déplace le fichier PDF au bon endroit
         $name = str_replace(array($oldPath, Library_Book::getUploadPdfFolder()), '', $book->filename);
         $source = Library_Config::getInstance()->getData()->path->pdf . $book->filename;
-        if (!@rename($source, $new_path . $name)) {
+        if (!@rename($source, $path['fullpath'] . $name)) {
             $e = error_get_last();
-            throw new Exception(sprintf(Library_Wording::get('move_pdf_to_good_folder_error'), $source, $new_path . $name, $e['message']));
+            throw new Exception(sprintf(Library_Wording::get('move_pdf_to_good_folder_error'), $source, $path['fullpath'] . $name, $e['message']));
         }
         
         // on change le filename du livre
-        $book->filename = $label . $name;
+        $book->filename = $path['label'] . $name;
         $book->save();
         
         return array(

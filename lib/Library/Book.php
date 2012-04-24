@@ -89,6 +89,40 @@ class Library_Book extends Zend_Db_Table_Abstract {
     public static function getUploadPdfFolder() {
         return 'upload/';
     }
+    
+    /**
+     * Récupère le chemin serveur vers le PDF en fonction de la matière
+     * 
+     * @param Library_Book $book
+     * @return array 
+     */
+    public static function getPdfPath($book) {     
+        // on détermine le bon dossier en fonction de la matière, en checkant
+        // sur le label de la matière du livre sélectionné
+        $ttype = new Library_Book_Type();
+        $type = $ttype->fetchRow($ttype->select()->where('id = ?', $book->type_id));
+        
+        // il peut ne pas y avoir de type. Du coup, on lance un message d'erreur
+        if (!$type) {
+            return false;
+        }
+        
+        $label = $type->label;
+        $co = Library_Book_Type::$correspondance;
+
+        $label = (isset($co[$label]) ? $co[$label] : $label) . '/';
+        $new_path = Library_Config::getInstance()->getData()->path->pdf . $label;
+        
+        if (!is_dir($new_path)) {
+            mkdir($new_path, 0777);
+        }
+        
+        return array(
+            'fullpath' => $new_path,
+            'label' => $label,
+            'path' => Library_Config::getInstance()->getData()->path->pdf
+        );
+    }
 
     /**
      * Retourne le chemin vers le dossier temporaire des pdf
