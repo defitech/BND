@@ -48,7 +48,7 @@ class Library_Book_Controller extends Library_Controller {
 
         // ajout des filtres non-grid s'il y en a
         if (isset($filters['fullsearch'])) {
-            $terms = str_replace('"', '', $filters['fullsearch']);
+            $terms = str_replace('"', '', stripslashes($filters['fullsearch']));
             $terms = explode(' ', Library_Util::getSlug(trim($terms), ' '));
             foreach ($terms as $term) {
                 // définition des champs touchés par le fullsearch
