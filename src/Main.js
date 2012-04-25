@@ -5,6 +5,18 @@ Ext.onReady(function() {
     Ext.Msg.minWidth = 450;
 });
 
+// si une exception de type "unauthorized" apparait, on montre la box de
+// login.
+Ext.data.DataProxy.on('exception', function(proxy, type, action, exception, response) {
+    if (response.status == 401) {
+        var win = new Library.login.Form({
+            modal: true,
+            light: true
+        });
+        win.show();
+    }
+});
+
 Library.Main = {
 
     cfg: {

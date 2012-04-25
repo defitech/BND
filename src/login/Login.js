@@ -25,42 +25,52 @@ Library.login.Form = Ext.extend(Ext.Window, {
      */
     showSplashScreen: function() {
         if (this.getForm().getForm().isValid()) {
-            var win = new Ext.Window({
-                modal: true,
-                width: 680,
-                height: 610,
-                title: Library.wording.library_conditions,
-                iconCls: 'book-main',
-                layout: 'fit',
-                items: [{
-                    xtype: 'panel',
-                    cls: 'book-conditions',
-                    autoLoad: 'conditions.html',
-                    border: false,
-                    autoScroll: true
-                }],
-                buttonAlign: 'left',
-                buttons: [{
-                    text: Library.wording.library_conditions_refuse,
-                    iconCls: 'book-conditions-no',
-                    scale: 'large',
-                    tabIndex: 1,
-                    handler: function() {
-                        win.close();
-                    }
-                }, '->', {
-                    text: Library.wording.library_conditions_accept,
-                    iconCls: 'book-conditions-ok',
-                    scale: 'large',
-                    scope: this,
-                    tabIndex: 2,
-                    handler: function() {
-                        this.connect();
-                        win.close();
-                    }
-                }]
-            });
-            win.show();
+            // le mode "light" est utilise lorsqu'on fait une action dans la
+            // BND alors qu'on a perdu la connexion. Si on est pas en mode
+            // light, c'est qu'on se connecte la 1ere fois. On montre donc la
+            // fenetre des conditions legales.
+            if (!this.light) {
+                var win = new Ext.Window({
+                    modal: true,
+                    width: 680,
+                    height: 610,
+                    title: Library.wording.library_conditions,
+                    iconCls: 'book-main',
+                    layout: 'fit',
+                    items: [{
+                        xtype: 'panel',
+                        cls: 'book-conditions',
+                        autoLoad: 'conditions.html',
+                        border: false,
+                        autoScroll: true
+                    }],
+                    buttonAlign: 'left',
+                    buttons: [{
+                        text: Library.wording.library_conditions_refuse,
+                        iconCls: 'book-conditions-no',
+                        scale: 'large',
+                        tabIndex: 1,
+                        handler: function() {
+                            win.close();
+                        }
+                    }, '->', {
+                        text: Library.wording.library_conditions_accept,
+                        iconCls: 'book-conditions-ok',
+                        scale: 'large',
+                        scope: this,
+                        tabIndex: 2,
+                        handler: function() {
+                            this.connect();
+                            win.close();
+                        }
+                    }]
+                });
+                win.show();
+            } else {
+                // en mode light, on se connecte directement car on est deja
+                // dans l'application et on a deja accepte les conditions
+                this.connect();
+            }
         }
     },
 
@@ -81,7 +91,15 @@ Library.login.Form = Ext.extend(Ext.Window, {
                 scope: this,
                 success: function(form, action) {
                     if (action.result.success) {
-                        window.location.reload();
+                        // Si on est pas en mode light, c'est qu'on se log pour
+                        // la 1ere fois, on recharge donc la page pour loader
+                        // tous les scripts de la BND
+                        if (!this.light)
+                            window.location.reload();
+                        else
+                            // si on est en mode light, on a deja charge tous
+                            // les scripts, on a rien donc besoin de faire
+                            this.close();
                     }
                 },
                 failure: function(form, action) {
@@ -186,9 +204,4 @@ Library.login.Form = Ext.extend(Ext.Window, {
         })
     }
 
-});
-
-Ext.onReady(function(){
-    var win = new Library.login.Form();
-    win.show();
 });

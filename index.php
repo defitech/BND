@@ -46,6 +46,7 @@ $config = array(
         <!-- Base JS App -->
         <script type="text/javascript" src="lang/fr.js"></script>
         <script type="text/javascript" src="src/Main.js"></script>
+        <script type="text/javascript" src="src/login/Login.js"></script>
         <?php /* si un utilisateur est connecté, on affiche l'appli */ if ($user) { ?>
         <script type="text/javascript" src="index.js"></script>
         <script type="text/javascript" src="src/App.js"></script>
@@ -62,7 +63,12 @@ $config = array(
         <script type="text/javascript" src="src/admin/UserGrid.js"></script>
         <script type="text/javascript" src="src/admin/UserDownload.js"></script>
         <?php /* si aucun utilisateur n'est connecté, on affiche le login */ } else { ?>
-        <script type="text/javascript" src="src/login/Login.js"></script>
+        <script type="text/javascript">
+        Ext.onReady(function(){
+            var win = new Library.login.Form();
+            win.show();
+        });
+        </script>
         <?php } ?>
         <!-- Envionment data -->
         <script type="text/javascript">
