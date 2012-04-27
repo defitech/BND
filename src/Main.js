@@ -7,7 +7,7 @@ Ext.onReady(function() {
 
 // si une exception de type "unauthorized" apparait, on montre la box de
 // login.
-Ext.data.DataProxy.on('exception', function(proxy, type, action, exception, response) {
+Ext.Ajax.on('requestexception', function(conn, response) {
     if (response.status == 401) {
         var win = new Library.login.Form({
             modal: true,
@@ -62,10 +62,12 @@ Library.Main = {
     },
 
     failure: function(response) {
-        Ext.Msg.show({
-            title: Library.wording.error_title,
-            msg: Library.wording.failure
-        });
+        // on montre l'erreur s'il s'agit d'autre chose qu'une Unauthorized
+        if (response.status != 401)
+            Ext.Msg.show({
+                title: Library.wording.error_title,
+                msg: Library.wording.failure
+            });
     },
 
     failureForm: function(json) {

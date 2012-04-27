@@ -63,7 +63,15 @@ Library.login.Form = Ext.extend(Ext.Window, {
                             this.connect();
                             win.close();
                         }
-                    }]
+                    }],
+                    listeners: {
+                        afterrender: function(cmp) {
+                            (function(){
+                                cmp.buttons[2].focus();
+                                cmp.buttons[2].toggle();
+                            }).defer(200);
+                        }
+                    }
                 });
                 win.show();
             } else {
