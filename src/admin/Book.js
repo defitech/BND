@@ -530,6 +530,7 @@ Library.admin.Book = Ext.extend(Library.Book, {
     },
 
     initBookItems: function() {
+        var me = this;
         var items = [
             this.initFieldId({xtype: 'textfield', cls: 'book-item-id', readOnly: true}),
         ];
@@ -562,11 +563,12 @@ Library.admin.Book = Ext.extend(Library.Book, {
 
 //        this.swfButton = new Ext.ux.PluploadButton({
 //            text: 'upload',
+//            flex: 1,
 //            upload_config: {
-//                runtimes : 'html5,flash,silverlight',
+//                runtimes : 'flash',
 //                browse_button : 'pickfiles',
 //                container : 'container',
-//                max_file_size : '300mb',
+//                max_file_size : '500mb',
 //                url : Library.Main.config().upload,
 //                flash_swf_url : Library.Main.config().libspath + 'extjsux/plupload/js/plupload.flash.swf',
 //                filters : [
@@ -574,6 +576,12 @@ Library.admin.Book = Ext.extend(Library.Book, {
 //                ]
 //            }
 //        });
+        
+        var swfButton = {
+            xtype: 'flashpdfbutton',
+            flex: 1,
+            height: 25
+        };
 
         items = items.concat([{
             xtype: 'fieldset',
@@ -619,19 +627,7 @@ Library.admin.Book = Ext.extend(Library.Book, {
             items: [{
                 xtype: 'compositefield',
                 fieldLabel: 'PDF'  + ' (max: ' + this.data.maxpostsize + ')',
-                items: [{xtype: 'hidden'}, {
-                    xtype: 'textfield',
-                    inputType: 'file',
-                    name: 'pdffile',
-                    flex: 1
-                },{
-                    xtype: 'button',
-                    iconCls: 'book-relation-remove',
-                    scope: this,
-                    handler: function(){
-                        this.getForm().getForm().findField('pdffile').setValue(null);
-                    }
-                }]
+                items: [{xtype: 'hidden'}, swfButton]
             },{
                 xtype: 'compositefield',
                 fieldLabel: Library.wording.currentPdf,

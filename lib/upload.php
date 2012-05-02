@@ -18,7 +18,11 @@ try {
     $upload->setDestination(Library_Book::getUploadPdfPath(true));
 
     if (!$upload->isUploaded($fieldname)) {
-        throw new Exception('Fichier PDF non fourni');
+        ob_start();
+        print_r($_SERVER);
+        $c = ob_get_contents();
+        ob_end_clean();
+        throw new Exception('Fichier PDF non fourni. ' . $c);
     }
     $upload->addValidator('Count', false, 1);
     $upload->addValidator('Extension', false, 'pdf');
