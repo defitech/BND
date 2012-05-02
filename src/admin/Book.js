@@ -576,7 +576,16 @@ Library.admin.Book = Ext.extend(Library.Book, {
 //                ]
 //            }
 //        });
-        
+
+        // bouton normal (HTML) d'upload (input type="file")
+        var normalButton = {
+            xtype: 'textfield',
+            inputType: 'file',
+            name: 'pdffile',
+            flex: 1
+        };
+
+        // bouton d'upload Flash SwfUpload
         var swfButton = {
             xtype: 'flashpdfbutton',
             flex: 1,
