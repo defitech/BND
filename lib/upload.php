@@ -34,6 +34,7 @@ try {
         throw new Exception(implode(', ', $upload->getMessages()));
     }
 
+    $json['name'] = Library_Book::getUploadPdfFolder() . $upload->getFileName();
     Library_Config::log('Document uploadé');
     
 } catch (Exception $e) {

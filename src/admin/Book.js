@@ -589,7 +589,12 @@ Library.admin.Book = Ext.extend(Library.Book, {
         var swfButton = {
             xtype: 'flashpdfbutton',
             flex: 1,
-            height: 25
+            height: 25,
+            listeners: {
+                uploadsuccess: {scope: this, fn: function(button, json){
+                    this.getForm().getForm().findField('pdf').setValue(json.name);
+                }}
+            }
         };
 
         items = items.concat([{
