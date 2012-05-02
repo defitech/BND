@@ -71,13 +71,7 @@ Library.admin.FlashPdfButton = Ext.extend(Ext.form.CompositeField, {
                     alert("There was a configuration error. You will not be able to upload a resume at this time: " + message);
                     return;
                 case SWFUpload.UPLOAD_ERROR.UPLOAD_LIMIT_EXCEEDED:
-                    alert("You may only upload 1 file.: " + message);
-                    return;
-                case SWFUpload.UPLOAD_ERROR.FILE_CANCELLED:
-                case SWFUpload.UPLOAD_ERROR.UPLOAD_STOPPED:
-                    break;
-                default:
-                    alert("An error occurred in the upload. Try again later.: " + message);
+                    alert("You may only upload 1 file: " + message);
                     return;
             }
 
