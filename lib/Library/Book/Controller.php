@@ -257,8 +257,8 @@ class Library_Book_Controller extends Library_Controller {
         }
 
         // si un pdf est envoyé en fichier
-        $pdf = $_FILES['pdffile'];
-        if ($pdf['error'] == UPLOAD_ERR_OK) {
+        $pdf = isset($_FILES['pdffile']) ? $_FILES['pdffile'] : null;
+        if ($pdf && $pdf['error'] == UPLOAD_ERR_OK) {
             $valid_extensions = array('application/pdf', 'application/download');
             if (in_array($pdf['type'], $valid_extensions)) {
                 $npath = Library_Book::getPdfPath($row);
