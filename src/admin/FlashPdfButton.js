@@ -96,6 +96,8 @@ Library.admin.FlashPdfButton = Ext.extend(Ext.form.CompositeField, {
                 case SWFUpload.UPLOAD_ERROR.UPLOAD_STOPPED:
                     alert("Upload Stopped: " + message);
                     break;
+                default:
+                    alert("An error occurred in the upload: " + message);
             }
         } catch (e) {
             alert("An error occurred in the upload. Try again later: " + message + ' / ' + e);
@@ -114,7 +116,7 @@ Library.admin.FlashPdfButton = Ext.extend(Ext.form.CompositeField, {
      * @return {void}
      */
     eventFileDialogComplete: function(nbFiles, nbFilesQueued, nbTotalFilesQueued) {
-        console.log('file dialog complete', nbFiles, nbFilesQueued, nbTotalFilesQueued);
+        //console.log('file dialog complete', nbFiles, nbFilesQueued, nbTotalFilesQueued);
         // on lance automatiquement l'upload si le nombre de fichiers
         // selectionnes est bien 1. On s'assure par ailleurs qu'il n'y a pas
         // deja un upload en route
@@ -132,7 +134,7 @@ Library.admin.FlashPdfButton = Ext.extend(Ext.form.CompositeField, {
      * @return {void}
      */
     eventUploadStart: function(file) {
-        console.log('upload start', file);
+        //console.log('upload start', file);
         this.uploadStarted = true;
     },
     
@@ -145,7 +147,7 @@ Library.admin.FlashPdfButton = Ext.extend(Ext.form.CompositeField, {
      * @return {void}
      */
     eventUploadProgress: function(file, current, total){
-        console.log('upload progress', file, current, total);
+        //console.log('upload progress', file, current, total);
         // on recupere la largeur totale de la zone de progression
         var cmp = Ext.get(this.idProgressContainer);
         var twidth = cmp.getWidth();
@@ -166,7 +168,7 @@ Library.admin.FlashPdfButton = Ext.extend(Ext.form.CompositeField, {
      * @return {void}
      */
     eventUploadSuccess: function(file, data, response) {
-        console.log('upload success', file, data,response);
+        //console.log('upload success', file, data,response);
         this.uploadStarted = false;
         
         var json = {};
