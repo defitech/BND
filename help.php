@@ -22,7 +22,7 @@ Ils sont nommés <em>logs_YYYY-MM.txt</em> et contiennent des informations de de
 <?php
     } // Fin If user->right == 1
 ?>
-<h1>Ajout d'un PDF plus lourd que <?php echo ini_get('post_max_size'); ?></h1>
+<h1>Ajout d'un PDF plus lourd que <?php echo $config->getMaxPostSize(); ?></h1>
 <ul>
     <li>Se connecter au FTP de <em><?php echo $_SERVER['HTTP_HOST']; ?></em></li>
     <li>

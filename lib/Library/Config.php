@@ -121,6 +121,19 @@ class Library_Config {
             throw new Exception(Library_Wording::get('no_connected_user'));
         }
     }
+    
+    /**
+     * Retourne le poids maximal d'un fichier PDF pour l'upload
+     * 
+     * @return string 
+     */
+    public function getMaxPostSize() {
+        // valeur max officielle du serveur
+        $init = ini_get('post_max_size');
+        // valeur qu'on set dans le plugin flash pour l'upload
+        $conf = '500mb';
+        return $conf;
+    }
 
 
 
