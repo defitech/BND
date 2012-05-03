@@ -76,30 +76,40 @@ Library.admin.Book = Ext.extend(Library.Book, {
         if (pdf) {
             Ext.Msg.confirm(Library.wording.book_thumb_create_title, Library.wording.book_thumb_create, function(choice){
                 if (choice == 'yes') {
-                    this._mask.show();
-                    Ext.Ajax.request({
-                        url: Library.Main.config().controller,
-                        params: {
-                            cmd: 'generatePdfThumb',
-                            pdf: pdf,
-                            book_id: this.data.id
-                        },
-                        scope: this,
-                        success: function(response) {
-                            var json = Library.Main.getJson(response);
-                            this._mask.hide();
-                            if (json.success) {
-                                this.setThumbInfo(json.thumb);
-                            }
-                        },
-                        failure: function(response) {
-                            this._mask.hide();
-                            Library.Main.failure(response);
-                        }
-                    });
+                    this.sendCreateThumbFromPdf(pdf);
                 }
             }, this);
         }
+    },
+    
+    /**
+     * Envoie effectivement la requete pour produire le thumb depuis le PDF
+     * 
+     * @param {String} pdf
+     * @return {void}
+     */
+    sendCreateThumbFromPdf: function(pdf) {
+        this._mask.show();
+        Ext.Ajax.request({
+            url: Library.Main.config().controller,
+            params: {
+                cmd: 'generatePdfThumb',
+                pdf: pdf,
+                book_id: this.data.id
+            },
+            scope: this,
+            success: function(response) {
+                var json = Library.Main.getJson(response);
+                this._mask.hide();
+                if (json.success) {
+                    this.setThumbInfo(json.thumb);
+                }
+            },
+            failure: function(response) {
+                this._mask.hide();
+                Library.Main.failure(response);
+            }
+        });
     },
 
 
@@ -571,6 +581,7 @@ Library.admin.Book = Ext.extend(Library.Book, {
             listeners: {
                 uploadsuccess: {scope: this, fn: function(button, json){
                     this.getForm().getForm().findField('pdf').setValue(json.name);
+                    this.sendCreateThumbFromPdf(json.name);
                 }}
             }
         };
