@@ -25,8 +25,6 @@ Alias /livres/  "/chemin/complet/vers/les/livres/"
 
 
 A envisager de faire un jour:
-- upload de maxi gros fichier pour les PDFs (utiliser flash ou java). plupload
-  semble être quelque chose de pas mal (déjà téléchargé dans les extjsux)
 - boutons "précédent" et "suivant" dans la popup livre, pour naviguer d'un
   livre à l'autre sans avoir à passer par la grid
 - ramener le focus sur la grid après chaque action (avec raccourcis clavier)
