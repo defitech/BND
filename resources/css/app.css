@@ -224,3 +224,22 @@ body.book-background-montagnes {
 .x-grid3-cell-inner {
     white-space: normal;
 }
+
+
+
+.progressbar {
+    width: 0;
+    text-align: center;
+    font-weight: bold;
+    color: #fff;
+    white-space: nowrap;
+    overflow: hidden;
+    padding-top: 5px;
+    font-size: 10px;
+    background: url('../images/progress-bg.gif') transparent left center repeat-x;
+}
+
+.uploadButton {
+    padding-top: 5px;
+    cursor: pointer;
+}

@@ -29,13 +29,17 @@ Library.wording = {
 
     download_book_button: 'T\u00e9l\u00e9charger',
 
-    swfupload_upload_progress: 'Fichier {0} \u00e0 {1}',
-    swfupload_error_title: 'Erreur d\'upload',
-    swfupload_button_text: 'Parcourir...',
-    swfupload_title: 'Upload de fichiers',
+    swfupload_button_text: 'Parcourir',
+    swfupload_before: '',
+    swfupload_cancel: 'Upload du PDF annul\u00e9',
+    swfupload_progress: "PDF en cours d'upload",
+    swfupload_after: "PDF upload\u00e9 correctement",
+    swfupload_error: "Le PDF n'a pas pu etre upload\u00e9...",
     
     currentThumb: 'Aperçu actuel',
     currentPdf: 'PDF actuel',
+    pdfLabel: 'PDF, max:{0}',
+    pdfNoLimits: '&#8734;',
     
     editor_add_title: 'Ajouter un \u00e9diteur',
     editor_add: 'Entrez le nom du nouvel \u00e9diteur',

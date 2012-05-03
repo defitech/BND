@@ -561,33 +561,11 @@ Library.admin.Book = Ext.extend(Library.Book, {
             }
         ]);
 
-//        this.swfButton = new Ext.ux.PluploadButton({
-//            text: 'upload',
-//            flex: 1,
-//            upload_config: {
-//                runtimes : 'flash',
-//                browse_button : 'pickfiles',
-//                container : 'container',
-//                max_file_size : '500mb',
-//                url : Library.Main.config().upload,
-//                flash_swf_url : Library.Main.config().libspath + 'extjsux/plupload/js/plupload.flash.swf',
-//                filters : [
-//                    {title : "PDF files", extensions : "pdf"}
-//                ]
-//            }
-//        });
-
-        // bouton normal (HTML) d'upload (input type="file")
-        var normalButton = {
-            xtype: 'textfield',
-            inputType: 'file',
-            name: 'pdffile',
-            flex: 1
-        };
-
-        // bouton d'upload Flash SwfUpload
-        var swfButton = {
+        // bouton d'upload PlUpload
+        var button = {
             xtype: 'flashpdfbutton',
+            data: Ext.apply({}, this.data),
+            fieldLabel: String.format(Library.wording.pdfLabel, this.data.maxpostsize),
             flex: 1,
             height: 25,
             listeners: {
@@ -596,6 +574,26 @@ Library.admin.Book = Ext.extend(Library.Book, {
                 }}
             }
         };
+
+        // bouton normal (HTML) d'upload (input type="file")
+//        var button = {
+//            xtype: 'textfield',
+//            inputType: 'file',
+//            name: 'pdffile',
+//            flex: 1
+//        };
+
+        // bouton d'upload Flash SwfUpload
+//        var button = {
+//            xtype: 'flashpdfbutton',
+//            flex: 1,
+//            height: 25,
+//            listeners: {
+//                uploadsuccess: {scope: this, fn: function(button, json){
+//                    this.getForm().getForm().findField('pdf').setValue(json.name);
+//                }}
+//            }
+//        };
 
         items = items.concat([{
             xtype: 'fieldset',
@@ -638,11 +636,9 @@ Library.admin.Book = Ext.extend(Library.Book, {
             defaults: {
                 anchor: '100%'
             },
-            items: [{
-                xtype: 'compositefield',
-                fieldLabel: 'PDF'  + ' (max: ' + this.data.maxpostsize + ')',
-                items: [{xtype: 'hidden'}, swfButton]
-            },{
+            items: [
+                button,
+            {
                 xtype: 'compositefield',
                 fieldLabel: Library.wording.currentPdf,
                 items: [{

@@ -15,113 +15,52 @@ Library.admin.FlashPdfButton = Ext.extend(Ext.form.CompositeField, {
      */
     uploadStarted: false,
     
+    /**
+     * @var Template pour la gestion du bouton d'upload
+     */
+    tplUpload: new Ext.XTemplate(
+        '<div id="{container}">',
+            '<div id="{button}" class="uploadButton">{text}</div>',
+        '</div>'
+    ),
     
     /**
-     * Methode appelee lorsqu'une erreur survient au moment de l'ajout de
-     * fichiers dans la liste d'attente d'upload
+     * @var Template de gestion de la barre de progression
+     */
+    tplProgress: new Ext.XTemplate(
+        '<div id="{id}" style="height: {height}px;" class="progressbar">{text}</div>'
+    ),
+    
+    /**
+     * Methode appelee lorsqu'une erreur survient au moment de l'upload
      * 
+     * @param {Uploader} uploader l'objet PlUpload
      * @param {Object} file les infos du fichier en question
-     * @param {Number} error le numero d'erreur
-     * @param {String} message le message d'erreur
      * @return {void}
      */
-    eventFileQueueError: function(file, error, message) {
-        try {
-            // Handle this error separately because we don't want to create a FileProgress element for it.
-            switch (error) {
-                case SWFUpload.QUEUE_ERROR.QUEUE_LIMIT_EXCEEDED:
-                    alert("You have attempted to queue too many files.\n" + (message === 0 ? "You have reached the upload limit." : "You may select " + (message > 1 ? "up to " + message + " files." : "one file.")));
-                    return;
-                case SWFUpload.QUEUE_ERROR.FILE_EXCEEDS_SIZE_LIMIT:
-                    alert("The file you selected is too big: " + message);
-                    return;
-                case SWFUpload.QUEUE_ERROR.ZERO_BYTE_FILE:
-                    alert("The file you selected is empty.  Please select another file: " + message);
-                    return;
-                case SWFUpload.QUEUE_ERROR.INVALID_FILETYPE:
-                    alert("The file you choose is not an allowed file type: " + message);
-                    return;
-                default:
-                    alert("An error occurred in the upload. Try again later: " + message);
-                    return;
-            }
-        } catch (e) {
-            alert("An error occurred in the upload. Try again later: " + message + ' / ' + e);
-            return;
-        }
+    eventUploadError: function(uploader, file) {
+        console.log('upload error', file);
     },
     
     /**
-     * Methode appelee lorsqu'une erreur survient pendant l'upload
+     * Methode appelee lorsqu'on appuie sur le bouton d'annulation d'upload
      * 
-     * @param {Object} file les infos du fichier en question
-     * @param {Number} errorCode le numero d'erreur
-     * @param {String} message le message d'erreur
      * @return {void}
      */
-    eventUploadError: function(file, errorCode, message) {
-        try {
-            // Don't show cancelled error boxes
-            if (errorCode === SWFUpload.UPLOAD_ERROR.FILE_CANCELLED) return;
-
-            // on gere ces erreurs separement car il n'y a pas besoin de faire
-            // avec la barre de progression pour ca
-            switch (errorCode) {
-                case SWFUpload.UPLOAD_ERROR.MISSING_UPLOAD_URL:
-                    alert("There was a configuration error. You will not be able to upload a resume at this time: " + message);
-                    return;
-                case SWFUpload.UPLOAD_ERROR.UPLOAD_LIMIT_EXCEEDED:
-                    alert("You may only upload 1 file: " + message);
-                    return;
-            }
-
-            // theoriquement ici, on fait avec la barre de progression. Pour le
-            // moment, ce n'est pas le cas
-            switch (errorCode) {
-                case SWFUpload.UPLOAD_ERROR.HTTP_ERROR:
-                    alert("Upload Error: " + message);
-                    break;
-                case SWFUpload.UPLOAD_ERROR.UPLOAD_FAILED:
-                    alert("Upload Failed: " + message);
-                    break;
-                case SWFUpload.UPLOAD_ERROR.IO_ERROR:
-                    alert("Server (IO) Error: " + message);
-                    break;
-                case SWFUpload.UPLOAD_ERROR.SECURITY_ERROR:
-                    alert("Security Error: " + message);
-                    break;
-                case SWFUpload.UPLOAD_ERROR.FILE_CANCELLED:
-                    alert("Upload Cancelled: " + message);
-                    break;
-                case SWFUpload.UPLOAD_ERROR.UPLOAD_STOPPED:
-                    alert("Upload Stopped: " + message);
-                    break;
-                default:
-                    alert("An error occurred in the upload: " + message);
-            }
-        } catch (e) {
-            alert("An error occurred in the upload. Try again later: " + message + ' / ' + e);
-            return;
-        }
+    eventCancelUpload: function() {
+        this.swfu.stop();
+        Ext.get(this.idProgressZone).update(Library.wording.swfupload_cancel);
     },
     
     /**
      * Methode appelee lorsqu'on ferme la fenetre de selection de fichiers
      * 
-     * @param {Number} nbFiles le nombre de fichiers selectionnes
-     * @param {Number} nbFilesQueued le nombre de fichiers actuellement en file
-     * d'attente
-     * @param {Number} nbTotalFilesQueued le nombre total de fichiers
-     * actuellement en file d'attente
+     * @param {Uploader} uploader l'objet PlUpload
      * @return {void}
      */
-    eventFileDialogComplete: function(nbFiles, nbFilesQueued, nbTotalFilesQueued) {
-        //console.log('file dialog complete', nbFiles, nbFilesQueued, nbTotalFilesQueued);
-        // on lance automatiquement l'upload si le nombre de fichiers
-        // selectionnes est bien 1. On s'assure par ailleurs qu'il n'y a pas
-        // deja un upload en route
-        if (nbFiles == 1 && !this.uploadStarted)
-            this.swfu.startUpload();
+    eventFileDialogComplete: function(uploader) {
+        //console.log('file dialog complete', uploader);
+        this.swfu.start();
     },
     
     /**
@@ -130,58 +69,60 @@ Library.admin.FlashPdfButton = Ext.extend(Ext.form.CompositeField, {
      * il n'y a pas de file d'attente, puisqu'on ne peut envoyer qu'un seul
      * PDF pour un bouquin.
      * 
+     * @param {Uploader} uploader l'objet PlUpload
      * @param {Object} file les infos du fichier en question
      * @return {void}
      */
-    eventUploadStart: function(file) {
+    eventUploadStart: function(uploader, file) {
         //console.log('upload start', file);
+        Ext.get(this.idProgressZone).update(Library.wording.swfupload_progress);
         this.uploadStarted = true;
+        Ext.getCmp(this.idCancelButton).enable();
+        this.fireEvent('uploadstart', this, file);
     },
     
     /**
      * Methode appelee a chaques petites progressions de l'upload du PDF
      * 
+     * @param {Uploader} uploader l'objet PlUpload
      * @param {Object} file les infos du fichier en question
-     * @param {Decimal} current le nombre de bytes envoyes
-     * @param {Decimal} total le nombre de bytes total du fichier
+     * @param {Object} response la reponse du serveur
      * @return {void}
      */
-    eventUploadProgress: function(file, current, total){
-        //console.log('upload progress', file, current, total);
-        // on recupere la largeur totale de la zone de progression
-        var cmp = Ext.get(this.idProgressContainer);
-        var twidth = cmp.getWidth();
-
-        // on set a la barre de progression sa largeur en fonction du nombre
-        // courant de bytes envoyes et de la largeur totale de la zone
+    eventUploadProgress: function(uploader, file, response){
+        // on set a la barre de progression sa largeur en fonction du
+        // pourcentage d'upload du fichier PDF courant
         var el = Ext.get(this.idProgressZone);
-        el.setWidth(current * twidth / total);
+        el.setWidth(file.percent + '%');
     },
     
     /**
      * Methode appelee lorsqu'un upload de la file d'attente est termine. Il
      * pourrait en avoir d'autres, mais comme on limite a un seul ici, voila...
      * 
+     * @param {Uploader} uploader l'objet PlUpload
      * @param {Object} file les infos du fichier en question
-     * @param {Object} data les donnees revenant du serveur
-     * @param {XmlHttpResponse} response la reponse serveur brute
+     * @param {Object} response la reponse serveur brute
      * @return {void}
      */
-    eventUploadSuccess: function(file, data, response) {
-        //console.log('upload success', file, data,response);
+    eventUploadSuccess: function(uploader, file, response) {
+        //console.log('upload success', file, response);
         this.uploadStarted = false;
         
         var json = {};
         try {
-            json = Ext.decode(data);
+            json = Ext.decode(response.response);
         } catch (e) {
-            json = {success: false, message: e.message + ' : ' + data};
+            json = {success: false, message: e.message + ' : ' + response};
         }
         
-        if (json.success) {
-            this.fireEvent('uploadsuccess', this, json, file, data, response);
+        if (typeof json.success == 'undefined' || json.success) {
+            Ext.get(this.idProgressZone).update(Library.wording.swfupload_after);
+            Ext.getCmp(this.idCancelButton).disable();
+            this.fireEvent('uploadsuccess', this, json, file, response);
         } else {
-            alert(json.message || json.msg || json.error);
+            Ext.get(this.idProgressZone).update(Library.wording.swfupload_error);
+            alert(json.message || json.msg || (Ext.isObject(json.error) ? json.error.message : json.error));
         }
     },
     
@@ -192,44 +133,32 @@ Library.admin.FlashPdfButton = Ext.extend(Ext.form.CompositeField, {
      * 
      * @return {void}
      */
-    initSwfObject: function() {
-        return new SWFUpload({
+    initFlashObject: function() {
+        var swfu = new plupload.Uploader({
+            runtimes : 'gears,html5,flash,silverlight',
+            browse_button : this.idFlashButton,
+            container: this.idProgressContainer,
+            max_file_size : this.data.maxpostsize,
+            chunk_size: '1mb',
             // adresse du fichier PHP qui gere l'upload
-            upload_url: Library.Main.config().upload,
+            url : Library.Main.config().upload,
             // adresse du fichier flash qui gere la selection de fichiers
-            flash_url: Library.Main.config().libspath + 'extjsux/FileUploader/swfupload.swf',
-            
-            // bug swfupload (connu) des sessions
-            post_params: {'PHPSESSID' : Library.Main.config().sid}, 
-
-            // id de l'element HTML qui contiendra le bouton Flash
-            button_placeholder_id   : this.idFlashButton,
-            // configurations du bouton Flash
-            button_text             : '<span class="swfupload_button">' + Library.wording.swfupload_button_text + '</span>',
-            button_text_style       : '.swfupload_button{font-family:Arial,sans-serif; font-size:11px;}',
-            button_width            : 50,
-            button_height           : 25,
-
-            // le nom du fichier dans le $_FILES du fichier PHP
-            file_post_name          : 'Filedata',
-            // les types de fichiers autorises
-            file_types              : '*.pdf',
-            file_types_description  : 'PDF',
-            // la limite en taille
-            file_size_limit         : '500 MB',
-            // le nombre d'upload autorises (0 = infini)
-            file_upload_limit       : 0,
-            // le nombre de fichiers qu'on peut selectionner en une fois
-            file_queue_limit        : 1,
-
-            file_queue_error_handler : this.eventFileQueueError.createDelegate(this),
-            file_dialog_complete_handler : this.eventFileDialogComplete.createDelegate(this),
-
-            upload_error_handler : this.eventUploadError.createDelegate(this),
-            upload_start: this.eventUploadStart.createDelegate(this),
-            upload_progress_handler : this.eventUploadProgress.createDelegate(this),
-            upload_success_handler: this.eventUploadSuccess.createDelegate(this)
+            flash_swf_url : Library.Main.config().libspath + 'extjsux/plupload/js/plupload.flash.swf',
+            silverlight_xap_url : Library.Main.config().libspath + 'extjsux/plupload/js/plupload.silverlight.xap',
+            filters : [
+                {title : 'PDF', extensions : 'pdf'}
+            ]
         });
+        
+        swfu.bind('Error', this.eventUploadError.createDelegate(this));
+        swfu.bind('UploadFile', this.eventUploadStart.createDelegate(this));
+        swfu.bind('ChunkUploaded', this.eventUploadProgress.createDelegate(this));
+        swfu.bind('FileUploaded', this.eventUploadSuccess.createDelegate(this));
+        swfu.bind('QueueChanged', this.eventFileDialogComplete.createDelegate(this));
+        
+        swfu.init();
+        
+        return swfu;
     },
     
     /**
@@ -242,45 +171,54 @@ Library.admin.FlashPdfButton = Ext.extend(Ext.form.CompositeField, {
         this.idFlashButton = Ext.id();
         this.idProgressZone = Ext.id();
         this.idProgressContainer = Ext.id();
+        this.idCancelButton = Ext.id();
         
         this.addEvents(
-            'uploadsuccess'
+            'uploadsuccess',
+            'uploadstart'
         );
         
         Ext.apply(this, {
             border: false,
-            items: [{
+            items: [{xtype: 'hidden'}, {
                 // definition de la barre de progression
                 xtype: 'panel',
                 // on la flex a 1 pour qu'elle prenne le maximum de place en
                 // largeur
                 flex: 1,
-                id: this.idProgressContainer,
                 // le fond par defaut
-                bodyStyle: 'background-color: #99DD99;',
+                bodyStyle: 'background-color: #99D;',
                 // l'element qui a une largeur de zero et qui va grandir petit
                 // a petit au fur et a mesure que l'upload avance
-                html: '<div id="' + this.idProgressZone + '" style="height: 20px; width: 0; background-color: #000099;"></div>'
+                html: this.tplProgress.apply({
+                    id: this.idProgressZone,
+                    height: 20,
+                    text: Library.wording.swfupload_before
+                })
             },{
                 // definition du bouton Flash
                 xtype: 'panel',
                 border: false,
-                html: '<div id="' + this.idFlashButton + '"></div>',
+                html: this.tplUpload.apply({
+                    container: this.idProgressContainer,
+                    button: this.idFlashButton,
+                    text: Library.wording.swfupload_button_text
+                }),
                 listeners: {
                     afterrender: {scope: this, fn: function(cmp){
                         // on attend que le panel soit rendu avant d'initialiser
                         // le bouton Flash, car on doit etre sur que l'element
                         // HTML existe bien dans le DOM
-                        this.swfu = this.initSwfObject();
+                        this.swfu = this.initFlashObject();
                     }}
                 }
             },{
                 xtype: 'button',
                 iconCls: 'book-relation-remove',
+                id: this.idCancelButton,
+                disabled: true,
                 scope: this,
-                handler: function(){
-                    this.swfu.cancelUpload(null, false);
-                }
+                handler: this.eventCancelUpload
             }]
             
         });
@@ -291,6 +229,7 @@ Library.admin.FlashPdfButton = Ext.extend(Ext.form.CompositeField, {
             destroy: {scope: this, fn: function(cmp){
                 // au moment de la destruction de l'objet, on detruit egalement
                 // la propriete qui contient le bouton Flash
+                this.swfu.destroy();
                 delete this.swfu;
             }}
         });

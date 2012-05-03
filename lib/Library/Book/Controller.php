@@ -161,7 +161,8 @@ class Library_Book_Controller extends Library_Controller {
                 'niveaux' => $c->getNiveauListForCheckboxGroup($book),
                 'rights' => $this->getRightListForCheckboxGroup($book),
                 'thumbBasePath' => Library_Book::getThumbPath(),
-                'maxpostsize' => ini_get('post_max_size')
+                'maxpostsize' => '500mb',
+                'inimaxpostsize' => ini_get('post_max_size')
             ))
         );
     }

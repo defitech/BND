@@ -35,12 +35,19 @@ $config = array(
         <script type="text/javascript" src="<?php echo $path; ?>ext-all.js"></script>
         <script type="text/javascript" src="<?php echo $path; ?>../extjsux/src/locale/ext-lang-fr.js"></script>
         <!-- Plugin JS Ext -->
-        <!--<script type="text/javascript" src="<?php echo $path; ?>../extjsux/plupload/js/plupload.min.js"></script>
-        <script type="text/javascript" src="<?php echo $path; ?>../extjsux/plupload/js/plupload.flash.min.js"></script>
-        <script type="text/javascript" src="<?php echo $path; ?>../extjsux/extjsplupload/ext.ux.plupload.js"></script>
-        -->
+        <script type="text/javascript" src="<?php echo $path; ?>../extjsux/plupload/js/plupload.js"></script>
+        <script type="text/javascript" src="<?php echo $path; ?>../extjsux/plupload/js/plupload.gears.js"></script>
+        <script type="text/javascript" src="<?php echo $path; ?>../extjsux/plupload/js/plupload.flash.js"></script>
+        <script type="text/javascript" src="<?php echo $path; ?>../extjsux/plupload/js/plupload.silverlight.js"></script>
+        <script type="text/javascript" src="<?php echo $path; ?>../extjsux/plupload/js/plupload.html4.js"></script>
+        <script type="text/javascript" src="<?php echo $path; ?>../extjsux/plupload/js/plupload.html5.js"></script>
+        <script type="text/javascript" src="src/admin/FlashPdfButton.js"></script>
+        
+        <!--
         <script type="text/javascript" src="<?php echo $path; ?>../extjsux/FileUploader/swfupload.js"></script>
-
+        <script type="text/javascript" src="src/admin/FlashPdfButton.js"></script>
+        -->
+        
         <script type="text/javascript" src="<?php echo $path; ?>../extjsux/examples/ux/gridfilters/menu/ListMenu.js"></script>
         <script type="text/javascript" src="<?php echo $path; ?>../extjsux/examples/ux/gridfilters/GridFilters.js"></script>
         <script type="text/javascript" src="<?php echo $path; ?>../extjsux/examples/ux/gridfilters/filter/Filter.js"></script>
@@ -59,7 +66,6 @@ $config = array(
         <script type="text/javascript" src="src/Keys.js"></script>
         <script type="text/javascript" src="src/admin/App.js"></script>
         <script type="text/javascript" src="src/admin/BookGrid.js"></script>
-        <script type="text/javascript" src="src/admin/FlashPdfButton.js"></script>
         <script type="text/javascript" src="src/admin/Book.js"></script>
         <script type="text/javascript" src="src/admin/ContextMenu.js"></script>
         <script type="text/javascript" src="src/admin/Keys.js"></script>
