@@ -1,5 +1,7 @@
 <?php
 
+date_default_timezone_set('Europe/Berlin');
+
 // chemin vers la racine du site
 $dir = dirname(__FILE__) . '/';
 
