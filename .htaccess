@@ -1,4 +1,4 @@
 # Hide git repository
 RedirectMatch 404 "(?:.*)/(?:\.git|file_or_dir)(?:/.*)?$"
 # Hide all .txt and .md files
-RedirectMatch 404 "(?:.*)/(?:\.txt|md)(?:/.*)?$"
+RedirectMatch 404 "(?:.*)/.*\.(txt|md)(?:/.*)?$"
