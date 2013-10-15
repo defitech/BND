@@ -96,7 +96,7 @@ Library.ContextMenu = Ext.extend(Ext.menu.Menu, {
             }
         }];
         if (withFilters) {
-            items = items.concat(this.initMenuFilters())
+            items = items.concat(this.initMenuFilters());
         }
         return items;
     },

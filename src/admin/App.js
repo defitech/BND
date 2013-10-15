@@ -29,6 +29,17 @@ Library.admin.App = Ext.extend(Library.App, {
     maxRequestTry: 3,
 
     currentRequestTry: 0,
+    
+    printBooks: function(order) {
+        var params = '';
+        if (order == 'id') {
+            params += '&sort=id&dir=ASC';
+        } else {
+            var sort = this.getGrid().getStore().getSortState();
+            params += String.format('&sort={0}&dir={1}', sort.field, sort.direction);
+        }
+        window.open(Library.Main.config().controller + '?cmd=printBooks' + params, 'bndprint');
+    },
 
     addBook: function(btn) {
         this.getGrid().getBookInfo(null, {modal: true});
@@ -393,6 +404,7 @@ Library.admin.App = Ext.extend(Library.App, {
                 '-'
             ]);
         }
+        var me = this;
         return items.concat([{
             xtype: 'splitbutton',
             text: Library.wording.add_book_button,
@@ -446,6 +458,34 @@ Library.admin.App = Ext.extend(Library.App, {
             scale: 'medium',
             scope: this,
             handler: this.removeBooks
+        }, '-', {
+            text: Library.wording.print_book_button,
+            iconCls: 'book-print',
+            scale: 'medium',
+            menu: {
+                listeners: {
+                    show: function(cmp) {
+                        var sort = me.getGrid().getStore().getSortState();
+                        var r = me.getGrid().getColumnModel().getColumnsBy(function(c){
+                            return c.dataIndex === sort.field;
+                        });
+                        cmp.getComponent(1).setText(String.format(Library.wording.print_order_by_grid, r[0].header));
+                    }
+                },
+                items: [{
+                    text: Library.wording.print_order_by_id,
+                    scope: this,
+                    handler: function() {
+                        this.printBooks('id');
+                    }
+                },{
+                    text: '',
+                    scope: this,
+                    handler: function() {
+                        this.printBooks('grid');
+                    }
+                }]
+            }
         }, '-']);
     },
 

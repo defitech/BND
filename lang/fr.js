@@ -111,6 +111,10 @@ Library.wording = {
     add_book_button: 'Ajouter',
     add_book: "Ajout d'un nouveau livre",
 
+    print_book_button: 'Imprimer',
+    print_order_by_id: "Ordrer par identifiant de livre (ID)",
+    print_order_by_grid: "Ordrer par ce qui est configur\u00e9 via la liste ({0})",
+    
     delete_book_button: 'Supprimer',
     delete_book_title: 'Suppression',
     delete_book: 'Supprimer les livres s\u00e9lectionn\u00e9s?',

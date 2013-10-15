@@ -1,89 +1,121 @@
-# SQLiteManager Dump
-# Version: 1.2.4
-# http://www.sqlitemanager.org/
-#
 # Serveur: localhost:8888
 # Généré le: Friday 11th 2011f March 2011 03:01 pm
 # SQLite Version: 3.3.7
 # PHP Version: 5.2.13
-# Base de données: db_bnd.txt
 # --------------------------------------------------------
 
 #
 # Structure de la table: library_book
 #
 
-CREATE TABLE 'library_book' ( 'id' INTEGER NOT NULL PRIMARY KEY , 'type_id' INT , 'editor_id' INT , 'title' VARCHAR ( 200 ) , 'thumb' VARCHAR ( 200 ) , 'tags' TEXT , 'isbn' VARCHAR ( 150 ) , 'filename' VARCHAR ( 100 ) , 'right' VARCHAR ( 255 ) ) ;
 # --------------------------------------------------------
+CREATE TABLE `library_book` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `type_id` int(11) NULL,
+  `editor_id` int(11) NULL,
+  `title` varchar(200) NULL,
+  `thumb` varchar(200) NULL,
+  `tags` TEXT NULL,
+  `isbn` varchar(150) NULL,
+  `filename` varchar(100) NULL,
+  `right` varchar(255) NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
 
 
 #
 # Structure de la table: library_book_editor
 #
 
-CREATE TABLE 'library_book_editor' ( 'id' INTEGER NOT NULL PRIMARY KEY, 'editor' VARCHAR(200) );
 # --------------------------------------------------------
-
+CREATE TABLE `library_book_editor` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `editor` varchar(200) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 #
 # Structure de la table: library_book_niveau
 #
 
-CREATE TABLE 'library_book_niveau' ( 'book_id' INTEGER NOT NULL, 'niveau_id' INTEGER NOT NULL );
 # --------------------------------------------------------
-
+CREATE TABLE `library_book_niveau` (
+  `book_id` int(11) NOT NULL,
+  `niveau_id` int(11) NOT NULL,
+  PRIMARY KEY (`book_id`,`niveau_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 #
 # Structure de la table: library_book_type
 #
 
-CREATE TABLE 'library_book_type' ( 'id' INTEGER NOT NULL PRIMARY KEY, 'label' VARCHAR(200) );
 # --------------------------------------------------------
-
+CREATE TABLE `library_book_type` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `label` varchar(200) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 #
 # Structure de la table: library_niveau
 #
 
-CREATE TABLE 'library_niveau' ( 'id' INTEGER NOT NULL PRIMARY KEY DEFAULT "0", 'label' VARCHAR(50) );
 # --------------------------------------------------------
-
+CREATE TABLE `library_niveau` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `label` varchar(50) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 #
 # Structure de la table: library_user
 #
 
-CREATE TABLE 'library_user' ( 'id' INTEGER NOT NULL PRIMARY KEY, 'login' VARCHAR(50) , 'pass' VARCHAR(255) , 'right' SMALLINT , 'last_connected' DATETIME );
 # --------------------------------------------------------
-
+CREATE TABLE `library_user` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `login` varchar(50) NOT NULL,
+  `pass` varchar(255) NOT NULL,
+  `right` int(3),
+  `type_id` int(11),
+  `last_connected` DATETIME NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 #
 # Structure de la table: library_user_download
 #
 
-CREATE TABLE 'library_user_download' ( 'id' INTEGER NOT NULL PRIMARY KEY , 'book_id' INTEGER , 'user_id' INTEGER , 'downloaded_at' DATETIME ) ;
 # --------------------------------------------------------
+CREATE TABLE `library_user_download` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `book_id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `downloaded_at` DATETIME NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 #
-# Contenu de la table: library_user
+# Structure de la table: library_user_type
 #
 
-INSERT INTO 'library_user' VALUES ('1', 'admin', 'c462ea29c64efa0f679b05d046205d41', '1', '2011-03-22 13:10:00');
-INSERT INTO 'library_user' VALUES ('2', 'adherent', 'ce47d07243bb6eaf5e1322c81baf9bbf', '2', '2011-03-22 13:10:10');
-INSERT INTO 'library_user' VALUES ('3', 'defitech', 'ce47d07243bb6eaf5e1322c81baf9bbf', '3', '2011-03-22 13:10:14');
 # --------------------------------------------------------
+CREATE TABLE `library_user_type` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_type` varchar(200) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 
 #
-# Propriété de la fonction: md5rev
+# Contenu de la table: library_user_type
 #
-/*
-function md5_and_reverse($string) { return strrev(md5($string)); }
-*/
 
-#
-# Propriété de la fonction: IF
-#
-/*
-function sqliteIf($compare, $good, $bad){ if ($compare) { return $good; } else { return $bad; } }
-*/
+INSERT INTO `library_user_type` VALUES
+('1', 'Administrateur'),
+('2', 'Elève'),
+('3', 'Enseignant'),
+('4', 'Etablissement'),
+('5', 'Exemple'),
+('6', 'Thérapeute');

@@ -32,7 +32,14 @@ class Fr {
         'move_pdf_to_good_folder_notype' => "Le livre [%s] n'a pas de matière. Il faut lui en donner une!",
         'move_pdf_to_good_folder_error' => "Le déplacement de [%s] vers [%s] a échouée (erreur: %s)",
 
-        'db_backup_done' => 'Base de données backupée (ok? %s)'
+        'db_backup_done' => 'Base de données backupée (ok? %s)',
+        
+        'field_id' => 'ID',
+        'field_type' => 'Matière',
+        'field_editor' => 'Editeur',
+        'field_niveau' => 'Niveaux',
+        'field_title' => 'Titre',
+        'field_isbn' => 'N° ISBN'
 
     );
 

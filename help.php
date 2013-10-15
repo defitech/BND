@@ -84,14 +84,6 @@ dont la génération de la miniature pose problème. Il sera alors facile de ret
 <p>Pour chaque PDF se crée, normalement, une image et une mini image. Celles-ci sont
     sauvegardées dans le dossier <strong><?php echo Library_Book::getThumbPath(true); ?></strong>.</p>
 <br/>
-<h1>Backup de la base de données</h1>
-<p>Afin de générer un backup (il n'y a pas de cron job pour ça), il y a deux méthodes:</p>
-<ul>
-    <li>(recommandé) Cliquer sur la <em>flèche droite</em> du bouton <em>Ajouter</em> et sélectionner
-        <strong>Vérifier s'il y a de nouveaux livres PDF</strong>, même s'il n'y en a pas.</li>
-    <li>Importer un fichier CSV vide (s'il n'est pas vide, le backup se fera quand même)</li>
-</ul>
-<br/>
 <h1>FAQ</h1>
 <ul>
     <li><em>Quelqu'un se plaint de ne pas trouver un livre, alors que l'admin constate qu'il
@@ -100,6 +92,7 @@ dont la génération de la miniature pose problème. Il sera alors facile de ret
     droits particuliers (du coup tout le monde pourra voir le livre), soit ajouter le plaignant
     dans les droits particuliers.</li></ul></li>
 </ul>
+<br/>
 <?php
 } // Fin if user->right <= 2
 ?>
@@ -122,7 +115,7 @@ dont la génération de la miniature pose problème. Il sera alors facile de ret
     <li><strong>Shift + Droite</strong> : Aller à la dernière page</li>
     <li><strong>Shift + Gauche</strong> : Aller à la première page</li>
 </ul>
-<ul
+<ul>
     <li><strong>Shift + Alt + M</strong> : Filtre par "même matière"</li>
     <li><strong>Shift + Alt + E</strong> : Filtre par "même éditeur"</li>
     <li><strong>Shift + Alt + N</strong> : Filtre par "même niveau"</li>

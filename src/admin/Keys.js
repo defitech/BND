@@ -9,7 +9,7 @@ Library.admin.Keys = Ext.extend(Library.Keys, {
                 key: [Ext.EventObject.D],
                 fn: function(key, e) {
                     grid.fireEvent('bookdelete', grid, grid.getRecordFromContextMenu());
-                    e.stopEvent()
+                    e.stopEvent();
                 }
             },
             {
@@ -18,7 +18,7 @@ Library.admin.Keys = Ext.extend(Library.Keys, {
                 alt: false,
                 fn: function(key, e) {
                     grid.getBookInfo(null);
-                    e.stopEvent()
+                    e.stopEvent();
                 }
             }
         ]);

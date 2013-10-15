@@ -16,7 +16,7 @@ class Library_Book_Controller extends Library_Controller {
         $sort = $this->getParam('sort', 'title');
         $dir = $this->getParam('dir', 'ASC');
         $start = $this->getParam('start', 0);
-        $limit = $this->getParam('limit');
+        $limit = $this->getParam('limit', null);
         $filters = $this->getParam('filters', array());
         $gridFilters = $this->getParam('filter', array());
 
@@ -134,6 +134,22 @@ class Library_Book_Controller extends Library_Controller {
             'total' => $rows->count(),
             'books' => $books
         );
+    }
+    
+    protected function printBooks() {
+        header('Content-type: text/html');
+        Library_Config::getInstance()->testIssetAuser(2);
+        
+        $data = $this->getBookList();
+        
+        $books = $data['books'];
+        ob_start();
+        include Library_Config::getInstance()->getRoot() . 'print.php';
+        $content = ob_get_contents();
+        ob_clean();
+        
+        echo $content;
+        exit;
     }
 
     protected function getBook() {

@@ -5,10 +5,14 @@ date_default_timezone_set('Europe/Berlin');
 // chemin vers la racine du site
 $dir = dirname(__FILE__) . '/';
 
-// récupération du chemin vers le Zend Framework. On chope l'instance
-$instance = trim(file_get_contents($dir . 'instance'));
+// récupération du chemin vers le Zend Framework. On chope l'instance. C'était
+// à l'époque un nom de section dans un fichier INI de Zend. Maintenant avec
+// git, ce sera toujours "production", le fichier de config étant changé à la
+// mano directement sur le serveur
+$instance = 'production';
+
 // on chope le config.ini qui contient toutes les infos de configuration
-$configFile = $dir . 'config/config.ini';
+$configFile = $dir . 'config/config_in_use.ini';
 $ini = parse_ini_file($configFile, true);
 if (isset($ini[$instance])) {
     // si une config pour l'instance existe, on la prend
@@ -37,9 +41,12 @@ ini_set('magic_quotes_gpc', 0);
 
 // initialisation de la base de données
 $db = $config->getData()->db;
-Zend_Registry::set('db', Zend_Db::factory('PDO_Sqlite', array(
-    'dbname' => $db->name
-)));
+Zend_Registry::set('db', Zend_Db::factory('PDO_Mysql', array_merge($db->toArray(), array(
+    'charset' => 'utf8',
+    'driver_options' => array(
+        PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES UTF8;'
+    )
+))));
 Zend_Db_Table_Abstract::setDefaultAdapter(Zend_Registry::get('db'));
 Zend_Registry::get('db')->getConnection();
 

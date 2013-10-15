@@ -140,11 +140,32 @@ if (typeof Ext.form.Action.Submit != 'undefined') {
     });
 }
 
-if (typeof Ext.form.Field != 'undefined') {
+if (typeof Ext.form.Field != 'undefined')
     Ext.override(Ext.form.Field, {
         getName : function(){
             // ajout du check si "dom" existe, pour eviter des erreurs
             return this.rendered && this.el.dom && this.el.dom.name ? this.el.dom.name : this.name || this.id || '';
         }
     });
-}
+    
+Ext.ns('Ext.grid');
+if (typeof Ext.grid.ColumnModel !== 'undefined')
+    Ext.override(Ext.grid.ColumnModel, {
+        getTotalWidth: function(includeHidden) {
+            var off = 0;
+            // redefinition de l'offset pour Chrome, qui a perdu des pixels entre
+            // ses versions...
+            if (Ext.isChrome){
+                off = 2;
+            }
+            if (!this.totalWidth) {
+                this.totalWidth = 0;
+                for (var i = 0, len = this.config.length; i < len; i++) {
+                    if (includeHidden || !this.isHidden(i)) {
+                        this.totalWidth += this.getColumnWidth(i)+off;
+                    }
+                }
+            }
+            return this.totalWidth;
+        }
+    });

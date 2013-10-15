@@ -10,7 +10,7 @@ Library.Keys = Ext.extend(Ext.util.Observable, {
                 alt: true,
                 fn: function(key, e) {
                     grid.doContextMenuFilter('editor_id', 'editorid');
-                    e.stopEvent()
+                    e.stopEvent();
                 }
             },
             {
@@ -19,7 +19,7 @@ Library.Keys = Ext.extend(Ext.util.Observable, {
                 alt: true,
                 fn: function(key, e) {
                     grid.doContextMenuFilter('type_id', 'typeid');
-                    e.stopEvent()
+                    e.stopEvent();
                 }
             },
             {
@@ -28,7 +28,7 @@ Library.Keys = Ext.extend(Ext.util.Observable, {
                 alt: true,
                 fn: function(key, e) {
                     grid.doContextMenuFilter('niveau_id', 'niveauid');
-                    e.stopEvent()
+                    e.stopEvent();
                 }
             },
             {
@@ -37,7 +37,7 @@ Library.Keys = Ext.extend(Ext.util.Observable, {
                 alt: true,
                 fn: function(key, e) {
                     grid.fireEvent('filterundo', grid);
-                    e.stopEvent()
+                    e.stopEvent();
                 }
             },
             {
@@ -45,7 +45,7 @@ Library.Keys = Ext.extend(Ext.util.Observable, {
                 shift: true,
                 fn: function(key, e) {
                     grid.launchDownload(grid.getRecordFromContextMenu());
-                    e.stopEvent()
+                    e.stopEvent();
                 }
             },
             {
@@ -54,7 +54,7 @@ Library.Keys = Ext.extend(Ext.util.Observable, {
                 fn: function(key, e) {
                     var contextmenu = grid.initBookContextMenu(grid.getRecordFromContextMenu());
                     contextmenu.showAt(e.getXY());
-                    e.stopEvent()
+                    e.stopEvent();
                 }
             },
             {
@@ -62,7 +62,7 @@ Library.Keys = Ext.extend(Ext.util.Observable, {
                 shift: true,
                 fn: function(key, e) {
                     grid.fireEvent('focusfullsearch', grid, e);
-                    e.stopEvent()
+                    e.stopEvent();
                 }
             },
             {
@@ -70,7 +70,7 @@ Library.Keys = Ext.extend(Ext.util.Observable, {
                 shift: true,
                 fn: function(key, e) {
                     grid.getBottomToolbar().moveLast();
-                    e.stopEvent()
+                    e.stopEvent();
                 }
             },
             {
@@ -78,7 +78,7 @@ Library.Keys = Ext.extend(Ext.util.Observable, {
                 shift: true,
                 fn: function(key, e) {
                     grid.getBottomToolbar().moveFirst();
-                    e.stopEvent()
+                    e.stopEvent();
                 }
             },
             {
@@ -86,7 +86,7 @@ Library.Keys = Ext.extend(Ext.util.Observable, {
                 shift: false,
                 fn: function(key, e) {
                     grid.getSelectionModel().selectLastRow();
-                    e.stopEvent()
+                    e.stopEvent();
                 }
             },
             {
@@ -94,7 +94,7 @@ Library.Keys = Ext.extend(Ext.util.Observable, {
                 shift: false,
                 fn: function(key, e) {
                     grid.getSelectionModel().selectFirstRow();
-                    e.stopEvent()
+                    e.stopEvent();
                 }
             },
             {
@@ -102,7 +102,7 @@ Library.Keys = Ext.extend(Ext.util.Observable, {
                 shift: false,
                 fn: function(key, e) {
                     grid.getBottomToolbar().moveNext();
-                    e.stopEvent()
+                    e.stopEvent();
                 }
             },
             {
@@ -110,7 +110,7 @@ Library.Keys = Ext.extend(Ext.util.Observable, {
                 shift: false,
                 fn: function(key, e) {
                     grid.getBottomToolbar().movePrevious();
-                    e.stopEvent()
+                    e.stopEvent();
                 }
             },
             {
@@ -118,7 +118,7 @@ Library.Keys = Ext.extend(Ext.util.Observable, {
                 shift: false,
                 fn: function(key, e) {
                     grid.getBookInfo(grid.getRecordFromContextMenu());
-                    e.stopEvent()
+                    e.stopEvent();
                 }
             }
         ];
