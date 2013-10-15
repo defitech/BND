@@ -143,8 +143,8 @@ Library.admin.FlashPdfButton = Ext.extend(Ext.form.CompositeField, {
             // adresse du fichier PHP qui gere l'upload
             url : Library.Main.config().upload,
             // adresse du fichier flash qui gere la selection de fichiers
-            flash_swf_url : Library.Main.config().libspath + 'extjsux/plupload/js/plupload.flash.swf',
-            silverlight_xap_url : Library.Main.config().libspath + 'extjsux/plupload/js/plupload.silverlight.xap',
+            flash_swf_url : Library.Main.config().libspath + 'extjsux/plupload/js/Moxie.swf',
+            silverlight_xap_url : Library.Main.config().libspath + 'extjsux/plupload/js/Moxie.xap',
             filters : [
                 {title : 'PDF', extensions : 'pdf'}
             ]

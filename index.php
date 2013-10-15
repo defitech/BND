@@ -35,12 +35,7 @@ $config = array(
         <script type="text/javascript" src="<?php echo $path; ?>ext-all.js"></script>
         <script type="text/javascript" src="<?php echo $path; ?>../extjsux/src/locale/ext-lang-fr.js"></script>
         <!-- Plugin JS Ext -->
-        <script type="text/javascript" src="<?php echo $path; ?>../extjsux/plupload/js/plupload.js"></script>
-        <script type="text/javascript" src="<?php echo $path; ?>../extjsux/plupload/js/plupload.gears.js"></script>
-        <script type="text/javascript" src="<?php echo $path; ?>../extjsux/plupload/js/plupload.flash.js"></script>
-        <script type="text/javascript" src="<?php echo $path; ?>../extjsux/plupload/js/plupload.silverlight.js"></script>
-        <script type="text/javascript" src="<?php echo $path; ?>../extjsux/plupload/js/plupload.html4.js"></script>
-        <script type="text/javascript" src="<?php echo $path; ?>../extjsux/plupload/js/plupload.html5.js"></script>
+        <script type="text/javascript" src="<?php echo $path; ?>../extjsux/plupload/js/plupload.full.min.js"></script>
         <script type="text/javascript" src="src/admin/FlashPdfButton.js"></script>
         
         <!--

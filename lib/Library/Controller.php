@@ -114,7 +114,7 @@ class Library_Controller {
      */
     
     protected function getRightConfig() {
-        Library_Config::getInstance()->testIssetAuser(1);
+        Library_Config::getInstance()->testIssetAuser(2);
                 
         $config = array();
         $config['userTypes'] = Library_User_Type::getComboList();

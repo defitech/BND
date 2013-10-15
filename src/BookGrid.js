@@ -150,6 +150,17 @@ Library.BookGrid = Ext.extend(Ext.grid.GridPanel, {
         };
     },
 
+    initColumnId: function(cfg) {
+        return Ext.apply({
+            dataIndex: 'id',
+            header: 'ID',
+            align: 'right',
+            width: 50,
+            fixed: true,
+            hideable: false,
+            hidden: true
+        }, cfg || {});
+    },
 
     initBookHeaders: function(idAutoExpand) {
         return new Ext.grid.ColumnModel({
@@ -166,6 +177,7 @@ Library.BookGrid = Ext.extend(Ext.grid.GridPanel, {
                     renderer : this.renderBookThumb,
                     dataIndex : 'thumb'
                 },
+                this.initColumnId(),
                 {
                     header : Library.wording.type,
                     width : 110,

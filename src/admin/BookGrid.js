@@ -52,6 +52,13 @@ Library.admin.BookGrid = Ext.extend(Library.BookGrid, {
             })
         });
     },
+    
+    initColumnId: function() {
+        return Library.admin.BookGrid.superclass.initColumnId.apply(this, [{
+            hideable: true,
+            hidden: false
+        }]);
+    },
 
     initKeyMap: function() {
         var map = new Library.admin.Keys();
