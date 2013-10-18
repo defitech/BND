@@ -37,6 +37,19 @@ class Library_Book_Controller extends Library_Controller {
         if (!Library_User::right(2)) {
             $select->where('(library_book.right IS NULL OR library_book.right = "" OR library_book.right LIKE "%|' . $user->id . '|%")');
         }
+        
+        // on va gérer l'éventuel multisort de la grid (programmatiquement
+        // généré pour les besoins du print)
+        $msorts = $this->getParam('sorts', null);
+        if (is_array($msorts) && count($msorts)) {
+            foreach ($msorts as $msort => $mdir) {
+                switch($msort) {
+                    case 'editor_id': $select->order('e.editor ' . $mdir); break;
+                    case 'type_id': $select->order('t.label ' . $mdir); break;
+                    case 'niveau_id': $select->order('n.label ' . $mdir); break;
+                }
+            }
+        }
 
         switch($sort) {
             case 'editor_id': $select->order('e.editor ' . $dir); break;

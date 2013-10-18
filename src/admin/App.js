@@ -31,12 +31,11 @@ Library.admin.App = Ext.extend(Library.App, {
     currentRequestTry: 0,
     
     printBooks: function(order) {
-        var params = '';
+        var sort = this.getGrid().getStore().getSortState();
+        var params = String.format('&sort={0}&dir={1}', sort.field, sort.direction);
+        // on va eventuellement rajouter le sort matiere/editeur
         if (order == 'id') {
-            params += '&sort=id&dir=ASC';
-        } else {
-            var sort = this.getGrid().getStore().getSortState();
-            params += String.format('&sort={0}&dir={1}', sort.field, sort.direction);
+            params += String.format('&sorts[{0}]={2}&sorts[{1}]={2}', 'type_id', 'editor_id', sort.direction);
         }
         window.open(Library.Main.config().controller + '?cmd=printBooks' + params, 'bndprint');
     },
@@ -469,11 +468,12 @@ Library.admin.App = Ext.extend(Library.App, {
                         var r = me.getGrid().getColumnModel().getColumnsBy(function(c){
                             return c.dataIndex === sort.field;
                         });
+                        cmp.getComponent(0).setText(String.format(Library.wording.print_order_by_id, r[0].header));
                         cmp.getComponent(1).setText(String.format(Library.wording.print_order_by_grid, r[0].header));
                     }
                 },
                 items: [{
-                    text: Library.wording.print_order_by_id,
+                    text: '',
                     scope: this,
                     handler: function() {
                         this.printBooks('id');
