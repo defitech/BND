@@ -27,7 +27,8 @@ class Library_Book_Type extends Zend_Db_Table_Abstract {
     public static $correspondance = array(
         'Géographie' => 'Geo',
         'Français' => 'Francais',
-        'Citoyenneté' => 'Civisme'
+        'Citoyenneté' => 'Civisme',
+        'Histoire,Géographie' => 'HistoireGeo'
     );
 
     public static function getList() {
