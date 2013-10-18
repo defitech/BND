@@ -3,6 +3,8 @@
 class Library_User_Download extends Zend_Db_Table_Abstract {
 
     protected $_primary = 'id';
+    
+    protected $_name = 'library_user_download';
 
     protected $_referenceMap = array(
         'User' => array(
