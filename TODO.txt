@@ -1,5 +1,5 @@
 Appli BND:
-dernière màj le 06.04.2012
+dernière màj le 06.11.2013
 
 
 Installer ImageMagick, pour avoir la fonction convert (pour extraire la 1ère

@@ -13,6 +13,8 @@ class Library_User extends Zend_Db_Table_Abstract {
      * @var string
      */
     protected $_primary = 'id';
+    
+    protected $_name = 'library_user';
 
     protected $_dependentTables = array('Library_User_Download');
 

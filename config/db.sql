@@ -1,6 +1,6 @@
 # Serveur: localhost:8888
 # Généré le: Friday 11th 2011f March 2011 03:01 pm
-# SQLite Version: 3.3.7
+# MySQL
 # PHP Version: 5.2.13
 # --------------------------------------------------------
 
@@ -106,16 +106,3 @@ CREATE TABLE `library_user_type` (
   `user_type` varchar(200) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
-
-
-#
-# Contenu de la table: library_user_type
-#
-
-INSERT INTO `library_user_type` VALUES
-('1', 'Administrateur'),
-('2', 'Elève'),
-('3', 'Enseignant'),
-('4', 'Etablissement'),
-('5', 'Exemple'),
-('6', 'Thérapeute');
