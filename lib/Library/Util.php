@@ -73,6 +73,7 @@ class Library_Util {
     /**
      * Backup la base de données
      *
+     * @deprecated utilisé pour Sqlite. Mais on a passé sur MySQL en 2013.
      * @return boolean true si la copie s'est bien déroulée, false sinon
      */
     public static function backupDb() {

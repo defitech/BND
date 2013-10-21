@@ -15,6 +15,7 @@ class Library_Book_Controller extends Library_Controller {
         // récupération des paramètres
         $sort = $this->getParam('sort', 'title');
         $dir = $this->getParam('dir', 'ASC');
+        $dir = strtolower($dir) == 'asc' ? 'ASC' : 'DESC';
         $start = $this->getParam('start', 0);
         $limit = $this->getParam('limit', null);
         $filters = $this->getParam('filters', array());
@@ -35,14 +36,15 @@ class Library_Book_Controller extends Library_Controller {
         $user = Library_Config::getInstance()->getUser();
         // s'il ne s'agit pas d'un admin, on ajoute la condition de droits
         if (!Library_User::right(2)) {
-            $select->where('(library_book.right IS NULL OR library_book.right = "" OR library_book.right LIKE "%|' . $user->id . '|%")');
+            $select->where('(library_book.right IS NULL OR library_book.right = "" OR library_book.right LIKE ?)', '%|' . $user->id . '|%');
         }
-        
+
         // on va gérer l'éventuel multisort de la grid (programmatiquement
         // généré pour les besoins du print)
         $msorts = $this->getParam('sorts', null);
         if (is_array($msorts) && count($msorts)) {
             foreach ($msorts as $msort => $mdir) {
+                $mdir = strtolower($mdir) == 'asc' ? 'ASC' : 'DESC';
                 switch($msort) {
                     case 'editor_id': $select->order('e.editor ' . $mdir); break;
                     case 'type_id': $select->order('t.label ' . $mdir); break;
@@ -57,10 +59,10 @@ class Library_Book_Controller extends Library_Controller {
             case 'niveau_id': $select->order('n.label ' . $dir); break;
             default: $select->order('library_book.' . $sort . ' ' . $dir);
         }
-        $select->order('library_book.title ASC');
+        $select->order('library_book.title ' . $dir);
 
         // ajout des filtres non-grid s'il y en a
-        if (isset($filters['fullsearch'])) {
+        if (isset($filters['fullsearch']) && $filters['fullsearch']) {
             $terms = str_replace('"', '', stripslashes($filters['fullsearch']));
             $terms = explode(' ', Library_Util::getSlug(trim($terms), ' '));
             foreach ($terms as $term) {
@@ -74,7 +76,13 @@ class Library_Book_Controller extends Library_Controller {
                 // création du bout de requête sql
                 $tmp = array();
                 foreach ($fullsearch_fields as $field) {
-                    $tmp[] = $field . ' LIKE "%' . $term . '%"';
+                    $t = '%' . $term . '%';
+                    // on envoie directement la string dans la requete, mais il
+                    // ne devrait pas y avoir de soucis d'injection, car la
+                    // string est "sluguée" avant d'être processée. Cela dit
+                    // l'idéal serait d'arriver à binder les paramètres, mais
+                    // Zend ne semble pas vouloir dans ce cas précis...
+                    $tmp[] = $field . ' LIKE "' . $t . '"';
                 }
                 $select->where('(' . implode(' OR ', $tmp) . ')');
             }
@@ -90,10 +98,10 @@ class Library_Book_Controller extends Library_Controller {
                     elseif ($filter['data']['comparison'] == 'lt')
                         $operator = '<';
                     
-                    $select->where('library_book.' . $filter['field'] . $operator . $filter['data']['value']);
+                    $select->where('library_book.' . $filter['field'] . $operator . '?', $filter['data']['value']);
                     break;
                 case 'string':
-                    $select->where('library_book.' . $filter['field'] . ' LIKE "%' . $filter['data']['value'] . '%"');
+                    $select->where('library_book.' . $filter['field'] . ' LIKE ?', '%' . $filter['data']['value'] . '%');
                     break;
                 case 'list':
                     switch  ($filter['field']) {
