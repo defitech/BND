@@ -29,6 +29,17 @@ Library.BookGrid = Ext.extend(Ext.grid.GridPanel, {
             }
         });
     },
+    
+    getCurrentFilters: function() {
+        var current = this.filters.buildQuery(this.filters.getFilterData());
+        var customs = ['fullsearch'];
+        for (var i = 0; i < customs.length; i++) {
+            if (this.getStore().baseParams['filters[' + customs[i] + ']']) {
+                current['filters[' + customs[i] + ']'] = this.getStore().baseParams['filters[' + customs[i] + ']'];
+            }
+        }
+        return current;
+    },
 
     launchDownload: function(record) {
         window.location.href = Library.Main.config().controller + '?cmd=download&id=' + record.get('id');
@@ -220,9 +231,12 @@ Library.BookGrid = Ext.extend(Ext.grid.GridPanel, {
         });*/
         var filters = new Ext.ux.grid.GridFilters({
             filters: [{
+                type: 'numeric',
+                dataIndex: 'id'
+            }, {
                 type: 'string',
                 dataIndex: 'title'
-            },{
+            }, {
                 type: 'string',
                 dataIndex: 'isbn'
             }, {

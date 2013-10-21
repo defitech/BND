@@ -83,6 +83,15 @@ class Library_Book_Controller extends Library_Controller {
         // ajout des filtres grid s'il y en a
         foreach ($gridFilters as $filter) {
             switch ($filter['data']['type']) {
+                case 'numeric':
+                    $operator = '=';
+                    if ($filter['data']['comparison'] == 'gt')
+                        $operator = '>';
+                    elseif ($filter['data']['comparison'] == 'lt')
+                        $operator = '<';
+                    
+                    $select->where('library_book.' . $filter['field'] . $operator . $filter['data']['value']);
+                    break;
                 case 'string':
                     $select->where('library_book.' . $filter['field'] . ' LIKE "%' . $filter['data']['value'] . '%"');
                     break;

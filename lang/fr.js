@@ -114,6 +114,7 @@ Library.wording = {
     print_book_button: 'Imprimer',
     print_order_by_id: "Ordrer par mati\u00e8re, \u00e9diteur, puis la liste ({0})",
     print_order_by_grid: "Ordrer par la liste ({0})",
+    print_filters: " (filtres actifs)",
     
     delete_book_button: 'Supprimer',
     delete_book_title: 'Suppression',

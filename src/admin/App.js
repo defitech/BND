@@ -37,6 +37,11 @@ Library.admin.App = Ext.extend(Library.App, {
         if (order == 'id') {
             params += String.format('&sorts[{0}]={2}&sorts[{1}]={2}', 'type_id', 'editor_id', sort.direction);
         }
+        // ajout des eventuels filtres
+        var filters = this.getGrid().getCurrentFilters();
+        if (filters)
+            params += '&' + Ext.urlEncode(filters);
+        
         window.open(Library.Main.config().controller + '?cmd=printBooks' + params, 'bndprint');
     },
 
@@ -468,8 +473,13 @@ Library.admin.App = Ext.extend(Library.App, {
                         var r = me.getGrid().getColumnModel().getColumnsBy(function(c){
                             return c.dataIndex === sort.field;
                         });
-                        cmp.getComponent(0).setText(String.format(Library.wording.print_order_by_id, r[0].header));
-                        cmp.getComponent(1).setText(String.format(Library.wording.print_order_by_grid, r[0].header));
+                        var strfilters = '';
+                        if (Ext.urlEncode(me.getGrid().getCurrentFilters())) {
+                            strfilters = Library.wording.print_filters;
+                        }
+                        
+                        cmp.getComponent(0).setText(String.format(Library.wording.print_order_by_id, r[0].header) + strfilters);
+                        cmp.getComponent(1).setText(String.format(Library.wording.print_order_by_grid, r[0].header) + strfilters);
                     }
                 },
                 items: [{
