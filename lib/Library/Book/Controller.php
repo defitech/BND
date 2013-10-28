@@ -68,7 +68,7 @@ class Library_Book_Controller extends Library_Controller {
             foreach ($terms as $term) {
                 // définition des champs touchés par le fullsearch
                 $fullsearch_fields = array(
-                    'library_book.title', 'library_book.tags', 'library_book.isbn',
+                    'library_book.title', 'library_book.tags', 'library_book.isbn', 'library_book.notes',
                     'e.editor',
                     't.label',
                     'n.label'
@@ -276,6 +276,7 @@ class Library_Book_Controller extends Library_Controller {
         $row->filename = $this->getParam('pdf');
         $row->editor_id = $this->getParam('editor_id');
         $row->type_id = $this->getParam('type_id');
+        $row->notes = $this->getParam('notes', null);
 
         if (Library_User::right(1)) {
             $rights = $this->getGroupParam('right');

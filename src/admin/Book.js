@@ -665,6 +665,16 @@ Library.admin.Book = Ext.extend(Library.Book, {
                     handler: this.createThumbFromPdf
                 }]
             }]
+        }, {
+            xtype: 'htmleditor',
+            anchor: '95%',
+            height: 120,
+            fieldLabel: Library.wording.notes,
+            enableFont: false,
+            enableFontSize: false,
+            enableColors: false,
+            enableAlignments: false,
+            value: this.data.notes
         }]);
 
         if (Library.Main.right(1)) {
