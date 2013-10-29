@@ -165,6 +165,10 @@ body.book-background-montagnes {
     background-image: url('../images/deletesmall.png') !important;
 }
 
+.user-profile {
+    background-image: url('../images/profile.png') !important;
+}
+
 .book-item-id {
     border: 0;
     background: none !important;

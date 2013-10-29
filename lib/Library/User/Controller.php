@@ -109,12 +109,50 @@ class Library_User_Controller extends Library_Controller {
         $field = $this->getParam('field');
         $value = $this->getParam('value');
 
-        $row->$field = $field == 'pass' ? md5($value) : $value;
+        $row->$field = $field == 'pass' ? $this->makeMdp($value) : $value;
         $row->save();
 
         return array(
             'success' => true,
             'id' => $row->id
+        );
+    }
+    
+    private function makeMdp($pass) {
+        return md5($pass);
+    }
+    
+    protected function getUser() {
+        Library_Config::getInstance()->testIssetAuser();
+        
+        $config = Library_Config::getInstance();
+        $user = $config->getUser();
+        
+        $data = $user->toArray();
+        unset($data['pass']);
+        unset($data['right']);
+        
+        return array(
+            'success' => true,
+            'record' => $data
+        );
+    }
+    
+    protected function saveCurrentUser() {
+        Library_Config::getInstance()->testIssetAuser();
+        
+        $config = Library_Config::getInstance();
+        $user = $config->getUser();
+        
+        $pass = trim($this->getParam('pass'));
+        if ($pass)
+            $user->pass = $this->makeMdp($pass);
+        
+        $user->email = trim($this->getParam('email'));
+        $user->save();
+        
+        return array(
+            'success' => true
         );
     }
 

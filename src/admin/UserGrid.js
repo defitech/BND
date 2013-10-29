@@ -320,6 +320,7 @@ Library.admin.UserGrid = Ext.extend(Ext.grid.EditorGridPanel, {
                     {name: 'login'},
                     {name: 'pass'},
                     {name: 'right'},
+                    {name: 'email'},
                     {name: 'type_id'},
                     {name: 'type_text'}
                 ]
@@ -374,6 +375,14 @@ Library.admin.UserGrid = Ext.extend(Ext.grid.EditorGridPanel, {
                     })
                 },
                 {
+                    header : Library.wording.user_email,
+                    dataIndex : 'email',
+                    editor: new Ext.form.TextField({
+                        allowBlank: true,
+                        vtype: 'email'
+                    })
+                },
+                {
                     header : '&nbsp;',
                     dataIndex : 'type_text',
                     hidden: true,
@@ -410,6 +419,9 @@ Library.admin.UserGrid = Ext.extend(Ext.grid.EditorGridPanel, {
             filters: [{
                 type: 'string',
                 dataIndex: 'login'
+            }, {
+                type: 'string',
+                dataIndex: 'email'
             }]
         });
     },

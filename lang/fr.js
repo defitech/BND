@@ -69,13 +69,17 @@ Library.wording = {
     file_fieldset: 'Aperçu (miniature)',
     filepdf_fieldset: 'Livre (fichier PDF)',
 
+    button_profile: "Mon profil",
+    profile_ok: "Votre profil a été enregistré",
     connect_title: 'Connexion',
     connect_logout: 'Deconnexion',
     connect_login: 'Login',
     connect_password: 'Mot de passe',
+    connect_password_confirm: 'Répéter',
 
     user_right: 'Droit (1 = admin)',
     user_type: 'Type',
+    user_email: 'Email',
     user_title: 'Gestion des utilisateurs',
     user_button: 'Utilisateurs',
     user_button_dl: 'Voir les t\u00e9l\u00e9chargements',

@@ -28,6 +28,109 @@ Library.App = Ext.extend(Ext.Viewport, {
         });
         win.show();
     },
+    
+    showProfile: function() {
+        var pid = Ext.id();
+        var win = new Ext.Window({
+            modal: true,
+            width: 300,
+            height: 240,
+            title: Library.wording.button_profile,
+            border: false,
+            layout: 'fit',
+            items: {
+                xtype: 'form',
+                url: Library.Main.config().controller,
+                baseParams: {
+                    cmd: 'saveCurrentUser'
+                },
+                bodyStyle: 'padding: 10px;',
+                defaults: {
+                    anchor: '100%'
+                },
+                items: [{
+                    xtype: 'displayfield',
+                    readOnly: true,
+                    name: 'login',
+                    fieldLabel: Library.wording.connect_login
+                }, {
+                    xtype: 'textfield',
+                    fieldLabel: Library.wording.user_email,
+                    allowBlank: false,
+                    name: 'email',
+                    vtype: 'email'
+                }, {
+                    xtype: 'fieldset',
+                    title: Library.wording.connect_password,
+                    collapsible: true,
+                    collapsed: true,
+                    items: [{
+                        xtype: 'textfield',
+                        inputType: 'password',
+                        id: pid,
+                        fieldLabel: Library.wording.connect_password,
+                        name: 'pass'
+                    }, {
+                        xtype: 'textfield',
+                        inputType: 'password',
+                        initialPassField: pid,
+                        fieldLabel: Library.wording.connect_password_confirm,
+                        name: 'pass_confirm',
+                        vtype: 'password'
+                    }]
+                }]
+            },
+            buttons: [
+            {
+                text: Library.wording.info_book_save,
+                iconCls: 'book-save',
+                scale: 'medium',
+                handler: function() {
+                    if (!win.getComponent(0).getForm().isValid())
+                        return;
+                    
+                    win.getComponent(0).getForm().submit({
+                        success: function() {
+                            Ext.Msg.alert(Library.wording.button_profile, Library.wording.profile_ok, function(){
+                                win.close();
+                            });
+                        },
+                        failure: function(action, result) {
+                            Library.Main.failureForm(result.action)
+                        }
+                    });
+                }
+            },{
+                text: Library.wording.info_book_close,
+                iconCls: 'book-window-close',
+                scale: 'medium',
+                handler: function() {
+                    win.close();
+                }
+            }],
+            listeners: {
+                show: function() {
+                    Ext.Ajax.request({
+                        url: Library.Main.config().controller,
+                        params: {
+                            cmd: 'getUser'
+                        },
+                        success: function(response) {
+                            var json = Library.Main.getJson(response);
+                            if (!json.success)
+                                return;
+                            
+                            win.getComponent(0).getForm().setValues(json.record);
+                        },
+                        failure: function(response) {
+                            Library.Main.failure(response);
+                        }
+                    });
+                }
+            }
+        });
+        win.show();
+    },
 
     doBookSearch: function() {
         var search = this.searchbox.getValue();
@@ -85,6 +188,16 @@ Library.App = Ext.extend(Ext.Viewport, {
                 Library.Main.failure(response);
             }
         });
+    },
+    
+    initProfileButton: function() {
+        return {
+            text: Library.wording.button_profile,
+            iconCls: 'user-profile',
+            scale: 'medium',
+            scope: this,
+            handler: this.showProfile
+        };
     },
 
     initLoginButton: function() {
@@ -188,7 +301,10 @@ Library.App = Ext.extend(Ext.Viewport, {
             },{
                 region: 'south',
                 border: false,
-                buttons: [this.initLoginButton()]
+                buttons: [
+                    this.initProfileButton(),
+                    this.initLoginButton()
+                ]
             }]
         });
         Library.App.superclass.initComponent.apply(this, arguments);

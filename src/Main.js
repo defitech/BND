@@ -17,6 +17,20 @@ Ext.Ajax.on('requestexception', function(conn, response) {
     }
 });
 
+Ext.apply(Ext.form.VTypes, {
+    
+    passwordText: "Error",
+    
+    password: function(val, field) {
+        if (field.initialPassField) {
+            var pwd = Ext.getCmp(field.initialPassField);
+            var r = val === pwd.getValue();
+            return r;
+        }
+        return true;
+    }
+});
+
 Library.Main = {
 
     cfg: {
