@@ -109,7 +109,7 @@ class Library_User_Controller extends Library_Controller {
         $field = $this->getParam('field');
         $value = $this->getParam('value');
 
-        $row->$field = $field == 'pass' ? $this->makeMdp($value) : $value;
+        $row->$field = $field == 'pass' ? $this->makeMdp($value) : ($field == 'email' && !trim($value) ? null : $value);
         $row->save();
 
         return array(
