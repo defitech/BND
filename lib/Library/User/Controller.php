@@ -196,6 +196,41 @@ class Library_User_Controller extends Library_Controller {
         );
     }
     
+    protected function remindPassword() {
+        $config = Library_Config::getInstance();
+        $cmail = $config->getData()->mail;
+        $tr = new Zend_Mail_Transport_Smtp($cmail->name, $cmail->toArray());
+        
+        Zend_Mail::setDefaultTransport($tr);
+        Zend_Mail::setDefaultFrom($cmail->from);
+        Zend_Mail::setDefaultReplyTo($cmail->replyTo);
+    
+        $mail = new Zend_Mail('UTF-8');
+        $mail->addTo('info@defitech.ch');
+        $mail->setSubject(
+            'BND > Defitech > Récupération de mot de passe'
+        );
+        $mail->setBodyText("Bonjour, voici votre nouveau mot de passe temporaire: " . $this->generateRandomString());
+        $mail->send();
+                
+        Zend_Mail::clearDefaultTransport();
+        Zend_Mail::clearDefaultFrom();
+        Zend_Mail::clearDefaultReplyTo();
+        
+        return array(
+            'success' => true
+        );
+    }
+    
+    private function generateRandomString($length = 10) {
+        $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $randomString = '';
+        for ($i = 0; $i < $length; $i++) {
+            $randomString .= $characters[rand(0, strlen($characters) - 1)];
+        }
+        return $randomString;
+    }
+    
 
 
     /**
