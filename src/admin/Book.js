@@ -667,6 +667,7 @@ Library.admin.Book = Ext.extend(Library.Book, {
             }]
         }, {
             xtype: 'htmleditor',
+            name: 'notes',
             anchor: '95%',
             height: 120,
             fieldLabel: Library.wording.notes,
