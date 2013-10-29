@@ -197,16 +197,36 @@ class Library_User_Controller extends Library_Controller {
     }
     
     protected function remindPassword() {
+        // récupération du mail à qui on veut envoyer le mdp. On peut soit
+        // recevoir un mail, soit un login. On vérifie respectivement que
+        // le mail existe dans la base ou que le login a un mail associé.
+        $str = $this->getParam('askforpass');
+        $table = new Library_User();
+        $field = 'email';
+        if (strpos($str, '@') === false) {
+            // ce n'est pas un mail, on va chercher le login
+            $field = 'login';
+        }
+        $row = $table->fetchRow($table->select()->where($field . ' = ?', $str));
+        if (!$row || !$row->email) {
+            return array(
+                'success' => false,
+                'error' => "Personne n'a de login ou de mail ainsi que vous l'avez écrit"
+            );
+        }
+        
+        // création de la connexion au serveur de mail
         $config = Library_Config::getInstance();
         $cmail = $config->getData()->mail;
         $tr = new Zend_Mail_Transport_Smtp($cmail->name, $cmail->toArray());
         
+        // set des valeurs par défaut et envoi du mail
         Zend_Mail::setDefaultTransport($tr);
         Zend_Mail::setDefaultFrom($cmail->from);
         Zend_Mail::setDefaultReplyTo($cmail->replyTo);
     
         $mail = new Zend_Mail('UTF-8');
-        $mail->addTo('info@defitech.ch');
+        $mail->addTo($row->email);
         $mail->setSubject(
             'BND > Defitech > Récupération de mot de passe'
         );

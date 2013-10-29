@@ -72,7 +72,7 @@ class Library_Controller {
         } elseif ($default !== 'FjhOh83hoo3') {
             return $default;
         }
-        throw new Exception(sprintf(Library_Wording::get('param_doesnt_exists', $param)));
+        throw new Exception(sprintf(Library_Wording::get('param_doesnt_exists'), $param));
     }
 
     public function getParams() {

@@ -12,7 +12,7 @@ $dir = dirname(__FILE__) . '/';
 $instance = 'production';
 
 // on chope le config.ini qui contient toutes les infos de configuration
-$configFile = $dir . 'config/config_in_use.ini';
+$configFile = $dir . 'config/config.ini';
 $ini = parse_ini_file($configFile, true);
 if (isset($ini[$instance])) {
     // si une config pour l'instance existe, on la prend
