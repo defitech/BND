@@ -19,9 +19,10 @@ class Library_Controller {
     public static function output($params) {
         $controller = new self($params);
 
+        $logout_actions = array('login', 'remindPassword', 'checkNewPasswordAsk', 'changePassword');
         // Si la personne est déconnectée, on relance le processus de login en
         // envoyant depuis ici l'information "Unauthorized"
-        if ($controller->getParam('cmd') != 'login' && !Library_Config::getInstance()->issetAUser()) {
+        if (!in_array($controller->getParam('cmd'), $logout_actions) && !Library_Config::getInstance()->issetAUser()) {
             header('Content-type: application/json');
             header('HTTP/1.0 401 Unauthorized');
             exit;
@@ -77,6 +78,11 @@ class Library_Controller {
 
     public function getParams() {
         return $this->params;
+    }
+    
+    public function setParam($param, $value) {
+        $this->params[$param] = $value;
+        return $this;
     }
 
     public function action() {

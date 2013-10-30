@@ -13,6 +13,12 @@ $config = array(
     'background' => 'foretcanada'
 );
 
+// test récupération de mot de passe. Si on demande un mot de passe, on va
+// afficher la popup de récup
+$ctrl = Library_Controller::output(array_merge($_REQUEST, array(
+    'cmd' => 'checkNewPasswordAsk'
+)));
+
 ?>
 <html>
     <head>
@@ -38,11 +44,6 @@ $config = array(
         <script type="text/javascript" src="<?php echo $path; ?>../extjsux/plupload/js/plupload.full.min.js"></script>
         <script type="text/javascript" src="src/admin/FlashPdfButton.js"></script>
         
-        <!--
-        <script type="text/javascript" src="<?php echo $path; ?>../extjsux/FileUploader/swfupload.js"></script>
-        <script type="text/javascript" src="src/admin/FlashPdfButton.js"></script>
-        -->
-        
         <script type="text/javascript" src="<?php echo $path; ?>../extjsux/examples/ux/gridfilters/menu/ListMenu.js"></script>
         <script type="text/javascript" src="<?php echo $path; ?>../extjsux/examples/ux/gridfilters/menu/RangeMenu.js"></script>
         <script type="text/javascript" src="<?php echo $path; ?>../extjsux/examples/ux/gridfilters/GridFilters.js"></script>
@@ -54,7 +55,7 @@ $config = array(
         <script type="text/javascript" src="lang/fr.js"></script>
         <script type="text/javascript" src="src/Main.js"></script>
         <script type="text/javascript" src="src/login/Login.js"></script>
-        <?php /* si un utilisateur est connecté, on affiche l'appli */ if ($user) { ?>
+        <?php /* si un utilisateur est connecté, on affiche l'appli */ if ($user) : ?>
         <script type="text/javascript" src="index.js"></script>
         <script type="text/javascript" src="src/App.js"></script>
         <script type="text/javascript" src="src/Book.js"></script>
@@ -69,14 +70,24 @@ $config = array(
         <script type="text/javascript" src="src/admin/UserPanel.js"></script>
         <script type="text/javascript" src="src/admin/UserGrid.js"></script>
         <script type="text/javascript" src="src/admin/UserDownload.js"></script>
-        <?php /* si aucun utilisateur n'est connecté, on affiche le login */ } else { ?>
+        <?php /* on demande un nouveau password */ elseif ($ctrl['success']) : ?>
+        <script type="text/javascript" src="src/login/AskPass.js"></script>
+        <script type="text/javascript">
+        Ext.onReady(function(){
+            var win = new Library.login.AskPass({
+                data: <?= Zend_Json::encode($ctrl['data']); ?>
+            });
+            win.show();
+        });
+        </script>
+        <?php /* si aucun utilisateur n'est connecté, on affiche le login */  else : ?>
         <script type="text/javascript">
         Ext.onReady(function(){
             var win = new Library.login.Form();
             win.show();
         });
         </script>
-        <?php } ?>
+        <?php endif; ?>
         <!-- Envionment data -->
         <script type="text/javascript">
             Ext.BLANK_IMAGE_URL = '<?php echo $path; ?>resources/images/default/s.gif';

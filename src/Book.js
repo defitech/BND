@@ -30,7 +30,7 @@ Library.Book = Ext.extend(Ext.Window, {
             scope: this,
             disabled: !this.record || !this.data.filename,
             handler: function() {
-                this.fireEvent('bookdownload', this, this.record)
+                this.fireEvent('bookdownload', this, this.record);
             }
         };
     },
@@ -45,7 +45,7 @@ Library.Book = Ext.extend(Ext.Window, {
             name: 'id',
             fieldLabel: 'ID',
             value: this.data.id
-        }, config || {})
+        }, config || {});
     },
 
     initFieldTitle: function(config) {
@@ -54,7 +54,7 @@ Library.Book = Ext.extend(Ext.Window, {
             name: 'title',
             fieldLabel: Library.wording.title,
             value: this.data.title
-        }, config || {})
+        }, config || {});
     },
 
     initFieldIsbn: function(config) {
@@ -63,7 +63,7 @@ Library.Book = Ext.extend(Ext.Window, {
             name: 'isbn',
             fieldLabel: Library.wording.isbn,
             value: this.data.isbn
-        }, config || {})
+        }, config || {});
     },
 
     initFieldEditor: function(config) {
@@ -88,7 +88,7 @@ Library.Book = Ext.extend(Ext.Window, {
             }),
             hideTrigger: true,
             readOnly: true
-        }, config || {})
+        }, config || {});
     },
 
     initFieldType: function(config) {
@@ -113,7 +113,7 @@ Library.Book = Ext.extend(Ext.Window, {
             }),
             hideTrigger: true,
             readOnly: true
-        }, config || {})
+        }, config || {});
     },
 
     initFieldNiveaux: function(config, cniveau) {

@@ -81,6 +81,108 @@ Library.login.Form = Ext.extend(Ext.Window, {
             }
         }
     },
+    
+    /**
+     * Affiche la popup qui permet de demander le mot de passe si on l'a
+     * oublie
+     * 
+     * @return void
+     */
+    showForgetPass: function() {
+        var me = this;
+        var win = new Ext.Window({
+            title: Library.wording.user_password_lost,
+            modal: true,
+            width: 220,
+            height: 250,
+            border: false,
+            layout: 'fit',
+            items: {
+                xtype: 'form',
+                bodyStyle: 'padding: 10px;',
+                url: Library.Main.config().controller,
+                hideLabels: true,
+                waitMsgTarget: true,
+                baseParams: {
+                    cmd: 'remindPassword'
+                },
+                items: [{
+                    xtype: 'panel',
+                    border: false,
+                    cls: 'user-password-panel',
+                    bodyStyle: '10px 0;',
+                    html: Library.wording.user_password_lost_label
+                }, {
+                    xtype: 'textfield',
+                    name: 'askforpass',
+                    anchor: '100%',
+                    ref: '../passfield',
+                    emptyText: Library.wording.user_password_label,
+                    allowBlank: false,
+                    enableKeyEvents: true,
+                    listeners: {
+                        keyup: function(field, ev){
+                            if (ev.getKey() === ev.ENTER) {
+                                me.requestPassword(win);
+                            }
+                        }
+                    }
+                }]
+            },
+            buttons: [
+            {
+                text: "Valider",
+                iconCls: 'user-password-lost',
+                scale: 'medium',
+                handler: function() {
+                    me.requestPassword(win);
+                }
+            },{
+                text: Library.wording.info_book_close,
+                iconCls: 'book-window-close',
+                scale: 'medium',
+                handler: function() {
+                    win.close();
+                }
+            }],
+            listeners: {
+                afterrender: function(){
+                    (function(){win.passfield.focus();}).defer(300);
+                }
+            }
+        });
+        win.show();
+    },
+    
+    /**
+     * Check si le formulaire de mot de passe oublie est valide et envoie une
+     * requete au serveur pour creer la demande de nouveau mot de passe. Si
+     * tout se passe bien, un mail est automatiquement envoye via le PHP
+     * 
+     * @param {Ext.Window} win
+     * @return void
+     */
+    requestPassword: function(win) {
+        if (!win.getComponent(0).getForm().isValid())
+            return;
+
+        win.getComponent(0).getForm().submit({
+            waitMsg: Library.wording.loading,
+            success: function(form, action) {
+                Ext.Msg.alert(Library.wording.user_password_lost, action.result.msg, function(){
+                    win.close();
+                });
+            },
+            failure: function(action, action) {
+                Ext.Msg.show({
+                    title: Library.wording.user_password_lost,
+                    msg: action.result.error || action.result.msg || action.result.message,
+                    buttons: Ext.Msg.OK,
+                    icon: Ext.Msg.WARNING
+                });
+            }
+        });
+    },
 
     /**
      * Envoie la requete de verification de login/password. Si tout est ok
@@ -122,6 +224,8 @@ Library.login.Form = Ext.extend(Ext.Window, {
      * Fonction definie pour les champs login/password, gerant la touche ENTER
      * pour envoyer le formulaire
      *
+     * @param {Ext.form.Field} field
+     * @param {Ext.Event} ev
      * @return void
      */
     onKeyUp: function(field, ev) {
@@ -189,6 +293,12 @@ Library.login.Form = Ext.extend(Ext.Window, {
             layout: 'fit',
             items: this.initForm(),
             buttons: [{
+                text: Library.wording.user_password_lost,
+                scale: 'medium',
+                iconCls: 'user-password-lost',
+                scope: this,
+                handler: this.showForgetPass
+            },{
                 text: Library.wording.connect_title,
                 scale: 'medium',
                 iconCls: 'book-connect',
@@ -200,7 +310,7 @@ Library.login.Form = Ext.extend(Ext.Window, {
             closable: false,
             resizable: false,
             onEsc: Ext.emptyFn
-        })
+        });
         Library.login.Form.superclass.initComponent.call(this);
 
         this.on({
@@ -209,7 +319,7 @@ Library.login.Form = Ext.extend(Ext.Window, {
                 var login = this.login;
                 (function(){login.focus();}).defer(300);
             }}
-        })
+        });
     }
 
 });

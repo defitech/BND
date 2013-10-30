@@ -71,7 +71,7 @@ Library.Main = {
             });
             return {
                 success: false
-            }
+            };
         }
     },
 
@@ -148,7 +148,7 @@ if (typeof Ext.form.Action.Submit != 'undefined') {
                 return Ext.decode(response.responseText);
             } catch (e) {
                 var msg = response.responseText + '<br/>Javascript: ' + e.toString();
-                return {success: false, error: msg}
+                return {success: false, error: msg};
             }
         }
     });

@@ -69,6 +69,7 @@ Library.wording = {
     file_fieldset: 'Aperçu (miniature)',
     filepdf_fieldset: 'Livre (fichier PDF)',
 
+    button_validate: "Valider",
     button_profile: "Mon profil",
     profile_ok: "Votre profil a été enregistré",
     connect_title: 'Connexion',
@@ -101,6 +102,14 @@ Library.wording = {
     user_id_book: 'ID du livre',
     
     user_books_exportcsv: 'Statistiques de t\u00e9l\u00e9chargement pour chaque livre',
+    
+    user_password_lost: "Mot de passe oubli\u00e9",
+    user_password_label: "- - - Login ou mail - - -",
+    user_password_lost_label: "Pour r\u00e9cup\u00e9rer votre mot de passe, inscrivez ci-dessous soit votre <strong>email</strong>, " 
+        + "soit votre <strong>nom d'utilisateur BDN (login)</strong>. Si vous ne disposez d'aucun email, merci de prendre "
+        + "contact avec Defitech.<br/><br/>",
+    user_password_renew: "Bonjour {0}, vous avez demand\u00e9 \u00e0 changer votre mot de passe. Veuillez ci-dessous en choisir un "
+        + "nouveau.<br/><br/>",
 
     info_book_button: 'Informations',
     info_book_close: 'Fermer',
@@ -124,7 +133,8 @@ Library.wording = {
     delete_book_button: 'Supprimer',
     delete_book_title: 'Suppression',
     delete_book: 'Supprimer les livres s\u00e9lectionn\u00e9s?',
-    delete_book_confirmmany: 'Un ou plusieurs de ces livres ont d\u00e9j\u00e0 \u00e9t\u00e9 t\u00e9l\u00e9charg\u00e9s au moins une fois. Supprimer quand m\u00eame?',
+    delete_book_confirmmany: 'Un ou plusieurs de ces livres ont d\u00e9j\u00e0 \u00e9t\u00e9 t\u00e9l\u00e9charg\u00e9s au '
+        + 'moins une fois. Supprimer quand m\u00eame?',
     delete_book_confirmone: 'Ce livre a d\u00e9j\u00e0 \u00e9t\u00e9 t\u00e9l\u00e9charg\u00e9 au moins une fois. Supprimer quand m\u00eame?',
 
     error_title: 'Erreur serveur',

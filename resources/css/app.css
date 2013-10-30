@@ -10,6 +10,10 @@ body.book-background-montagnes {
     background-image: url('../background/montagnes.jpg') !important;
 }
 
+.user-password-lost {
+    background-image: url('../images/passlost.png') !important;
+}
+
 .book-conditions .x-panel-body, .book-help .x-panel-body {
     padding: 20px;
 }
@@ -231,6 +235,13 @@ body.book-background-montagnes {
 
 .x-grid3-cell-inner {
     white-space: normal;
+}
+
+.user-password-panel strong {
+    font-weight: bold;
+}
+.user-password-panel {
+    text-align: justify;
 }
 
 

@@ -39,7 +39,12 @@ class Fr {
         'field_editor' => 'Editeur',
         'field_niveau' => 'Niveaux',
         'field_title' => 'Titre',
-        'field_isbn' => 'N° ISBN'
+        'field_isbn' => 'N° ISBN',
+        
+        'mail_subject' => "BND > Defitech > Récupération de mot de passe",
+        'mail_content' => "Bonjour,\n\nVous avez demander un nouveau mot de passe. Rendez-vous à l'adresse suivante: %s \n\nSi vous n'avez pas demandé un nouveau mot de passe, ignorez simplement cet email. Merci de ne pas y répondre.\n\n Fondaton defitech\n%s",
+        'mail_sent' => "Un mail vous a été envoyé. Suivez-en les instructions pour changer votre mot de passe",
+        'mail_error' => "Personne n'a de login ou de mail ainsi que vous l'avez écrit"
 
     );
 

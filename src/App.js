@@ -96,7 +96,7 @@ Library.App = Ext.extend(Ext.Viewport, {
                             });
                         },
                         failure: function(action, result) {
-                            Library.Main.failureForm(result.action)
+                            Library.Main.failureForm(result.action);
                         }
                     });
                 }

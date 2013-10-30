@@ -208,47 +208,127 @@ class Library_User_Controller extends Library_Controller {
             $field = 'login';
         }
         $row = $table->fetchRow($table->select()->where($field . ' = ?', $str));
-        if (!$row || !$row->email) {
+        if (!$row || !$row->email)
             return array(
                 'success' => false,
-                'error' => "Personne n'a de login ou de mail ainsi que vous l'avez écrit"
+                'error' => Library_Wording::get('mail_error')
             );
-        }
+        
+        $config = Library_Config::getInstance();
+        
+        // génération du hash qui sera le lien de récupération du mdp
+        $hash = hash('sha256', sprintf('u:%s;s:%s;d:%s', $row->id, $config->getData()->password->hashSalt, date('Ymd-His')));
+        $href = substr($_SERVER['REQUEST_URI'], 0, strpos($_SERVER['REQUEST_URI'], '/lib'));
+        $link = 'http://' . $_SERVER['HTTP_HOST'] . $href . '/?' . $config->getData()->password->getParamName . '=' . $hash;
+        
+        // enregistrement du hash dans la BD
+        $htable = new Library_User_PassHash();
+        $htable->addHashForUser($row->id, $hash);
         
         // création de la connexion au serveur de mail
-        $config = Library_Config::getInstance();
         $cmail = $config->getData()->mail;
-        $tr = new Zend_Mail_Transport_Smtp($cmail->name, $cmail->toArray());
-        
-        // set des valeurs par défaut et envoi du mail
-        Zend_Mail::setDefaultTransport($tr);
-        Zend_Mail::setDefaultFrom($cmail->from);
-        Zend_Mail::setDefaultReplyTo($cmail->replyTo);
-    
-        $mail = new Zend_Mail('UTF-8');
-        $mail->addTo($row->email);
-        $mail->setSubject(
-            'BND > Defitech > Récupération de mot de passe'
-        );
-        $mail->setBodyText("Bonjour, voici votre nouveau mot de passe temporaire: " . $this->generateRandomString());
-        $mail->send();
+        if ($cmail->active) {
+            $tr = new Zend_Mail_Transport_Smtp($cmail->name, $cmail->toArray());
+
+            $mail = new Zend_Mail('UTF-8');
+            $mail
+                ->setFrom($cmail->from)
+                ->setReplyTo($cmail->replyTo)
+                ->addTo($row->email)
+                ->setSubject(Library_Wording::get("mail_subject"))
+                ->setBodyText(sprintf(Library_Wording::get('mail_content'), $link, date('d.m.Y, H:i')));
+
+            $mail->send($tr);
+        }
                 
-        Zend_Mail::clearDefaultTransport();
-        Zend_Mail::clearDefaultFrom();
-        Zend_Mail::clearDefaultReplyTo();
-        
         return array(
-            'success' => true
+            'success' => true,
+            'msg' => Library_Wording::get('mail_sent')
         );
     }
     
-    private function generateRandomString($length = 10) {
-        $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-        $randomString = '';
-        for ($i = 0; $i < $length; $i++) {
-            $randomString .= $characters[rand(0, strlen($characters) - 1)];
-        }
-        return $randomString;
+    /**
+     * Détermine s'il y a une demande pour créer un nouveau mot de passe. Cette
+     * méthode de contrôleur est appelée uniquement dans l'index.php. Si elle
+     * retourne true, l'index va charger les javascripts pour demander le
+     * nouveau mot de passe. Autrement, il ne se passera rien de spécial.
+     * 
+     * @return array
+     */
+    protected function checkNewPasswordAsk() {
+        $pass_param = Library_Config::getInstance()->getData()->password->getParamName;
+        if (!$this->getParam($pass_param, false))
+            return array(
+                'success' => false
+            );
+        
+        $table = new Library_User_PassHash();
+        $row = $table->fetchRow($table->select()->where('hashcode = ?', $this->getParam($pass_param)));
+        if (!$row)
+            return array(
+                'success' => false
+            );
+        
+        $utable = new Library_User();
+        $user = $utable->fetchRow($utable->select()->where('id = ?', $row->user_id));
+        if (!$user)
+            return array(
+                'success' => false
+            );
+        
+        return array(
+            'success' => true,
+            'data' => array(
+                'id' => $row->user_id,
+                'login' => $user->login,
+                'hash' => $row->hashcode
+            )
+        );
+    }
+    
+    /**¨
+     * Change le password après la demande d'un hash et loggue automatiquement
+     * la personne au système
+     * 
+     * @return array
+     */
+    protected function changePassword() {
+        $pass1 = $this->getParam('pass');
+        $pass2 = $this->getParam('pass_confirm');
+        
+        if ($pass1 != $pass2)
+            return array(
+                'success' => false,
+                'error' => "Mot de passe mal réinséré"
+            );
+        
+        $htable = new Library_User_PassHash();
+        $hrow = $htable->exists($this->getParam('user'), $this->getParam('hash'));
+        if (!$hrow)
+            return array(
+                'success' => false,
+                'error' => "Le changement de mot de passe a échoué. Merci de refaire une demande."
+            );
+        
+        $utable = new Library_User();
+        $user = $utable->fetchRow($utable->select()->where('id = ?', $this->getParam('user')));
+        if (!$user)
+            return array(
+                'success' => false,
+                'error' => "Le changement de mot de passe a échoué. Merci de refaire une demande."
+            );
+        
+        $user->pass = $this->makeMdp($pass1);
+        $user->save();
+        
+        // suppression du tuple du hash
+        $htable->delete($htable->getAdapter()->quoteInto('id = ?', $hrow->id));
+        
+        // login automatique
+        return $this
+            ->setParam('login', $user->login)
+            ->setParam('pass', $pass1)
+            ->login();
     }
     
 
