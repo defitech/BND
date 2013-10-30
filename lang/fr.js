@@ -77,6 +77,7 @@ Library.wording = {
     connect_login: 'Login',
     connect_password: 'Mot de passe',
     connect_password_confirm: 'Répéter',
+    connect_password_old: 'Passe actuel',
 
     user_right: 'Droit (1 = admin)',
     user_type: 'Type',

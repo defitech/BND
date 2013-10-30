@@ -28,6 +28,20 @@ Library.login.AskPass = Ext.extend(Ext.Window, {
     },
 
     /**
+     * Fonction definie pour les champs login/password, gerant la touche ENTER
+     * pour envoyer le formulaire
+     *
+     * @param {Ext.form.Field} field
+     * @param {Ext.Event} ev
+     * @return void
+     */
+    onKeyUp: function(field, ev) {
+        if (ev.getKey() === ev.ENTER) {
+            this.changePassAndLogin();
+        }
+    },
+
+    /**
      * Recupere le formulaire de la window
      *
      * @return Ext.form.FormPanel
@@ -63,14 +77,22 @@ Library.login.AskPass = Ext.extend(Ext.Window, {
                 id: pid,
                 fieldLabel: Library.wording.connect_password,
                 name: 'pass',
-                ref: '../pass'
+                ref: '../pass',
+                enableKeyEvents: true,
+                listeners: {
+                    keyup: {scope: this, fn: this.onKeyUp}
+                }
             }, {
                 xtype: 'textfield',
                 inputType: 'password',
                 initialPassField: pid,
                 fieldLabel: Library.wording.connect_password_confirm,
                 name: 'pass_confirm',
-                vtype: 'password'
+                vtype: 'password',
+                enableKeyEvents: true,
+                listeners: {
+                    keyup: {scope: this, fn: this.onKeyUp}
+                }
             }]
         };
     },

@@ -34,7 +34,7 @@ Library.App = Ext.extend(Ext.Viewport, {
         var win = new Ext.Window({
             modal: true,
             width: 300,
-            height: 240,
+            height: 260,
             title: Library.wording.button_profile,
             border: false,
             layout: 'fit',
@@ -67,6 +67,11 @@ Library.App = Ext.extend(Ext.Viewport, {
                     items: [{
                         xtype: 'textfield',
                         inputType: 'password',
+                        fieldLabel: Library.wording.connect_password_old,
+                        name: 'pass_old'
+                    },{
+                        xtype: 'textfield',
+                        inputType: 'password',
                         id: pid,
                         fieldLabel: Library.wording.connect_password,
                         name: 'pass'
@@ -95,8 +100,8 @@ Library.App = Ext.extend(Ext.Viewport, {
                                 win.close();
                             });
                         },
-                        failure: function(action, result) {
-                            Library.Main.failureForm(result.action);
+                        failure: function(action, action) {
+                            Library.Main.failureForm(action.result);
                         }
                     });
                 }

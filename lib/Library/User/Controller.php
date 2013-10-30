@@ -11,7 +11,7 @@ class Library_User_Controller extends Library_Controller {
 
 
     protected function login() {
-        $pass = md5($this->getParam('pass'));
+        $pass = $this->makeMdp($this->getParam('pass'));
         $user = new Library_User();
         $result = $user->fetchRow($user->select()
             ->where('login = ?', $this->getParam('login'))
@@ -145,8 +145,23 @@ class Library_User_Controller extends Library_Controller {
         $user = $config->getUser();
         
         $pass = trim($this->getParam('pass'));
-        if ($pass)
+        if ($pass && $pass == $this->getParam('pass_confirm')) {
+            // check si la personne a bien inséré son bon mot de passe actuel
+            $utable = new Library_User();
+            $check = $utable->fetchRow($utable->select()->where('id = ?', $user->id)->where('pass = ?', $this->makeMdp($this->getParam('pass_old'))));
+            if (!$check) {
+                return array(
+                    'success' => false,
+                    'error' => Library_Wording::get('old_pass_wrong')
+                );
+            }
+            
             $user->pass = $this->makeMdp($pass);
+            $user->save();
+            
+            $session = new Zend_Session_Namespace('Library');
+            $session->pass = $user->pass;
+        }
         
         $user->email = trim($this->getParam('email'));
         $user->save();
@@ -211,7 +226,7 @@ class Library_User_Controller extends Library_Controller {
         if (!$row || !$row->email)
             return array(
                 'success' => false,
-                'error' => Library_Wording::get('mail_error')
+                'error' => !$row ? Library_Wording::get('mail_error') : Library_Wording::get('mail_nomail')
             );
         
         $config = Library_Config::getInstance();
