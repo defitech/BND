@@ -43,8 +43,10 @@ class Fr {
         'field_isbn' => 'N° ISBN',
         
         'mail_subject' => "BND > Defitech > Récupération de mot de passe",
-        'mail_content' => "Bonjour,\n\nVous avez demander un nouveau mot de passe. Rendez-vous à l'adresse suivante: %s \n\nSi vous n'avez pas demandé un nouveau mot de passe, ignorez simplement cet email. Merci de ne pas y répondre.\n\n Fondaton defitech\n%s",
+        'mail_content' => "Bonjour,\n\nVous avez demander un nouveau mot de passe. Rendez-vous à l'adresse suivante: %s \nVotre login est le suivant: %s\n\nSi vous n'avez pas demandé un nouveau mot de passe, ignorez simplement cet email. Merci de ne pas y répondre.\n\n Fondaton defitech\n%s",
+        'mail_content_create' => "Bonjour,\n\nUn compte est disponible pour vous dans la BND. Nous vous proposons de vous rendre à l'adresse ci-dessous pour choisir votre mot de passe.\n\nVotre login: %s\nAdresse: %s \n\nMerci de ne pas répondre à cet email.\n\n Fondaton defitech\n%s",
         'mail_sent' => "Un mail vous a été envoyé. Suivez-en les instructions pour changer votre mot de passe",
+        'mail_sent_create' => "Le mail a bien été envoyé.",
         'mail_error' => "Personne n'a de login ou de mail ainsi que vous l'avez écrit",
         'mail_nomail' => "Votre compte existe mais n'a pas d'email associé. Vous ne pourrez pas recevoir de notification. Veuillez contacter defitech."
 

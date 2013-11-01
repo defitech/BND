@@ -1,6 +1,8 @@
 <?php
 
 class Library_User_Controller extends Library_Controller {
+    
+    const MAIL_MSG_CREATE_PASSWORD = 1;
 
 
     /**
@@ -157,13 +159,12 @@ class Library_User_Controller extends Library_Controller {
             }
             
             $user->pass = $this->makeMdp($pass);
-            $user->save();
             
             $session = new Zend_Session_Namespace('Library');
             $session->pass = $user->pass;
         }
         
-        $user->email = trim($this->getParam('email'));
+        $user->email = trim($this->getParam('email')) ? $this->getParam('email') : null;
         $user->save();
         
         return array(
@@ -184,7 +185,7 @@ class Library_User_Controller extends Library_Controller {
         }
 
         if (!$this->getParam('forceConfirm', false)) {
-            // check si plusieurs livres on l'élément
+            // check si plusieurs livres ont été téléchargé par le user
             $table = new Library_User_Download();
             $rowset = $table->fetchAll($table
                 ->select()
@@ -211,6 +212,31 @@ class Library_User_Controller extends Library_Controller {
         );
     }
     
+    /**
+     * Méthode appelée depuis l'administration des users. Permet d'envoyer un
+     * mail de création de mot de passe à n'importe quel compte. Le message du
+     * mail aura comme contenu qqch qui parle de créer son mot de passe.
+     * 
+     * @return array
+     */
+    protected function remindPasswordCreate() {
+        $ctrl = $this
+            ->setParam('type', self::MAIL_MSG_CREATE_PASSWORD)
+            ->remindPassword();
+
+        if ($ctrl['success']) {
+            $ctrl['msg'] = Library_Wording::get('mail_sent_create');
+        }
+        return $ctrl;
+    }
+    
+    /**
+     * Méthode appelée au login si on a oublié son mot de passe. Le message
+     * du mail envoyé parlera du fait qu'on a oublié son mot de passe et qu'on
+     * peut du coup le changer
+     * 
+     * @return array
+     */
     protected function remindPassword() {
         // récupération du mail à qui on veut envoyer le mdp. On peut soit
         // recevoir un mail, soit un login. On vérifie respectivement que
@@ -244,6 +270,14 @@ class Library_User_Controller extends Library_Controller {
         $cmail = $config->getData()->mail;
         if ($cmail->active) {
             $tr = new Zend_Mail_Transport_Smtp($cmail->name, $cmail->toArray());
+            
+            switch ($this->getParam('type', null)) {
+                case self::MAIL_MSG_CREATE_PASSWORD:
+                    $msg = sprintf(Library_Wording::get('mail_content_createpass'), $link, $row->login, date('d.m.Y, H:i'));
+                    break;
+                default:
+                    $msg = sprintf(Library_Wording::get('mail_content'), $link, $row->login, date('d.m.Y, H:i'));
+            }
 
             $mail = new Zend_Mail('UTF-8');
             $mail
@@ -251,7 +285,7 @@ class Library_User_Controller extends Library_Controller {
                 ->setReplyTo($cmail->replyTo)
                 ->addTo($row->email)
                 ->setSubject(Library_Wording::get("mail_subject"))
-                ->setBodyText(sprintf(Library_Wording::get('mail_content'), $link, date('d.m.Y, H:i')));
+                ->setBodyText($msg);
 
             $mail->send($tr);
         }
@@ -340,10 +374,11 @@ class Library_User_Controller extends Library_Controller {
         $htable->delete($htable->getAdapter()->quoteInto('id = ?', $hrow->id));
         
         // login automatique
-        return $this
-            ->setParam('login', $user->login)
-            ->setParam('pass', $pass1)
-            ->login();
+        $session = new Zend_Session_Namespace('Library');
+        $session->pass = $user->pass;
+        return array(
+            'success' => true
+        );
     }
     
 

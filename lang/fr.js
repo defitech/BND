@@ -19,7 +19,10 @@ Library.wording = {
     file: 'Fichier',
     right: 'Restrictions de droits',
     right_users: 'Ayants-droit',
-    right_description: "Vous pouvez ici limiter les droits d'affichage du livre. Si rien n'est coch\u00e9, il sera visible pour tout le monde. Dès que l'un des utilisateurs est s\u00e9lectionn\u00e9, le livre ne s'affichera plus que pour les admins (niveaux de droits 1 et 2) et l'utilisateur (ou les utilisateurs) en question.",
+    right_description: "Vous pouvez ici limiter les droits d'affichage du livre. Si rien "
+        + "n'est coch\u00e9, il sera visible pour tout le monde. D\u00e8s que l'un des utilisateurs "
+        + "est s\u00e9lectionn\u00e9, le livre ne s'affichera plus que pour les admins (niveaux de droits "
+        + "1 et 2) et l'utilisateur (ou les utilisateurs) en question.",
     notes: "Commentaires",
 
     filter_undo: 'Annuler les filtres',
@@ -71,12 +74,12 @@ Library.wording = {
 
     button_validate: "Valider",
     button_profile: "Mon profil",
-    profile_ok: "Votre profil a été enregistré",
+    profile_ok: "Votre profil a \u00e9t\u00e9 enregistr\u00e9",
     connect_title: 'Connexion',
-    connect_logout: 'Deconnexion',
+    connect_logout: 'D\u00e9connexion',
     connect_login: 'Login',
     connect_password: 'Mot de passe',
-    connect_password_confirm: 'Répéter',
+    connect_password_confirm: 'R\u00e9p\u00e9ter',
     connect_password_old: 'Passe actuel',
 
     user_right: 'Droit (1 = admin)',
@@ -104,6 +107,10 @@ Library.wording = {
     
     user_books_exportcsv: 'Statistiques de t\u00e9l\u00e9chargement pour chaque livre',
     
+    user_passsend: "Envoi de mot de passe",
+    user_passsend_msg: "Voulez-vous vraiment envoyer une demande de mot de passe \u00e0 [ {0} ] dont l'adresse est {1}?",
+    user_passsend_tip: "Envoyer une demande de mot de passe \u00e0 l'adresse {0}",
+    user_passsend_tip_no: "Impossible d'envoyer une demande de mot de passe. Aucune adresse email trouv\u00e9e",
     user_password_lost: "Mot de passe oubli\u00e9",
     user_password_label: "- - - Login ou mail - - -",
     user_password_lost_label: "Pour r\u00e9cup\u00e9rer votre mot de passe, inscrivez ci-dessous soit votre <strong>email</strong>, " 
@@ -136,7 +143,8 @@ Library.wording = {
     delete_book: 'Supprimer les livres s\u00e9lectionn\u00e9s?',
     delete_book_confirmmany: 'Un ou plusieurs de ces livres ont d\u00e9j\u00e0 \u00e9t\u00e9 t\u00e9l\u00e9charg\u00e9s au '
         + 'moins une fois. Supprimer quand m\u00eame?',
-    delete_book_confirmone: 'Ce livre a d\u00e9j\u00e0 \u00e9t\u00e9 t\u00e9l\u00e9charg\u00e9 au moins une fois. Supprimer quand m\u00eame?',
+    delete_book_confirmone: 'Ce livre a d\u00e9j\u00e0 \u00e9t\u00e9 t\u00e9l\u00e9charg\u00e9 ' +
+        + 'au moins une fois. Supprimer quand m\u00eame?',
 
     error_title: 'Erreur serveur',
     loading: 'Chargement...',
@@ -145,14 +153,19 @@ Library.wording = {
 
     search_for_new_books: "V\u00e9rifier s'il y a de nouveaux livres PDF",
     search_for_new_books_title: 'Nouveaux livres PDF',
-    search_for_new_books_confirm: "Voulez-vous importer les PDFs pr\u00e9sents dans le dossier temporaire (s'il y en a) vers l'application?",
+    search_for_new_books_confirm: "Voulez-vous importer les PDFs pr\u00e9sents dans le dossier "
+        + "temporaire (s'il y en a) vers l'application?",
     book_moved: '{0} fichiers trait\u00e9s sur {1}',
     book_moved_first: 'Traitement du 1er fichier',
-    book_moved_finish: "<strong>{0}</strong> PDFs ont \u00e9t\u00e9 ajout\u00e9. Vous pourrez les retrouver en cherchant <strong>new</strong> dans la barre de filtre principale. N'oubliez pas d'enlever ce mot-cl\u00e9 une fois le livre \u00e9dit\u00e9 correctement!",
-    book_import_csv_error: "Si une erreur serveur survient, il faut r\u00e9importer le fichier. Les doublons seront ignor\u00e9s et l'importation pourra continuer gentiment.",
+    book_moved_finish: "<strong>{0}</strong> PDFs ont \u00e9t\u00e9 ajout\u00e9. Vous pourrez les "
+        + "retrouver en cherchant <strong>new</strong> dans la barre de filtre principale. N'oubliez "
+        + "pas d'enlever ce mot-cl\u00e9 une fois le livre \u00e9dit\u00e9 correctement!",
+    book_import_csv_error: "Si une erreur serveur survient, il faut r\u00e9importer le fichier. Les "
+        + "doublons seront ignor\u00e9s et l'importation pourra continuer gentiment.",
 
     admin_redim_and_mini: "Redimensionner et recr\u00e9er tous les thumbs",
-    admin_redim_and_mini_finished: "{0} images ont \u00e9t\u00e9 redimendionn\u00e9es. S'il y a eu des erreurs, elles seront list\u00e9es ci-dessous.",
+    admin_redim_and_mini_finished: "{0} images ont \u00e9t\u00e9 redimendionn\u00e9es. S'il y a eu des " 
+        + "erreurs, elles seront list\u00e9es ci-dessous.",
     admin_move_to_good_folder: "D\u00e9placer les PDFs dans les bons sous-dossiers",
     admin_move_to_good_folder_finished: "Les PDFs ont \u00e9t\u00e9 d\u00e9plac\u00e9s avec succ\u00e8s."
 

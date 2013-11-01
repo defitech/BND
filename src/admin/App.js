@@ -496,16 +496,6 @@ Library.admin.App = Ext.extend(Library.App, {
                     }
                 }]
             }
-        }, {
-            text: 'Test mail',
-            handler: function() {
-                Ext.Ajax.request({
-                    url: Library.Main.config().controller,
-                    params: {
-                        cmd: 'remindPassword'
-                    }
-                });
-            }
         },'-']);
     },
 

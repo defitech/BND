@@ -210,6 +210,16 @@ body.book-background-montagnes {
     background-image: url('../images/star.png') !important;
 }
 
+.book-user-sendpass {
+    background-image: url('../images/passlostsmall.png') !important;
+    height: 16px;
+}
+
+.book-user-sendpass-off {
+    background-image: url('../images/passlostsmall-off.png') !important;
+    height: 16px;
+}
+
 .book-new-check-true {
     color: #009900 !important;
 }

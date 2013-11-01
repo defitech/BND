@@ -51,7 +51,7 @@ Library.Main = {
     right: function(right) {
         // on check si le droit vaut quelque chose (!=null ou 0) et qu'il est
         // plus petit ou egal au droit de l'utilisateur connecte (1=admin)
-        return Library.Main.config().rid && Library.Main.config().rid <= right;
+        return Library.Main.config().rid * 1 && Library.Main.config().rid <= right;
     },
 
     getJson: function(response) {

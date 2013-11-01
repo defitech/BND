@@ -3,6 +3,43 @@ Ext.ns('Library.admin');
 Library.admin.UserGrid = Ext.extend(Ext.grid.EditorGridPanel, {
     
     /**
+     * Envoie par mail une proposition de changer son mot de passe à l'adresse
+     * configurée dans le record
+     * 
+     * @param {Ext.data.Record} record
+     * @return void
+     */
+    sendPasswordDemand: function(record) {
+        if (!record.get('email'))
+            return;
+        
+        var msg = String.format(Library.wording.user_passsend_msg, record.get('login'), record.get('email'));
+        var box = Ext.Msg.wait(Library.wording.loading);
+        Ext.Msg.confirm(Library.wording.user_passsend, msg, function(choice){
+            if (choice != 'yes')
+                return;
+            
+            Ext.Ajax.request({
+                url: Library.Main.config().controller,
+                scope: this,
+                params: {
+                    cmd: 'remindPasswordCreate',
+                    askforpass: record.get('email')
+                },
+                success: function(response) {
+                    box.hide();
+                    var json = Library.Main.getJson(response);
+                    Ext.Msg.alert('ok', json.msg || json.error);
+                },
+                failure: function(response) {
+                    box.hide();
+                    Library.Main.failure(response);
+                }
+            });
+        }, this);
+    },
+    
+    /**
      * Envoie au serveur l'information d'ajout ou de suppression d'un type
      * d'utilisateur
      * 
@@ -194,10 +231,6 @@ Library.admin.UserGrid = Ext.extend(Ext.grid.EditorGridPanel, {
         return win;
     },
     
-    
-    
-    
-
     addUser: function() {
         var User = this.getStore().recordType;
         var u = new User({
@@ -360,6 +393,7 @@ Library.admin.UserGrid = Ext.extend(Ext.grid.EditorGridPanel, {
                 {
                     header : Library.wording.connect_password,
                     dataIndex : 'pass',
+                    hidden: true,
                     editor: new Ext.form.TextField({
                         allowBlank: false,
                         inputType: 'password'
@@ -409,6 +443,29 @@ Library.admin.UserGrid = Ext.extend(Ext.grid.EditorGridPanel, {
                         var r = combo.getStore().getAt(index);
                         return r ? r.get('value') : '';
                     }
+                },
+                {
+                    xtype: 'actioncolumn',
+                    width: 22,
+                    height: 22,
+                    sortable: false,
+                    hideable: false,
+                    items: [{
+                        getClass: function(v, meta, record) {
+                            var cls = 'book-user-sendpass';
+                            var tip = String.format(Library.wording.user_passsend_tip, record.get('email'));
+                            if (!record.get('email')) {
+                                cls += '-off';
+                                tip = Library.wording.user_passsend_tip_no;
+                            }
+                            this.items[0].tooltip = tip;
+                            return cls;
+                        },
+                        handler: function(grid, row, col) {
+                            var record = grid.getStore().getAt(row);
+                            me.sendPasswordDemand(record);
+                        }
+                    }]
                 }
             ]
         });

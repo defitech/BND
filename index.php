@@ -42,8 +42,6 @@ $ctrl = Library_Controller::output(array_merge($_REQUEST, array(
         <script type="text/javascript" src="<?php echo $path; ?>../extjsux/src/locale/ext-lang-fr.js"></script>
         <!-- Plugin JS Ext -->
         <script type="text/javascript" src="<?php echo $path; ?>../extjsux/plupload/js/plupload.full.min.js"></script>
-        <script type="text/javascript" src="src/admin/FlashPdfButton.js"></script>
-        
         <script type="text/javascript" src="<?php echo $path; ?>../extjsux/examples/ux/gridfilters/menu/ListMenu.js"></script>
         <script type="text/javascript" src="<?php echo $path; ?>../extjsux/examples/ux/gridfilters/menu/RangeMenu.js"></script>
         <script type="text/javascript" src="<?php echo $path; ?>../extjsux/examples/ux/gridfilters/GridFilters.js"></script>
@@ -52,6 +50,7 @@ $ctrl = Library_Controller::output(array_merge($_REQUEST, array(
         <script type="text/javascript" src="<?php echo $path; ?>../extjsux/examples/ux/gridfilters/filter/NumericFilter.js"></script>
         <script type="text/javascript" src="<?php echo $path; ?>../extjsux/examples/ux/gridfilters/filter/ListFilter.js"></script>
         <!-- Base JS App -->
+        <script type="text/javascript" src="src/admin/FlashPdfButton.js"></script>
         <script type="text/javascript" src="lang/fr.js"></script>
         <script type="text/javascript" src="src/Main.js"></script>
         <script type="text/javascript" src="src/login/Login.js"></script>
@@ -88,7 +87,7 @@ $ctrl = Library_Controller::output(array_merge($_REQUEST, array(
         });
         </script>
         <?php endif; ?>
-        <!-- Envionment data -->
+        <!-- Environment data -->
         <script type="text/javascript">
             Ext.BLANK_IMAGE_URL = '<?php echo $path; ?>resources/images/default/s.gif';
             Library.Main.addConfig(<?php echo Zend_Json::encode($config); ?>);
