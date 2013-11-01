@@ -14,24 +14,25 @@ Library.admin.UserGrid = Ext.extend(Ext.grid.EditorGridPanel, {
             return;
         
         var msg = String.format(Library.wording.user_passsend_msg, record.get('login'), record.get('email'));
-        // on cree une fenetre d'attente. Normalement, on utilise Ext.Msg.wait()
-        // mais la, y'a rien a faire...
-        var box = new Ext.Window({
-            modal: true,
-            title: Library.wording.user_passsend,
-            height: 70,
-            width: 210,
-            closable: false,
-            plain: true,
-            border: false,
-            cls: 'window-wait-debug',
-            onEsc: Ext.emptyFn,
-            html: Library.wording.user_passsend_wait
-        });
-        box.show();
         Ext.Msg.confirm(Library.wording.user_passsend, msg, function(choice){
             if (choice !== 'yes')
                 return;
+            
+            // on cree une fenetre d'attente. Normalement, on utilise Ext.Msg.wait()
+            // mais la, y'a rien a faire...
+            var box = new Ext.Window({
+                modal: true,
+                title: Library.wording.user_passsend,
+                height: 70,
+                width: 210,
+                closable: false,
+                plain: true,
+                border: false,
+                cls: 'window-wait-debug',
+                onEsc: Ext.emptyFn,
+                html: Library.wording.user_passsend_wait
+            });
+            box.show();
             
             Ext.Ajax.request({
                 url: Library.Main.config().controller,
