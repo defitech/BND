@@ -40,6 +40,7 @@ Library.App = Ext.extend(Ext.Viewport, {
             layout: 'fit',
             items: {
                 xtype: 'form',
+                waitMsgTarget: true,
                 url: Library.Main.config().controller,
                 baseParams: {
                     cmd: 'saveCurrentUser'
@@ -95,6 +96,7 @@ Library.App = Ext.extend(Ext.Viewport, {
                         return;
                     
                     win.getComponent(0).getForm().submit({
+                        waitMsg: Library.wording.loading,
                         success: function() {
                             Ext.Msg.alert(Library.wording.button_profile, Library.wording.profile_ok, function(){
                                 win.close();
