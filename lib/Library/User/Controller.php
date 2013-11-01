@@ -273,7 +273,7 @@ class Library_User_Controller extends Library_Controller {
             
             switch ($this->getParam('type', null)) {
                 case self::MAIL_MSG_CREATE_PASSWORD:
-                    $msg = sprintf(Library_Wording::get('mail_content_createpass'), $link, $row->login, date('d.m.Y, H:i'));
+                    $msg = sprintf(Library_Wording::get('mail_content_create'), $row->login, $link, date('d.m.Y, H:i'));
                     break;
                 default:
                     $msg = sprintf(Library_Wording::get('mail_content'), $link, $row->login, date('d.m.Y, H:i'));

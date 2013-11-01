@@ -14,7 +14,7 @@ Library.admin.UserGrid = Ext.extend(Ext.grid.EditorGridPanel, {
             return;
         
         var msg = String.format(Library.wording.user_passsend_msg, record.get('login'), record.get('email'));
-        var box = Ext.Msg.wait(Library.wording.loading);
+        var box = Ext.Msg.wait();
         Ext.Msg.confirm(Library.wording.user_passsend, msg, function(choice){
             if (choice != 'yes')
                 return;
@@ -29,7 +29,7 @@ Library.admin.UserGrid = Ext.extend(Ext.grid.EditorGridPanel, {
                 success: function(response) {
                     box.hide();
                     var json = Library.Main.getJson(response);
-                    Ext.Msg.alert('ok', json.msg || json.error);
+                    Ext.Msg.alert(Library.wording.user_passsend, json.msg || json.error);
                 },
                 failure: function(response) {
                     box.hide();
