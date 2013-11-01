@@ -215,6 +215,10 @@ body.book-background-montagnes {
     height: 16px;
 }
 
+.window-wait-debug .x-window-body {
+    text-align: center;
+}
+
 .book-user-sendpass-off {
     background-image: url('../images/passlostsmall-off.png') !important;
     height: 16px;

@@ -374,11 +374,10 @@ class Library_User_Controller extends Library_Controller {
         $htable->delete($htable->getAdapter()->quoteInto('id = ?', $hrow->id));
         
         // login automatique
-        $session = new Zend_Session_Namespace('Library');
-        $session->pass = $user->pass;
-        return array(
-            'success' => true
-        );
+        return $this
+            ->setParam('login', $user->login)
+            ->setParam('pass', $pass1)
+            ->login();
     }
     
 

@@ -108,6 +108,7 @@ Library.wording = {
     user_books_exportcsv: 'Statistiques de t\u00e9l\u00e9chargement pour chaque livre',
     
     user_passsend: "Envoi de mot de passe",
+    user_passsend_wait: "Veuillez patienter que le serveur de mail fasse son job, merci...",
     user_passsend_msg: "Voulez-vous vraiment envoyer une demande de mot de passe \u00e0 [ {0} ] dont l'adresse est {1}?",
     user_passsend_tip: "Envoyer une demande de mot de passe \u00e0 l'adresse {0}",
     user_passsend_tip_no: "Impossible d'envoyer une demande de mot de passe. Aucune adresse email trouv\u00e9e",
