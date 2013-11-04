@@ -409,7 +409,6 @@ Library.admin.UserGrid = Ext.extend(Ext.grid.EditorGridPanel, {
                 {
                     header : Library.wording.connect_password,
                     dataIndex : 'pass',
-                    hidden: true,
                     editor: new Ext.form.TextField({
                         allowBlank: false,
                         inputType: 'password'
@@ -418,6 +417,7 @@ Library.admin.UserGrid = Ext.extend(Ext.grid.EditorGridPanel, {
                 {
                     header : Library.wording.user_right,
                     dataIndex : 'right',
+                    hidden: true,
                     editor: new Ext.form.NumberField({
                         allowBlank: false,
                         allowNegative: false,

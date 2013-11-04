@@ -68,6 +68,17 @@ class Library_Config {
     public function getRoot() {
         return $this->root;
     }
+    
+    /**
+     * Retourne le chemin web complet jusqu'à la racine, genre:
+     * http://localhost/sousDossier/bnd/
+     * 
+     * @return string le chemin web avec un / à la fin
+     */
+    public function getWeb() {
+        $host = 'http://' . $_SERVER['HTTP_HOST'];
+        return $host . substr($_SERVER['REQUEST_URI'], 0, strpos($_SERVER['REQUEST_URI'], '/lib')) . '/';
+    }
 
     /**
      * Check si un user est connecté

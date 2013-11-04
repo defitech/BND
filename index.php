@@ -24,31 +24,31 @@ $ctrl = Library_Controller::output(array_merge($_REQUEST, array(
     <head>
         <title>Library BND</title>
         <meta http-equiv="content-language" content="fr" />
-        <meta name="description" content="Bilbiothèque numérique Download (BND)" />
+        <meta name="description" content="Bibliothèque numérique Download (BND)" />
         <meta name="Author" content="Allez-savoir" />
         <meta name="Copyright" content="Allez-savoir" />
         <meta name="Publisher" content="Allez-savoir" />
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <link rel="shortcut icon" type="image/png" href="resources/images/favicon.png" />
         <!-- CSS Ext -->
-        <link rel="stylesheet" type="text/css" href="<?php echo $path; ?>resources/css/ext-all.css" />
-        <link rel="stylesheet" type="text/css" href="<?php echo $path; ?>../extjsux/extjsplupload/ext.ux.plupload.css" />
-        <link rel="stylesheet" type="text/css" href="<?php echo $path; ?>../extjsux/examples/ux/gridfilters/css/GridFilters.css" />
+        <link rel="stylesheet" type="text/css" href="<?= $path; ?>resources/css/ext-all.css" />
+        <link rel="stylesheet" type="text/css" href="<?= $path; ?>../extjsux/extjsplupload/ext.ux.plupload.css" />
+        <link rel="stylesheet" type="text/css" href="<?= $path; ?>../extjsux/examples/ux/gridfilters/css/GridFilters.css" />
         <!-- CSS app -->
         <link rel="stylesheet" type="text/css" href="resources/css/app.css" />
         <!-- Base JS Ext -->
-        <script type="text/javascript" src="<?php echo $path; ?>adapter/ext/ext-base.js"></script>
-        <script type="text/javascript" src="<?php echo $path; ?>ext-all.js"></script>
-        <script type="text/javascript" src="<?php echo $path; ?>../extjsux/src/locale/ext-lang-fr.js"></script>
+        <script type="text/javascript" src="<?= $path; ?>adapter/ext/ext-base.js"></script>
+        <script type="text/javascript" src="<?= $path; ?>ext-all.js"></script>
+        <script type="text/javascript" src="<?= $path; ?>../extjsux/src/locale/ext-lang-fr.js"></script>
         <!-- Plugin JS Ext -->
-        <script type="text/javascript" src="<?php echo $path; ?>../extjsux/plupload/js/plupload.full.min.js"></script>
-        <script type="text/javascript" src="<?php echo $path; ?>../extjsux/examples/ux/gridfilters/menu/ListMenu.js"></script>
-        <script type="text/javascript" src="<?php echo $path; ?>../extjsux/examples/ux/gridfilters/menu/RangeMenu.js"></script>
-        <script type="text/javascript" src="<?php echo $path; ?>../extjsux/examples/ux/gridfilters/GridFilters.js"></script>
-        <script type="text/javascript" src="<?php echo $path; ?>../extjsux/examples/ux/gridfilters/filter/Filter.js"></script>
-        <script type="text/javascript" src="<?php echo $path; ?>../extjsux/examples/ux/gridfilters/filter/StringFilter.js"></script>
-        <script type="text/javascript" src="<?php echo $path; ?>../extjsux/examples/ux/gridfilters/filter/NumericFilter.js"></script>
-        <script type="text/javascript" src="<?php echo $path; ?>../extjsux/examples/ux/gridfilters/filter/ListFilter.js"></script>
+        <script type="text/javascript" src="<?= $path; ?>../extjsux/plupload/js/plupload.full.min.js"></script>
+        <script type="text/javascript" src="<?= $path; ?>../extjsux/examples/ux/gridfilters/menu/ListMenu.js"></script>
+        <script type="text/javascript" src="<?= $path; ?>../extjsux/examples/ux/gridfilters/menu/RangeMenu.js"></script>
+        <script type="text/javascript" src="<?= $path; ?>../extjsux/examples/ux/gridfilters/GridFilters.js"></script>
+        <script type="text/javascript" src="<?= $path; ?>../extjsux/examples/ux/gridfilters/filter/Filter.js"></script>
+        <script type="text/javascript" src="<?= $path; ?>../extjsux/examples/ux/gridfilters/filter/StringFilter.js"></script>
+        <script type="text/javascript" src="<?= $path; ?>../extjsux/examples/ux/gridfilters/filter/NumericFilter.js"></script>
+        <script type="text/javascript" src="<?= $path; ?>../extjsux/examples/ux/gridfilters/filter/ListFilter.js"></script>
         <!-- Base JS App -->
         <script type="text/javascript" src="src/admin/FlashPdfButton.js"></script>
         <script type="text/javascript" src="lang/fr.js"></script>
@@ -89,9 +89,9 @@ $ctrl = Library_Controller::output(array_merge($_REQUEST, array(
         <?php endif; ?>
         <!-- Environment data -->
         <script type="text/javascript">
-            Ext.BLANK_IMAGE_URL = '<?php echo $path; ?>resources/images/default/s.gif';
-            Library.Main.addConfig(<?php echo Zend_Json::encode($config); ?>);
+            Ext.BLANK_IMAGE_URL = '<?= $path; ?>resources/images/default/s.gif';
+            Library.Main.addConfig(<?= Zend_Json::encode($config); ?>);
         </script>
     </head>
-    <body class="book-background book-background-<?php echo $config['background']; ?>"></body>
+    <body class="book-background book-background-<?= $config['background']; ?>"></body>
 </html>

@@ -259,9 +259,7 @@ class Library_User_Controller extends Library_Controller {
         
         // génération du hash qui sera le lien de récupération du mdp
         $hash = hash('sha256', sprintf('u:%s;s:%s;d:%s', $row->id, $config->getData()->password->hashSalt, date('Ymd-His')));
-        $href = substr($_SERVER['REQUEST_URI'], 0, strpos($_SERVER['REQUEST_URI'], '/lib'));
-        $link = 'http://' . $_SERVER['HTTP_HOST'] . $href . '/?' . $config->getData()->password->getParamName . '=' . $hash;
-        
+
         // enregistrement du hash dans la BD
         $htable = new Library_User_PassHash();
         $htable->addHashForUser($row->id, $hash);
@@ -269,6 +267,7 @@ class Library_User_Controller extends Library_Controller {
         // création de la connexion au serveur de mail
         $cmail = $config->getData()->mail;
         if ($cmail->active) {
+            $link = $config->getWeb() . '?' . $config->getData()->password->getParamName . '=' . $hash;
             $tr = new Zend_Mail_Transport_Smtp($cmail->name, $cmail->toArray());
             
             switch ($this->getParam('type', null)) {

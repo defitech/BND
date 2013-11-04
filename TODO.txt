@@ -5,7 +5,7 @@ dernière màj le 06.11.2013
 Installer ImageMagick, pour avoir la fonction convert (pour extraire la 1ère
 image d'un PDF) et GhostScript. Pour faire simple, installer Xcode puis MacPorts
 et faire:
-$ sudo port install ImageMagick +gs
+$ sudo port install ImageMagick
 
 
 Dans la configuration APACHE (en local pour le dev), ajouter les lignes

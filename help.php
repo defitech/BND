@@ -16,17 +16,17 @@ if (Library_User::right(2)) {
 </ol>
 <br/>
 <h1>Visualisation des logs</h1>
-<p>Un fichier de logs mensuel est généré dans <strong><?php echo $config->getData()->path->log; ?></strong>.
+<p>Un fichier de logs mensuel est généré dans <strong><?= $config->getData()->path->log; ?></strong>.
 Ils sont nommés <em>logs_YYYY-MM.txt</em> et contiennent des informations de debug, notamment sur la génération des thumbs.</p>
 <br/>
 <?php
     } // Fin If user->right == 1
 ?>
-<h1>Ajout d'un PDF plus lourd que <?php echo $config->getMaxPostSize(); ?></h1>
+<h1>Ajout d'un PDF plus lourd que <?= $config->getMaxPostSize(); ?></h1>
 <ul>
-    <li>Se connecter au FTP de <em><?php echo $_SERVER['HTTP_HOST']; ?></em></li>
+    <li>Se connecter au FTP de <em><?= $_SERVER['HTTP_HOST']; ?></em></li>
     <li>
-        Transférer le(s) PDF dans le dossier temporaire du dossier contenant tous les livres, soit <strong><?php echo Library_Book::getTmpPdfPath(true); ?></strong>
+        Transférer le(s) PDF dans le dossier temporaire du dossier contenant tous les livres, soit <strong><?= Library_Book::getTmpPdfPath(true); ?></strong>
         <p><em>Note: l'extension <strong>.pdf</strong> doit être en <strong>minuscule</strong> pour que le fichier soit reconnu.</em></p>
     </li>
     <li>Se connecter à l'interface BND</li>
@@ -40,9 +40,9 @@ le mot-clé <strong>new</strong> dans la barre de filtre.</p>
 <br/>
 <h1>Importation via CSV</h1>
 <ul>
-    <li>Se connecter au FTP de <em><?php echo $_SERVER['HTTP_HOST']; ?></em></li>
+    <li>Se connecter au FTP de <em><?= $_SERVER['HTTP_HOST']; ?></em></li>
     <li>Transférer les PDF dans leur dossier correspondant, soit quelque part dans l'arborescence
-    <strong><?php echo $config->getData()->path->pdf; ?></strong></li>
+    <strong><?= $config->getData()->path->pdf; ?></strong></li>
 </ul>
 <ul>
     <li>
@@ -82,7 +82,7 @@ dont la génération de la miniature pose problème. Il sera alors facile de ret
 <br/>
 <h1>Emplacement des images</h1>
 <p>Pour chaque PDF se crée, normalement, une image et une mini image. Celles-ci sont
-    sauvegardées dans le dossier <strong><?php echo Library_Book::getThumbPath(true); ?></strong>.</p>
+    sauvegardées dans le dossier <strong><?= Library_Book::getThumbPath(true); ?></strong>.</p>
 <br/>
 <h1>FAQ</h1>
 <ul>
