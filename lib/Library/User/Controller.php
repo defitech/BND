@@ -3,7 +3,7 @@
 class Library_User_Controller extends Library_Controller {
     
     const MAIL_MSG_CREATE_PASSWORD = 1;
-
+    
 
     /**
      * --------------------------------------------------------------
@@ -220,12 +220,25 @@ class Library_User_Controller extends Library_Controller {
      * @return array
      */
     protected function remindPasswordCreate() {
-        $ctrl = $this
-            ->setParam('type', self::MAIL_MSG_CREATE_PASSWORD)
-            ->remindPassword();
+        Library_Config::getInstance()->testIssetAuser(2);
+        if (!$this->getParam('holdmail', false)) {
+            $ctrl = $this
+                ->setParam('type', self::MAIL_MSG_CREATE_PASSWORD)
+                ->remindPassword();
 
-        if ($ctrl['success']) {
-            $ctrl['msg'] = Library_Wording::get('mail_sent_create');
+            if ($ctrl['success']) {
+                $ctrl['msg'] = Library_Wording::get('mail_sent_create');
+            }
+        }
+        else {
+            $data = $this->getUserAndHash();
+            if (!$data['success'])
+                return $data;
+
+            $ctrl = array(
+                'success' => true,
+                'msg' => sprintf(Library_Wording::get('mail_notsent_butlink'), $data['user']->login, $this->getHashLink($data['hash']))
+            );
         }
         return $ctrl;
     }
@@ -238,6 +251,51 @@ class Library_User_Controller extends Library_Controller {
      * @return array
      */
     protected function remindPassword() {
+        $data = $this->getUserAndHash();
+        if (!$data['success'])
+            return $data;
+        
+        $row = $data['user'];
+        $hash = $data['hash'];
+        
+        // création de la connexion au serveur de mail
+        $config = Library_Config::getInstance();
+        $cmail = $config->getData()->mail;
+        if ($cmail->active) {
+            $link = $this->getHashLink($hash);
+            $tr = new Zend_Mail_Transport_Smtp($cmail->name, $cmail->toArray());
+            
+            switch ($this->getParam('type', null)) {
+                case self::MAIL_MSG_CREATE_PASSWORD:
+                    $msg = sprintf(Library_Wording::get('mail_content_create'), $row->login, $link, date('d.m.Y, H:i'));
+                    break;
+                default:
+                    $msg = sprintf(Library_Wording::get('mail_content'), $link, $row->login, date('d.m.Y, H:i'));
+            }
+
+            $mail = new Zend_Mail('UTF-8');
+            $mail
+                ->setFrom($cmail->from)
+                ->setReplyTo($cmail->replyTo)
+                ->addTo($row->email)
+                ->setSubject(Library_Wording::get("mail_subject"))
+                ->setBodyText($msg);
+
+            $mail->send($tr);
+        }
+                
+        return array(
+            'success' => true,
+            'msg' => Library_Wording::get('mail_sent')
+        );
+    }
+    
+    private function getHashLink($hash) {
+        $config = Library_Config::getInstance();
+        return $config->getWeb() . '?' . $config->getData()->password->getParamName . '=' . $hash;
+    }
+    
+    private function getUserAndHash() {
         // récupération du mail à qui on veut envoyer le mdp. On peut soit
         // recevoir un mail, soit un login. On vérifie respectivement que
         // le mail existe dans la base ou que le login a un mail associé.
@@ -264,34 +322,10 @@ class Library_User_Controller extends Library_Controller {
         $htable = new Library_User_PassHash();
         $htable->addHashForUser($row->id, $hash);
         
-        // création de la connexion au serveur de mail
-        $cmail = $config->getData()->mail;
-        if ($cmail->active) {
-            $link = $config->getWeb() . '?' . $config->getData()->password->getParamName . '=' . $hash;
-            $tr = new Zend_Mail_Transport_Smtp($cmail->name, $cmail->toArray());
-            
-            switch ($this->getParam('type', null)) {
-                case self::MAIL_MSG_CREATE_PASSWORD:
-                    $msg = sprintf(Library_Wording::get('mail_content_create'), $row->login, $link, date('d.m.Y, H:i'));
-                    break;
-                default:
-                    $msg = sprintf(Library_Wording::get('mail_content'), $link, $row->login, date('d.m.Y, H:i'));
-            }
-
-            $mail = new Zend_Mail('UTF-8');
-            $mail
-                ->setFrom($cmail->from)
-                ->setReplyTo($cmail->replyTo)
-                ->addTo($row->email)
-                ->setSubject(Library_Wording::get("mail_subject"))
-                ->setBodyText($msg);
-
-            $mail->send($tr);
-        }
-                
         return array(
             'success' => true,
-            'msg' => Library_Wording::get('mail_sent')
+            'user' => $row,
+            'hash' => $hash
         );
     }
     

@@ -14,45 +14,59 @@ Library.admin.UserGrid = Ext.extend(Ext.grid.EditorGridPanel, {
             return;
         
         var msg = String.format(Library.wording.user_passsend_msg, record.get('login'), record.get('email'));
-        Ext.Msg.confirm(Library.wording.user_passsend, msg, function(choice){
-            if (choice !== 'yes')
-                return;
-            
-            // on cree une fenetre d'attente. Normalement, on utilise Ext.Msg.wait()
-            // mais la, y'a rien a faire...
-            var box = new Ext.Window({
-                modal: true,
-                title: Library.wording.user_passsend,
-                height: 70,
-                width: 210,
-                closable: false,
-                plain: true,
-                border: false,
-                cls: 'window-wait-debug',
-                onEsc: Ext.emptyFn,
-                html: Library.wording.user_passsend_wait
-            });
-            box.show();
-            
-            Ext.Ajax.request({
-                url: Library.Main.config().controller,
-                scope: this,
-                params: {
-                    cmd: 'remindPasswordCreate',
-                    askforpass: record.get('email')
-                },
-                success: function(response) {
-                    box.close();
-                    var json = Library.Main.getJson(response);
-                    if (json.success)
-                        Ext.Msg.alert(Library.wording.user_passsend, json.msg);
-                },
-                failure: function(response) {
-                    box.close();
-                    Library.Main.failure(response);
-                }
-            });
-        }, this);
+        var buttonText = Ext.apply({}, Ext.Msg.buttonText);
+        Ext.Msg.buttonText.yes = Library.wording.user_passsend_btn_mail;
+        Ext.Msg.buttonText.no = Library.wording.user_passsend_btn_link;
+        Ext.Msg.show({
+            title : Library.wording.user_passsend,
+            msg : msg,
+            buttons: Ext.Msg.YESNOCANCEL,
+            scope : this,
+            icon: Ext.Msg.QUESTION,
+            fn: function(choice) {
+                Ext.Msg.buttonText = buttonText;
+                if (choice === 'cancel')
+                    return;
+
+                var holdmail = choice === 'no';
+                // on cree une fenetre d'attente. Normalement, on utilise Ext.Msg.wait()
+                // mais la, y'a rien a faire...
+                var box = new Ext.Window({
+                    modal: true,
+                    title: Library.wording.user_passsend,
+                    height: 70,
+                    width: 210,
+                    closable: false,
+                    plain: true,
+                    border: false,
+                    cls: 'window-wait-debug',
+                    onEsc: Ext.emptyFn,
+                    html: Library.wording.user_passsend_wait
+                });
+                box.show();
+
+                Ext.Ajax.request({
+                    url: Library.Main.config().controller,
+                    scope: this,
+                    params: {
+                        cmd: 'remindPasswordCreate',
+                        askforpass: record.get('email'),
+                        holdmail: holdmail ? 1 : 0
+                    },
+                    success: function(response) {
+                        box.close();
+                        var json = Library.Main.getJson(response);
+                        if (json.success) {
+                            Ext.Msg.alert(Library.wording.user_passsend, json.msg);
+                        }
+                    },
+                    failure: function(response) {
+                        box.close();
+                        Library.Main.failure(response);
+                    }
+                });
+            }
+        });
     },
     
     /**

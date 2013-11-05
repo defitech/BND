@@ -47,6 +47,7 @@ class Fr {
         'mail_content_create' => "Bonjour,\n\nUn compte est disponible pour vous dans la BND. Nous vous proposons de vous rendre à l'adresse ci-dessous pour choisir votre mot de passe.\n\nVotre login: %s\nAdresse: %s \n\nMerci de ne pas répondre à cet email.\n\n Fondaton defitech\n%s",
         'mail_sent' => "Un mail vous a été envoyé. Suivez-en les instructions pour changer votre mot de passe",
         'mail_sent_create' => "Le mail a bien été envoyé.",
+        'mail_notsent_butlink' => "Voici le lien généré pour %s:<br/>%s",
         'mail_error' => "Personne n'a de login ou de mail ainsi que vous l'avez écrit",
         'mail_nomail' => "Votre compte existe mais n'a pas d'email associé. Vous ne pourrez pas recevoir de notification. Veuillez contacter defitech."
 
