@@ -37,6 +37,7 @@ Library.Main = {
         nb: 25,
         controller: 'lib/controller.php',
         upload: 'lib/upload.php',
+        bg: 'resources/background/',
         image: 'lib/image.php?i={0}&t={1}'
     },
 
@@ -46,12 +47,20 @@ Library.Main = {
 
     addConfig: function(obj) {
         Ext.apply(Library.Main.cfg, obj);
+        // si on a un background sette, on le place dans le body
+        if (obj.background) {
+            Library.Main.setBackground(obj.background);
+        }
     },
 
     right: function(right) {
         // on check si le droit vaut quelque chose (!=null ou 0) et qu'il est
         // plus petit ou egal au droit de l'utilisateur connecte (1=admin)
         return Library.Main.config().rid * 1 && Library.Main.config().rid <= right;
+    },
+            
+    setBackground: function(file) {
+        Ext.getBody().setStyle('backgroundImage', 'url(' + Library.Main.config().bg + file + ')');
     },
 
     getJson: function(response) {

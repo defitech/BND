@@ -4,13 +4,14 @@ include_once 'config.php';
 
 $path = Library_Config::getInstance()->getData()->path->extjs;
 $user = Library_Config::getInstance()->getUser();
+$bg = Library_Config::getInstance()->getBackground();
 
 $config = array(
     'sid' => session_id(),
     'cid' => $user ? $user->id : 0,
     'rid' => $user ? $user->right : 0,
     'libspath' => $path . '../',
-    'background' => 'foretcanada'
+    'background' => $bg
 );
 
 // test récupération de mot de passe. Si on demande un mot de passe, on va
@@ -69,6 +70,7 @@ $ctrl = Library_Controller::output(array_merge($_REQUEST, array(
         <script type="text/javascript" src="src/admin/UserPanel.js"></script>
         <script type="text/javascript" src="src/admin/UserGrid.js"></script>
         <script type="text/javascript" src="src/admin/UserDownload.js"></script>
+        <script type="text/javascript" src="src/admin/BackgroundWindow.js"></script>
         <?php /* on demande un nouveau password */ elseif ($ctrl['success']) : ?>
         <script type="text/javascript" src="src/login/AskPass.js"></script>
         <script type="text/javascript">
@@ -93,5 +95,5 @@ $ctrl = Library_Controller::output(array_merge($_REQUEST, array(
             Library.Main.addConfig(<?= Zend_Json::encode($config); ?>);
         </script>
     </head>
-    <body class="book-background book-background-<?= $config['background']; ?>"></body>
+    <body class="book-background"></body>
 </html>

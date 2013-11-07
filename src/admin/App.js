@@ -498,6 +498,23 @@ Library.admin.App = Ext.extend(Library.App, {
             }
         },'-']);
     },
+    
+    initSouthButtons: function() {
+        return [
+            {
+                text: 'Fond d ecran',
+                scale: 'medium',
+                iconCls: '',
+                scope: this,
+                handler: function() {
+                    var win = new Library.admin.BackgroundWindow();
+                    win.show();
+                }
+            },
+            this.initProfileButton(),
+            this.initLoginButton()
+        ];
+    },
 
     initComponent: function() {
         this.bookgridxtype = 'bookgridadmin';

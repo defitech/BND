@@ -145,6 +145,15 @@ class Library_Config {
         $conf = '500mb';
         return $conf;
     }
+    
+    /**
+     * Retourne le fond d'écran choisi pour l'application
+     * 
+     * @return string le nom du fichier (avec ext.) dans resources/background/
+     */
+    public function getBackground() {
+        return @file_get_contents($this->getRoot() . 'config/background.txt');
+    }
 
 
 

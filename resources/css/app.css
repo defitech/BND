@@ -2,7 +2,7 @@ body.book-background {
     background: transparent top left no-repeat;
 }
 
-body.book-background-foretcanada {
+body.book-background-foretcanada2 {
     background-image: url('../background/foretcanada.jpg') !important;
 }
 
@@ -275,4 +275,24 @@ body.book-background-montagnes {
 .uploadButton {
     padding-top: 5px;
     cursor: pointer;
+}
+
+
+.backgrounds .thumb-wrap{
+    float: left;
+    text-align: center;
+    padding: 6px;
+}
+
+.backgrounds .x-view-over{
+    padding: 0px;
+    border: 6px solid #eef;
+    background-color: #efefef;
+}
+
+.backgrounds .x-view-selected{
+    padding: 0px;
+    border: 6px solid #fc0;
+    background-color: #eff5fb;
+    color: #960;
 }

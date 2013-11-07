@@ -154,4 +154,109 @@ class Library_Controller {
 
 
 
+
+    /**
+     * --------------------------------------------------------------
+     *              Méthodes relatives à l'application
+     * --------------------------------------------------------------
+     */
+
+    protected function getBackgrounds() {
+        $config = Library_Config::getInstance();
+        $path = $config->getRoot() . 'resources/background/';
+        $path_thumbs = $path . 'thumbs/';
+        $dir = dir($path);
+        $extensions = array('jpg', 'jpeg');
+        
+        $items = array();
+        while (false !== ($entry = $dir->read())) {
+            if ($entry == '.' || $entry == '..' || is_dir($path . $entry))
+                continue;
+            
+            $ext = Library_Util::getExtension($entry);
+            if (!in_array($ext, $extensions))
+                continue;
+            
+            if (!file_exists($path_thumbs . $entry)) {
+                $im = @imagecreatefromjpeg($path . $entry);
+                list($width, $height) = getimagesize($path . $entry);
+                $mini_width = 210;
+                $mini_height = 118;
+                $tn = imagecreatetruecolor($mini_width, $mini_height);
+                imagecopyresampled($tn, $im, 0, 0, 0, 0, $mini_width, $mini_height, $width, $height);
+                if (!is_dir($path_thumbs)) {
+                    mkdir($path_thumbs, 0777);
+                }
+                imagejpeg($tn, $path_thumbs . $entry, 70);
+                imageDestroy($tn);
+            }
+            $items[] = array(
+                'bg' => $entry,
+                'thumb' =>  'resources/background/thumbs/'. $entry
+            );
+        }
+        $dir->close();
+        
+        return array(
+            'success' => true,
+            'totalCount' => count($items),
+            'items' => $items
+        );
+    }
+    
+    protected function changeBackground() {
+        $bg = $this->getParam('bg');
+        $config = Library_Config::getInstance();
+        if (!trim($bg) || !file_exists($config->getRoot() . 'resources/background/' . $bg))
+            return array(
+                'success' => false,
+                'error' => sprintf("Le fond d'écran [%s] n'existe pas!", $bg)
+            );
+        
+        if (!@file_put_contents($config->getRoot() . 'config/background.txt', $bg)) {
+            $e = error_get_last();
+            return array(
+                'success' => false,
+                'error' => $e['message']
+            );
+        }
+        return array(
+            'success' => true
+        );
+    }
+    
+    public function addBackground() {
+        $file = $_FILES['bgfile'];
+        if ($file['error'] != UPLOAD_ERR_OK)
+            return array(
+                'success' => false,
+                'error' => "Un problème a eu lieu pendant l'upload du fond d'écran"
+            );
+        
+        $config = Library_Config::getInstance();
+        $path = $config->getRoot() . 'resources/background/';
+        $name = Library_Util::getSlug(substr($file['name'], 0, strrpos($file['name'], '.')));
+        $extensions = array('jpeg', 'jpg');
+        $ext = Library_Util::getExtension($file['name']);
+        $name .= '.' . $ext;
+        if (!in_array($ext, $extensions))
+            return array(
+                'success' => false,
+                'error' => sprintf("Seul le format JPG est accepté. Le format %s a été donné.", $ext)
+            );
+        
+        if (!move_uploaded_file($file['tmp_name'], $path . $name)) {
+            return array(
+                'success' => false,
+                'error' => "Impossible de déplacer le fond d'écran sur le serveur"
+            );
+        }
+        
+        return array(
+            'success' => true,
+            'name' => $name
+        );
+    }
+
+
 }

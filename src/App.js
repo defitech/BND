@@ -216,6 +216,13 @@ Library.App = Ext.extend(Ext.Viewport, {
             handler: this.logout
         };
     },
+            
+    initSouthButtons: function() {
+        return [
+            this.initProfileButton(),
+            this.initLoginButton()
+        ];
+    },
 
     initComponent: function() {
         Ext.apply(this, {
@@ -308,10 +315,7 @@ Library.App = Ext.extend(Ext.Viewport, {
             },{
                 region: 'south',
                 border: false,
-                buttons: [
-                    this.initProfileButton(),
-                    this.initLoginButton()
-                ]
+                buttons: this.initSouthButtons()
             }]
         });
         Library.App.superclass.initComponent.apply(this, arguments);
