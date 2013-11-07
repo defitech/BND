@@ -105,7 +105,7 @@ class Library_User_DownloadController extends Library_Controller {
                 $row['bid'],
                 '"'. str_replace('"', "'", $row['btitle']) .'"',
                 '"'. str_replace('"', "'", $editor) .'"',
-                isset($types[$row['tid']]) ? $types[$row['tid']] : 'Aucun',
+                isset($types[$row['tid']]) ? '"'. str_replace('"', "'", $types[$row['tid']]) .'"' : 'Aucun',
                 $row['nb']
             );
         }
