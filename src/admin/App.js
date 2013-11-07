@@ -502,9 +502,9 @@ Library.admin.App = Ext.extend(Library.App, {
     initSouthButtons: function() {
         return [
             {
-                text: 'Fond d ecran',
+                text: Library.wording.bg_title,
                 scale: 'medium',
-                iconCls: '',
+                iconCls: 'background-cls',
                 scope: this,
                 handler: function() {
                     var win = new Library.admin.BackgroundWindow();

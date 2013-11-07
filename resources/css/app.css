@@ -278,6 +278,10 @@ body.book-background-montagnes {
 }
 
 
+.background-cls {
+    background-image: url('../images/background.png') !important;
+}
+
 .backgrounds .thumb-wrap{
     float: left;
     text-align: center;

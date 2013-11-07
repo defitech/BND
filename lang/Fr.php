@@ -49,8 +49,12 @@ class Fr {
         'mail_sent_create' => "Le mail a bien été envoyé.",
         'mail_notsent_butlink' => "Voici le lien généré pour %s:<br/>%s",
         'mail_error' => "Personne n'a de login ou de mail ainsi que vous l'avez écrit",
-        'mail_nomail' => "Votre compte existe mais n'a pas d'email associé. Vous ne pourrez pas recevoir de notification. Veuillez contacter defitech."
+        'mail_nomail' => "Votre compte existe mais n'a pas d'email associé. Vous ne pourrez pas recevoir de notification. Veuillez contacter defitech.",
 
+        'bg_error_upload' => "Un problème a eu lieu pendant l'upload du fond d'écran",
+        'bg_error_extension' => "Seul le format JPG est accepté. Le format %s a été donné.",
+        'bg_error_move' => "Impossible de déplacer le fond d'écran sur le serveur",
+        'bg_error_notexist' => "Le fond d'écran [%s] n'existe pas!"
     );
 
 }

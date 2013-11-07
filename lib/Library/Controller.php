@@ -210,7 +210,7 @@ class Library_Controller {
         if (!trim($bg) || !file_exists($config->getRoot() . 'resources/background/' . $bg))
             return array(
                 'success' => false,
-                'error' => sprintf("Le fond d'écran [%s] n'existe pas!", $bg)
+                'error' => sprintf(Library_Wording::get('bg_error_notexist'), $bg)
             );
         
         if (!@file_put_contents($config->getRoot() . 'config/background.txt', $bg)) {
@@ -230,7 +230,7 @@ class Library_Controller {
         if ($file['error'] != UPLOAD_ERR_OK)
             return array(
                 'success' => false,
-                'error' => "Un problème a eu lieu pendant l'upload du fond d'écran"
+                'error' => Library_Wording::get('bg_error_upload')
             );
         
         $config = Library_Config::getInstance();
@@ -242,13 +242,13 @@ class Library_Controller {
         if (!in_array($ext, $extensions))
             return array(
                 'success' => false,
-                'error' => sprintf("Seul le format JPG est accepté. Le format %s a été donné.", $ext)
+                'error' => sprintf(Library_Wording::get('bg_error_extension'), $ext)
             );
         
         if (!move_uploaded_file($file['tmp_name'], $path . $name)) {
             return array(
                 'success' => false,
-                'error' => "Impossible de déplacer le fond d'écran sur le serveur"
+                'error' => Library_Wording::get('bg_error_move')
             );
         }
         

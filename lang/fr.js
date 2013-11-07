@@ -170,7 +170,11 @@ Library.wording = {
     admin_redim_and_mini_finished: "{0} images ont \u00e9t\u00e9 redimendionn\u00e9es. S'il y a eu des " 
         + "erreurs, elles seront list\u00e9es ci-dessous.",
     admin_move_to_good_folder: "D\u00e9placer les PDFs dans les bons sous-dossiers",
-    admin_move_to_good_folder_finished: "Les PDFs ont \u00e9t\u00e9 d\u00e9plac\u00e9s avec succ\u00e8s."
+    admin_move_to_good_folder_finished: "Les PDFs ont \u00e9t\u00e9 d\u00e9plac\u00e9s avec succ\u00e8s.",
+    
+    bg_title: "Fond d'\u00e9cran",
+    bg_empty: "Aucun fond d'\u00e9cran disponible",
+    bg_add: "Ajouter un fond"
 
 };
 

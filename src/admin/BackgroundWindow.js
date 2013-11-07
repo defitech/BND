@@ -72,7 +72,7 @@ Library.admin.BackgroundWindow = Ext.extend(Ext.Window, {
             fileUpload: true,
             items: {
                 xtype: 'compositefield',
-                fieldLabel: 'Ajouter un fond',
+                fieldLabel: Library.wording.bg_add,
                 items: [{
                     xtype: 'field',
                     inputType: 'file',
@@ -81,7 +81,7 @@ Library.admin.BackgroundWindow = Ext.extend(Ext.Window, {
                 }, {
                     hideLabel: true,
                     xtype: 'button',
-                    text: 'Ajouter',
+                    text: Library.wording.add_book_button,
                     scope: this,
                     handler: this.addBg
                 }]
@@ -107,7 +107,7 @@ Library.admin.BackgroundWindow = Ext.extend(Ext.Window, {
             },
             autoScroll: true,
             multiSelect: true,
-            emptyText: 'aucun fond d ecran',
+            emptyText: Library.wording.bg_empty,
             overClass:'x-view-over',
             itemSelector:'div.thumb-wrap',
             tpl: new Ext.XTemplate(
@@ -129,7 +129,7 @@ Library.admin.BackgroundWindow = Ext.extend(Ext.Window, {
             modal: true,
             width: 482,
             height: 420,
-            title: "Fond d'écran",
+            title: Library.wording.bg_title,
             layout: 'border',
             cls: 'backgrounds',
             items: [
