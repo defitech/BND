@@ -104,7 +104,7 @@ class Library_User_DownloadController extends Library_Controller {
             $items[] = array(
                 $row['bid'],
                 '"'. str_replace('"', "'", $row['btitle']) .'"',
-                $editor,
+                '"'. str_replace('"', "'", $editor) .'"',
                 isset($types[$row['tid']]) ? $types[$row['tid']] : 'Aucun',
                 $row['nb']
             );
