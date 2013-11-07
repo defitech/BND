@@ -290,13 +290,12 @@ body.book-background-montagnes {
 
 .backgrounds .x-view-over{
     padding: 0px;
-    border: 6px solid #eef;
-    background-color: #efefef;
+    border: 6px solid #aaf;
+    background-color: #aaf;
 }
 
 .backgrounds .x-view-selected{
     padding: 0px;
     border: 6px solid #fc0;
-    background-color: #eff5fb;
-    color: #960;
+    background-color: #fe9;
 }

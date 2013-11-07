@@ -127,7 +127,7 @@ Library.admin.BackgroundWindow = Ext.extend(Ext.Window, {
     initComponent: function() {
         Ext.apply(this, {
             modal: true,
-            width: 482,
+            width: 700,
             height: 420,
             title: Library.wording.bg_title,
             layout: 'border',
