@@ -162,6 +162,7 @@ class Library_Controller {
      */
 
     protected function getBackgrounds() {
+        Library_Config::getInstance()->testIssetAuser(2);
         $config = Library_Config::getInstance();
         $path = $config->getRoot() . 'resources/background/';
         $path_thumbs = $path . 'thumbs/';
@@ -205,6 +206,7 @@ class Library_Controller {
     }
     
     protected function changeBackground() {
+        Library_Config::getInstance()->testIssetAuser(2);
         $bg = $this->getParam('bg');
         $config = Library_Config::getInstance();
         if (!trim($bg) || !file_exists($config->getRoot() . 'resources/background/' . $bg))
@@ -226,6 +228,7 @@ class Library_Controller {
     }
     
     public function addBackground() {
+        Library_Config::getInstance()->testIssetAuser(2);
         $file = $_FILES['bgfile'];
         if ($file['error'] != UPLOAD_ERR_OK)
             return array(
