@@ -146,7 +146,7 @@ Library.wording = {
     delete_book: 'Supprimer les livres s\u00e9lectionn\u00e9s?',
     delete_book_confirmmany: 'Un ou plusieurs de ces livres ont d\u00e9j\u00e0 \u00e9t\u00e9 t\u00e9l\u00e9charg\u00e9s au '
         + 'moins une fois. Supprimer quand m\u00eame?',
-    delete_book_confirmone: 'Ce livre a d\u00e9j\u00e0 \u00e9t\u00e9 t\u00e9l\u00e9charg\u00e9 ' +
+    delete_book_confirmone: 'Ce livre a d\u00e9j\u00e0 \u00e9t\u00e9 t\u00e9l\u00e9charg\u00e9 '
         + 'au moins une fois. Supprimer quand m\u00eame?',
 
     error_title: 'Erreur serveur',
