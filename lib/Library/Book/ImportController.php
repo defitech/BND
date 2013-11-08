@@ -12,7 +12,8 @@ class Library_Book_ImportController extends Library_Controller {
     protected function checkNewBooks() {
         Library_Config::getInstance()->testIssetAuser(2);
         if ($this->getParam('start', 0) == 0) {
-            Library_Util::backupDb();
+            // @deprectated backup de la bd , c'était utile en SQLite
+            // Library_Util::backupDb();
         }
         $skip_thumb = $this->getParam('skipThumb');
         $stop = false;
@@ -121,8 +122,8 @@ class Library_Book_ImportController extends Library_Controller {
         // on check si on peut ouvrir ce fichier uploadé
         $types = array('text/csv', 'application/csv');
         if ($file['error'] == UPLOAD_ERR_OK && in_array($file['type'], $types)) {
-            // backup de la bd
-            Library_Util::backupDb();
+            // @deprectated backup de la bd , c'était utile en SQLite
+            // Library_Util::backupDb();
 
             // sauvegarde du csv quelque part pour réutilisation ultérieure
             $path = Library_Config::getInstance()->getData()->path->log;
