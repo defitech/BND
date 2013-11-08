@@ -1,9 +1,27 @@
 ------------------------------------------------------
-Configuration sur un poste local:
+Configuration après checkout du dépôt git:
+------------------------------------------------------
+
+1. vérifier l'existence du dossier config/
+2. vérifier l'existence du dossier resources/background/
+3. copier config/config_default.ini et nommer le fichier config/config.ini,
+   et y inscrire les bonnes informations 
+4. créer un fichier config/background.txt avec le nom d'un JPG existant dans
+   resources/background/
+5. vérifier que l'écriture est possible pour config/background.txt
+6. vérifier que l'écriture est possible dans resources/background/
+7. vérifier que l'écriture est possible dans les dossiers et sous-dossiers des
+   livres
+
+
+
+------------------------------------------------------
+Configuration avancées sur un poste local:
 ------------------------------------------------------
 
 Installer ImageMagick, pour avoir la fonction convert (pour extraire la 1ère
-image d'un PDF). Pour faire simple, installer Xcode puis MacPorts et faire:
+image d'un PDF). Pour faire simple sous Mac OSX, installer Xcode puis MacPorts
+et faire:
 $ sudo port install ImageMagick
 
 Dans la configuration APACHE (en local pour le dev), ajouter les lignes
@@ -19,25 +37,6 @@ Alias /livres/  "/chemin/complet/vers/les/livres/"
  
 # /livres/ = l'alias qu'on retrouve dans web.pdf du config.ini
 # /chemin/complet/vers/les/livres/ = le path.pdf du config.ini
-
-
-
-
-------------------------------------------------------
-Configuration après checkout du dépôt git:
-------------------------------------------------------
-
-1. vérifier l'existence du dossier config/
-2. vérifier l'existence du dossier resources/background/
-3. copier config/config_default.ini et nommer le fichier config/config.ini,
-   et y inscrire les bonnes informations 
-4. créer un fichier config/background.txt avec le nom d'un JPG existant dans
-   resources/background/
-5. vérifier que l'écriture est possible pour config/background.txt
-6. vérifier que l'écriture est possible dans resources/background/
-7. vérifier que l'écriture est possible dans les dossiers et sous-dossiers des
-   livres
-
 
 
 
