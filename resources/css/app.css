@@ -251,6 +251,10 @@ body.book-background-montagnes {
     white-space: normal;
 }
 
+.book-grid .x-grid3-cell-inner {
+    font-size: 1.2em;
+}
+
 .user-password-panel strong {
     font-weight: bold;
 }

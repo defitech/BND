@@ -196,7 +196,7 @@ Library.BookGrid = Ext.extend(Ext.grid.GridPanel, {
                 },
                 {
                     header : Library.wording.editor,
-                    width : 180,
+                    width : 160,
                     dataIndex : 'editor_id'
                 },
                 {
@@ -211,7 +211,7 @@ Library.BookGrid = Ext.extend(Ext.grid.GridPanel, {
                 },
                 {
                     header : Library.wording.isbn,
-                    width: 120,
+                    width: 140,
                     dataIndex : 'isbn'
                 }
             ]
@@ -301,6 +301,7 @@ Library.BookGrid = Ext.extend(Ext.grid.GridPanel, {
         var store = this.initBookStore();
         var filters = this.initFilters();
         Ext.apply(this, {
+            cls: 'book-grid',
             store: store,
             plugins: [filters],
             loadMask: true,
