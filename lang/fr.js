@@ -174,7 +174,10 @@ Library.wording = {
     
     bg_title: "Fond d'\u00e9cran",
     bg_empty: "Aucun fond d'\u00e9cran disponible",
-    bg_add: "Ajouter un fond"
+    bg_add: "Ajouter un fond",
+    bg_set: "Utiliser comme fond d'\u00e9cran",
+    bg_remove: "Supprimer",
+    bg_remove_msg: "Voulez-vous supprimer le fond d'\u00e9cran {0}?"
 
 };
 

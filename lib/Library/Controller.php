@@ -260,6 +260,29 @@ class Library_Controller {
             'name' => $name
         );
     }
+    
+    protected function removeBackground() {
+        Library_Config::getInstance()->testIssetAuser(2);
+        
+        $path = Library_Config::getInstance()->getRoot() . 'resources/background/';
+        $file = $path . $this->getParam('bg');
+        // suppression du fichier
+        if (!@unlink($file)) {
+            $e = error_get_last();
+            return array(
+                'success' => false,
+                'error' => sprintf("Impossible de supprimer le fond d'écran %s: %s", $this->getParam('bg'), $e['message'])
+            );
+        }
+        // suppression de la mini. S'il y a une erreur, on l'ignore. De toute
+        // façon, ça ne prend pas bcp de place sur le serveur
+        $file_mini = $path . 'thumbs/' . $this->getParam('bg');
+        @unlink($file_mini);
+        
+        return array(
+            'success' => true
+        );
+    }
 
 
 }

@@ -25,6 +25,55 @@ Library.admin.BackgroundWindow = Ext.extend(Ext.Window, {
             }
         });
     },
+    
+    removeBg: function(record) {
+        this._mask.show();
+        Ext.Ajax.request({
+            url: Library.Main.config().controller,
+            scope: this,
+            params: {
+                cmd: 'removeBackground',
+                bg: record.get('bg')
+            },
+            success: function(response) {
+                this._mask.hide();
+                var json = Library.Main.getJson(response);
+                if (json.success)
+                    this.getComponent(1).getStore().reload();
+            },
+            failure: function(response) {
+                this._mask.hide();
+                Library.Main.failure(response);
+            }
+        });
+    },
+    
+    showContextMenu: function(view, index, node, e) {
+        var record = view.getStore().getAt(index);
+        var menu = new Ext.menu.Menu({
+            items: [{
+                text: Library.wording.bg_set,
+                scope: this,
+                handler: function() {
+                    this.backgroundClicked(view, index);
+                }
+            },{
+                text: Library.wording.bg_remove,
+                scope: this,
+                handler: function() {
+                    var msg = String.format(Library.wording.bg_remove_msg, record.get('bg'));
+                    Ext.Msg.confirm(Library.wording.bg_title, msg, function(choice){
+                        if (choice != 'yes')
+                            return;
+                        this.removeBg(record);
+                    }, this);
+                }
+            }]
+        });
+        menu.showAt(e.getXY());
+        e.stopPropagation();
+        e.stopEvent();
+    },
             
     backgroundClicked: function(data, index) {
         var record = data.getStore().getAt(index);
@@ -119,7 +168,8 @@ Library.admin.BackgroundWindow = Ext.extend(Ext.Window, {
                 '<div class="x-clear"></div>'
             ),
             listeners: {
-                dblclick: {scope: this, fn: this.backgroundClicked}
+                dblclick: {scope: this, fn: this.backgroundClicked},
+                contextmenu: {scope: this, fn: this.showContextMenu}
             }
         }, config);
     },
