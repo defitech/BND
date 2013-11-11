@@ -7,11 +7,6 @@ Bugs connus
   en lançant le script qu'on trouve dans l'interface, via le bouton:
   "Ajouter > Déplacer les PDFs dans les bons sous-dossiers"
 
-- Lorsqu'on crée une nouvelle fiche et qu'il y a un bug dans l'upload ou dans la
-  génération de la miniature, un message d'erreur est retourné et la fenêtre
-  reste ouverte. Si on reclique sur "Enregistrer" ou "Appliquer", une nouvelle
-  fiche sera recréée.
-
 - NOM DE LA MATIÈRE: un dossier sur le serveur se crée pour chaque nouvelle
   matière insérée. Or, si la matière contient des catactères spéciaux du genre
   espaces ou virgules, le download et l'upload ne fonctionneront pas! Pour
@@ -19,6 +14,7 @@ Bugs connus
   une correspondance entre la matière telle qu'elle existe dans la BD et le
   nom du dossier.
 
+- on ne peut pas enregistrer du 1er coup une fiche sans avoir un PDF
 
 
 ------------------------------------------------------

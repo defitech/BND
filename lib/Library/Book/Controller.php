@@ -352,13 +352,18 @@ class Library_Book_Controller extends Library_Controller {
         }
         
         // on bouge le PDF dans le bon répertoire si nécessaire
-        if ($old_type != $row->type_id) {
-            $old = explode('/', $row->filename);
-            array_pop($old);
-            $return = $this->doMoveUploadedBooksToGoodFolder($row, implode('/', $old) . '/');
-            if (!$return['success']) {
-                return $return;
+        try {
+            if ($old_type != $row->type_id) {
+                $old = explode('/', $row->filename);
+                array_pop($old);
+                $return = $this->doMoveUploadedBooksToGoodFolder($row, implode('/', $old) . '/');
+                if (!$return['success']) {
+                    throw new Exception($return['error']);
+                }
             }
+        } catch (Exception $e) {
+            $success = false;
+            $msg = $e->getMessage();
         }
         
         return array(

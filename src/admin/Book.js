@@ -24,6 +24,13 @@ Library.admin.Book = Ext.extend(Library.Book, {
             },
             failure: function(form, action) {
                 this._mask.hide();
+                // en cas d'erreur, on va quand meme setter l'id du livre si
+                // celui-ci n'existe pas, de sorte qu'en recliquant sur le
+                // bouton d'enregistrement, on ne cree pas de 2e fiche
+                if (!this.data.id && action.result.infos && action.result.infos.id) {
+                    this.data.id = action.result.infos.id;
+                    form.findField('id').setValue(this.data.id);
+                }
                 Library.Main.failureForm(action.result);
             }
         });
