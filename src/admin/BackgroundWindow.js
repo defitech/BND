@@ -102,7 +102,7 @@ Library.admin.BackgroundWindow = Ext.extend(Ext.Window, {
     initButtons: function() {
         return [
             {
-                text: 'Fermer',
+                text: Library.wording.info_book_close,
                 scale: 'medium',
                 iconCls: 'book-window-close',
                 scope: this,
