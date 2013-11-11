@@ -1,5 +1,5 @@
 ------------------------------------------------------
-Bugs connus 
+Bugs connus!
 ------------------------------------------------------
 - Lorsqu'on crée une nouvelle fiche, on sélectionne une matière puis on upload
   un PDF. Or, le PDF s'upload systématiquement dans le dossier /upload/ et pas
