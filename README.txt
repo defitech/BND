@@ -1,4 +1,27 @@
 ------------------------------------------------------
+Bugs connus
+------------------------------------------------------
+- Lorsqu'on crée une nouvelle fiche, on sélectionne une matière puis on upload
+  un PDF. Or, le PDF s'upload systématiquement dans le dossier /upload/ et pas
+  dans le dossier de la matière choisie. On peut toujours remettre de l'ordre
+  en lançant le script qu'on trouve dans l'interface, via le bouton:
+  "Ajouter > Déplacer les PDFs dans les bons sous-dossiers"
+
+- Lorsqu'on crée une nouvelle fiche et qu'il y a un bug dans l'upload ou dans la
+  génération de la miniature, un message d'erreur est retourné et la fenêtre
+  reste ouverte. Si on reclique sur "Enregistrer" ou "Appliquer", une nouvelle
+  fiche sera recréée.
+
+- NOM DE LA MATIÈRE: un dossier sur le serveur se crée pour chaque nouvelle
+  matière insérée. Or, si la matière contient des catactères spéciaux du genre
+  espaces ou virgules, le download et l'upload ne fonctionneront pas! Pour
+  pallier ce problème, il y a le fichier config/config.ini qui permet de faire
+  une correspondance entre la matière telle qu'elle existe dans la BD et le
+  nom du dossier.
+
+
+
+------------------------------------------------------
 Configuration après checkout du dépôt git:
 ------------------------------------------------------
 

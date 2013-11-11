@@ -544,7 +544,8 @@ class Library_Book_Controller extends Library_Controller {
         $book = $table->fetchRow($table->select()->where('id = ?', $this->getParam('id')));
 
         $filelocation = $config->getData()->path->pdf . $book->filename;
-        $filename = array_pop(explode('/', $book->filename));
+        $f = explode('/', $book->filename);
+        $filename = array_pop($f);
 
         if (! file_exists($filelocation) || is_dir($filelocation)) {
             die("Unkown file:".$book->filename);

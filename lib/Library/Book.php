@@ -108,7 +108,7 @@ class Library_Book extends Zend_Db_Table_Abstract {
         }
         
         $label = $type->label;
-        $co = Library_Book_Type::$correspondance;
+        $co = $mats = Library_Config::getInstance()->getData()->matieres->toArray();
 
         $label = (isset($co[$label]) ? $co[$label] : $label) . '/';
         $new_path = Library_Config::getInstance()->getData()->path->pdf . $label;
