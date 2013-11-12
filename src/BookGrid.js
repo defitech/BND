@@ -176,7 +176,8 @@ Library.BookGrid = Ext.extend(Ext.grid.GridPanel, {
     initBookHeaders: function(idAutoExpand) {
         return new Ext.grid.ColumnModel({
             defaults: {
-                sortable: true
+                sortable: true,
+                fixed: true
             },
             columns: [
                 {
@@ -206,7 +207,7 @@ Library.BookGrid = Ext.extend(Ext.grid.GridPanel, {
                 },
                 {
                     header : Library.wording.title,
-                    id : idAutoExpand,
+                    fixed: false,
                     dataIndex : 'title'
                 },
                 {
@@ -310,7 +311,8 @@ Library.BookGrid = Ext.extend(Ext.grid.GridPanel, {
             colModel: this.initBookHeaders(idAutoExpand),
             autoExpandColumn: idAutoExpand,
             viewConfig: {
-                stripeRows: true
+                stripeRows: true,
+                forceFit: true
             },
             bbar: this.initPagingToolbar(store, filters),
             listeners: {
