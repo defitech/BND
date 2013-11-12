@@ -16,11 +16,17 @@ Bugs connus
 
 - on ne peut pas enregistrer du 1er coup une fiche sans avoir un PDF
 
+- Dans le formulaire d'ajout/édition d'un livre, NE PAS rajouter de champ AVANT
+  les cases à cocher des niveaux. C'est possible de le faire, mais il ne faut
+  pas oublier de changer la valeur de la propriété [niveauPos] de la classe
+  [Library.admin.Book].
+
 
 ------------------------------------------------------
 Configuration après checkout du dépôt git:
 ------------------------------------------------------
 
+0. récupérer la BD depuis la prod ou un backup SQL
 1. vérifier l'existence du dossier config/
 2. vérifier l'existence du dossier resources/background/
 3. copier config/config_default.ini et nommer le fichier config/config.ini,
