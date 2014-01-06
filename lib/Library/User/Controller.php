@@ -268,9 +268,11 @@ class Library_User_Controller extends Library_Controller {
             switch ($this->getParam('type', null)) {
                 case self::MAIL_MSG_CREATE_PASSWORD:
                     $msg = sprintf(Library_Wording::get('mail_content_create'), $row->login, $link, $row->login, date('d.m.Y, H:i'));
+                    $subject = Library_Wording::get('mail_subject_create');
                     break;
                 default:
                     $msg = sprintf(Library_Wording::get('mail_content'), $link, $row->login, date('d.m.Y, H:i'));
+                    $subject = Library_Wording::get('mail_subject');
             }
 
             $mail = new Zend_Mail('UTF-8');
@@ -278,7 +280,7 @@ class Library_User_Controller extends Library_Controller {
                 ->setFrom($cmail->from)
                 ->setReplyTo($cmail->replyTo)
                 ->addTo($row->email)
-                ->setSubject(Library_Wording::get("mail_subject"))
+                ->setSubject($subject)
                 ->setBodyText($msg);
 
             $mail->send($tr);

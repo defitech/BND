@@ -45,6 +45,7 @@ class Fr {
         'mail_subject' => "BND > Defitech > Récupération de mot de passe",
         'mail_content' => "Bonjour,\n\nVous avez demander un nouveau mot de passe. Rendez-vous à l'adresse suivante: %s \nVotre login est le suivant: %s\n\nSi vous n'avez pas demandé un nouveau mot de passe, ignorez simplement cet email. Merci de ne pas y répondre.\n\n Fondaton defitech\n%s",
 // Mail complet pour mot de passe initial
+        'mail_subject_create' => "BND > Defitech > Création d'un compte",
         'mail_content_create' => "Bonjour,
 
 Un compte vient d'être créé vous dans la base de données de livres
