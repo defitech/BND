@@ -43,7 +43,20 @@ class Fr {
         'field_isbn' => 'N° ISBN',
         
         'mail_subject' => "BND > Defitech > Récupération de mot de passe",
-        'mail_content' => "Bonjour,\n\nVous avez demander un nouveau mot de passe. Rendez-vous à l'adresse suivante: %s \nVotre login est le suivant: %s\n\nSi vous n'avez pas demandé un nouveau mot de passe, ignorez simplement cet email. Merci de ne pas y répondre.\n\n Fondaton defitech\n%s",
+        'mail_content' => "Bonjour,
+
+Vous avez demandé un nouveau mot de passe pour la base de données de
+livres. Rendez-vous à l'adresse suivante:
+
+	%s
+
+Votre login est le suivant: %s
+
+Si vous n'avez pas demandé un nouveau mot de passe, ignorez simplement
+cet email. Merci de ne pas y répondre.
+
+  La fondation defitech\n%s",
+
 // Mail complet pour mot de passe initial
         'mail_subject_create' => "BND > Defitech > Création d'un compte",
         'mail_content_create' => "Bonjour,
@@ -93,7 +106,7 @@ N.B.: Les livres sont des fichiers assez volumineux et le temps de chargement
 
 N'hésitez pas à nous contacter en cas de problème.
 
-  La fondaton defitech\n%s",
+  La fondation defitech\n%s",
         'mail_sent' => "Un mail vous a été envoyé. Suivez-en les instructions pour changer votre mot de passe",
         'mail_sent_create' => "Le mail a bien été envoyé.",
         'mail_notsent_butlink' => "Voici le lien généré pour %s:<br/>%s",
