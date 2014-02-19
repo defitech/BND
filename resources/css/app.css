@@ -215,6 +215,18 @@ body.book-background-montagnes {
     height: 16px;
 }
 
+.book-user-form {
+    background-image: url('../images/form-signed.png') !important;
+    height: 16px;
+    width: 14px;
+}
+
+.book-user-form-no {
+    background-image: url('../images/form-signed-gray.png') !important;
+    height: 16px;
+    width: 14px;
+}
+
 .window-wait-debug .x-window-body {
     text-align: center;
 }

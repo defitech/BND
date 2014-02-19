@@ -385,7 +385,8 @@ Library.admin.UserGrid = Ext.extend(Ext.grid.EditorGridPanel, {
                     {name: 'right'},
                     {name: 'email'},
                     {name: 'type_id'},
-                    {name: 'type_text'}
+                    {name: 'type_text'},
+                    {name: 'confirmed'}
                 ]
             }),
             url: Library.Main.config().controller,
@@ -476,11 +477,52 @@ Library.admin.UserGrid = Ext.extend(Ext.grid.EditorGridPanel, {
                 },
                 {
                     xtype: 'actioncolumn',
-                    width: 22,
+                    width: 40,
                     height: 22,
                     sortable: false,
                     hideable: false,
                     items: [{
+                        getClass: function(v, meta, record) {
+                            var cls = 'book-user-form';
+                            var tip = Library.wording.user_sent_form;
+                            if (record.get('confirmed') != 1) {
+                                cls += '-no';
+                                tip = Library.wording.user_sent_form_no;
+                            }
+                            this.items[0].tooltip = tip;
+                            return cls;
+                        },
+                        handler: function(grid, row, col) {
+                            var record = grid.getStore().getAt(row);
+                            var newval;
+                            if ( record.get('confirmed') != 1 ) {
+                                newval = 1;
+                            } else {
+                                newval = 0;
+                            }
+                            record.set('confirmed', newval);
+                            Ext.Ajax.request({
+                                url: Library.Main.config().controller,
+                                scope: this,
+                                params: {
+                                    cmd: 'saveUser',
+                                    id: record.get('id'),
+                                    field: 'confirmed',
+                                    value: newval
+                                },
+                                success: function(response) {
+                                    var json = Library.Main.getJson(response);
+                                    if (json.success) {
+                                        record.set('id', json.id);
+                                        record.commit();
+                                    }
+                                },
+                                failure: function(response) {
+                                    Library.Main.failure(response);
+                                }
+                            });
+                        },
+                    },{
                         getClass: function(v, meta, record) {
                             var cls = 'book-user-sendpass';
                             var tip = String.format(Library.wording.user_passsend_tip, record.get('email'));
@@ -488,7 +530,7 @@ Library.admin.UserGrid = Ext.extend(Ext.grid.EditorGridPanel, {
                                 cls += '-off';
                                 tip = Library.wording.user_passsend_tip_no;
                             }
-                            this.items[0].tooltip = tip;
+                            this.items[1].tooltip = tip;
                             return cls;
                         },
                         handler: function(grid, row, col) {

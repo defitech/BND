@@ -107,6 +107,9 @@ Library.wording = {
     
     user_books_exportcsv: 'Statistiques de t\u00e9l\u00e9chargement pour chaque livre',
     
+    user_sent_form: "Formulaire rendu",
+    user_sent_form_no: "Formulaire pas encore rendu…",
+
     user_passsend_btn_mail: "Envoyer mail",
     user_passsend_btn_link: "Copier lien",
     user_passsend: "Envoi de mot de passe",
