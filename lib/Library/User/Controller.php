@@ -20,24 +20,42 @@ class Library_User_Controller extends Library_Controller {
             ->where('pass = ?', $pass)
         );
 
+        // Calcule le niveau d'accès:
+        // 'wrongpass' => mauvais mot de passe
+        // 'rogue' => pas signé, déjà téléchargé => bloque
+        // 'pristine' => pas signé, rien téléchargé, okay pour une fois
+        // 'trusted' => signé, okay
+        $access_level = 'wrongpass';
+
         if ($result) {
-            $session = new Zend_Session_Namespace('Library');
-            $session->login = $this->getParam('login');
-            $session->pass = $pass;
+            $access_level = 'rogue';
 
-            // on enregistre la date de dernière connection
-            $result->last_connected = date('Y-m-d H:i:s');
-            $result->save();
+            $n_books = $result->findDependentRowset('Library_User_Download')->count();
+            if($result->confirmed)
+                $access_level = 'trusted';
+            else if ($n_books == 0)
+                $access_level = 'pristine';
+  
+            if($access_level != 'rogue') {
+                $session = new Zend_Session_Namespace('Library');
+                $session->login = $this->getParam('login');
+                $session->pass = $pass;
 
-            Library_Config::log('connexion');
+                // on enregistre la date de dernière connection
+                $result->last_connected = date('Y-m-d H:i:s');
+                $result->save();
 
+                Library_Config::log('connexion');
+            }
             return array(
-                'success' => true
+                'success' => true,
+                'access_level' => $access_level,
             );
         }
 
         return array(
             'success' => false,
+            'access_level' => $access_level,
             'error' => Library_Wording::get('bad_login')
         );
     }

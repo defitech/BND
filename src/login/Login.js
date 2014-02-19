@@ -23,62 +23,97 @@ Library.login.Form = Ext.extend(Ext.Window, {
      *
      * @return void
      */
-    showSplashScreen: function() {
+    showSplashScreen: function(access_level) {
         if (this.getForm().getForm().isValid()) {
-            // le mode "light" est utilise lorsqu'on fait une action dans la
-            // BND alors qu'on a perdu la connexion. Si on est pas en mode
-            // light, c'est qu'on se connecte la 1ere fois. On montre donc la
-            // fenetre des conditions legales.
-            if (!this.light) {
+            if(access_level == 'pristine') {
+                // N'a jamais accédé et n'a pas encore signé
                 var win = new Ext.Window({
-                    modal: true,
-                    width: 680,
-                    height: 610,
-                    title: Library.wording.library_conditions,
-                    iconCls: 'book-main',
-                    layout: 'fit',
-                    items: [{
-                        xtype: 'panel',
-                        cls: 'book-conditions',
-                        autoLoad: 'conditions.html',
-                        border: false,
-                        autoScroll: true
-                    }],
-                    buttonAlign: 'left',
-                    buttons: [{
-                        text: Library.wording.library_conditions_refuse,
-                        iconCls: 'book-conditions-no',
-                        scale: 'large',
-                        tabIndex: 1,
-                        handler: function() {
-                            win.close();
-                        }
-                    }, '->', {
-                        text: Library.wording.library_conditions_accept,
-                        iconCls: 'book-conditions-ok',
-                        scale: 'large',
-                        scope: this,
-                        tabIndex: 2,
-                        handler: function() {
-                            this.connect();
-                            win.close();
-                        }
-                    }],
-                    listeners: {
-                        afterrender: function(cmp) {
-                            (function(){
-                                cmp.buttons[2].focus();
-                                cmp.buttons[2].toggle();
-                            }).defer(200);
-                        }
+                modal: true,
+                width: 680,
+                height: 680,
+                title: Library.wording.library_conditions,
+                iconCls: 'book-main',
+                layout: 'fit',
+                items: [{
+                    xtype: 'panel',
+                    cls: 'book-conditions',
+                    autoLoad: 'conditions.html',
+                    border: false,
+                    autoScroll: true
+                }],
+                buttonAlign: 'left',
+                buttons: [{
+                    text: Library.wording.library_conditions_refuse,
+                    iconCls: 'book-conditions-no',
+                    scale: 'large',
+                    tabIndex: 1,
+                    handler: function() {
+                        Ext.Ajax.request({
+                            url: Library.Main.config().controller,
+                            params: {
+                                cmd: 'logout'
+                            },
+                            scope: this,
+                            success: function(response) {
+                                var json = Library.Main.getJson(response);
+                                if (json.success) {
+                                    window.location.reload();
+                                }
+                            },
+                            failure: function(response) {
+                                Library.Main.failure(response);
+                            }
+                        });
+                    },
+                }, '->', {
+                    text: Library.wording.library_conditions_accept,
+                    iconCls: 'book-conditions-ok',
+                    scale: 'large',
+                    scope: this,
+                    tabIndex: 2,
+                    handler: function() {
+                        window.location.reload();
+                        win.close();
                     }
-                });
-                win.show();
+                }],
+                listeners: {
+                    afterrender: function(cmp) {
+                        (function(){
+                            cmp.buttons[2].focus();
+                            cmp.buttons[2].toggle();
+                        }).defer(200);
+                    }
+                }
+            });
             } else {
-                // en mode light, on se connecte directement car on est deja
-                // dans l'application et on a deja accepte les conditions
-                this.connect();
+                // A déjà accédé et n'a pas encore signé => STOP
+                var win = new Ext.Window({
+                modal: true,
+                width: 680,
+                height: 680,
+                title: Library.wording.library_conditions,
+                iconCls: 'book-main',
+                layout: 'fit',
+                items: [{
+                    xtype: 'panel',
+                    cls: 'book-conditions',
+                    autoLoad: 'conditions.html',
+                    border: false,
+                    autoScroll: true
+                }],
+                buttonAlign: 'center',
+                buttons: [{
+                    text: Library.wording.library_conditions_sign_and_return,
+                    iconCls: 'book-conditions-form',
+                    scale: 'large',
+                    tabIndex: 1,
+                    handler: function() {
+                        window.location.reload();
+                    },
+                }],
+            });
             }
+            win.show();
         }
     },
     
@@ -204,12 +239,18 @@ Library.login.Form = Ext.extend(Ext.Window, {
                         // Si on est pas en mode light, c'est qu'on se log pour
                         // la 1ere fois, on recharge donc la page pour loader
                         // tous les scripts de la BND
-                        if (!this.light)
-                            window.location.reload();
-                        else
+                        if (!this.light) {
+                            if(action.result.access_level != 'trusted') {
+                                this.showSplashScreen(action.result.access_level);
+                            } else {
+                                window.location.reload();
+                            }
+                        }
+                        else {
                             // si on est en mode light, on a deja charge tous
                             // les scripts, on a rien donc besoin de faire
                             this.close();
+                        }
                     }
                 },
                 failure: function(form, action) {
@@ -230,7 +271,7 @@ Library.login.Form = Ext.extend(Ext.Window, {
      */
     onKeyUp: function(field, ev) {
         if (ev.getKey() === ev.ENTER) {
-            this.showSplashScreen();
+            this.connect();
         }
     },
 
@@ -303,7 +344,7 @@ Library.login.Form = Ext.extend(Ext.Window, {
                 scale: 'medium',
                 iconCls: 'book-connect',
                 scope: this,
-                handler: this.showSplashScreen
+                handler: this.connect
             }]
         });
         Ext.apply(this, {

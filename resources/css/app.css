@@ -18,10 +18,13 @@ body.book-background-montagnes {
     padding: 20px;
 }
 .book-conditions-ok {
-    background-image: url('../images/okbig.png') !important;
+    background-image: url('../images/form.png') !important;
 }
 .book-conditions-no {
     background-image: url('../images/nobig.png') !important;
+}
+.book-conditions-form {
+    background-image: url('../images/form.png') !important;
 }
 .book-conditions h1, .book-help h1 {
     font-size: 140%;
@@ -34,6 +37,15 @@ body.book-background-montagnes {
 
 .book-conditions p, .book-conditions li, .book-help {
     text-align: justify;
+}
+
+.book-conditions p strong.form-not-resent {
+    color: red;
+    font-weight: bold;
+}
+
+.book-conditions p strong.form-not-resent a {
+    color: inherit !important;
 }
 
 .book-conditions p, .book-help p {

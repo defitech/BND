@@ -6,7 +6,8 @@ Library.wording = {
 
     library_conditions: 'Conditions d\'utilisation',
     library_conditions_refuse: 'Je ne suis pas d\'accord',
-    library_conditions_accept: 'J\'ai sign\u00e9 et j\'accepte les conditions ci-dessus',
+    library_conditions_accept: 'J\'ai sign\u00e9 et renvoi\u00e9 la convention ci-dessus',
+    library_conditions_sign_and_return: 'Je signe et renvoie la convention ci-dessus',
 
     thumb: 'Aperçu',
     title: 'Titre',
