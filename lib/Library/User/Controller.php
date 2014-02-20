@@ -43,8 +43,6 @@ class Library_User_Controller extends Library_Controller {
 
                 // on enregistre la date de dernière connection
                 $result->last_connected = date('Y-m-d H:i:s');
-                // on annule l'état inactif
-                $result->inactive = false;
                 $result->save();
 
                 Library_Config::log('connexion');

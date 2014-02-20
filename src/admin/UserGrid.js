@@ -581,7 +581,7 @@ Library.admin.UserGrid = Ext.extend(Ext.grid.EditorGridPanel, {
                     {name: 'deficiency_id'},
                     {name: 'deficiency_text'},
                     {name: 'confirmed'},
-                    {name: 'inactive'}
+                    {name: 'last_connected'}
                 ]
             }),
             url: Library.Main.config().controller,
@@ -767,42 +767,16 @@ Library.admin.UserGrid = Ext.extend(Ext.grid.EditorGridPanel, {
                         getClass: function(v, meta, record) {
                             var cls = 'book-user-active';
                             var tip = Library.wording.user_active;
-                            if (record.get('inactive') == 1) {
+                            // Set threshold date to be one year in the past
+                            var date_threshold = new Date();
+                            date_threshold.setDate(date_threshold.getDate()-365);
+                            var record_date = new Date(record.get('last_connected'));
+                            if (record_date < date_threshold) {
                                 cls += '-no';
                                 tip = Library.wording.user_inactive;
                             }
-                            this.items[0].tooltip = tip;
+                            this.items[2].tooltip = tip;
                             return cls;
-                        },
-                        handler: function(grid, row, col) {
-                            var record = grid.getStore().getAt(row);
-                            var newval;
-                            if ( record.get('inactive') != 1 ) {
-                                newval = 1;
-                            } else {
-                                newval = 0;
-                            }
-                            record.set('inactive', newval);
-                            Ext.Ajax.request({
-                                url: Library.Main.config().controller,
-                                scope: this,
-                                params: {
-                                    cmd: 'saveUser',
-                                    id: record.get('id'),
-                                    field: 'inactive',
-                                    value: newval
-                                },
-                                success: function(response) {
-                                    var json = Library.Main.getJson(response);
-                                    if (json.success) {
-                                        record.set('id', json.id);
-                                        record.commit();
-                                    }
-                                },
-                                failure: function(response) {
-                                    Library.Main.failure(response);
-                                }
-                            });
                         },
                     }]
                 }

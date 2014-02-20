@@ -108,6 +108,10 @@ Library.wording = {
     user_deficiency_label: 'Affection',
     user_deficiency_choose: '- - - Choisir une affection - - -'
 ,
+
+    user_active: 'A utilis\u00e9 la BND depuis un an',
+    user_inactive: 'N\'a pas utilis\u00e9 la BND depuis plus d\'un an',
+
     user_dl_title: 'Livres t\u00e9l\u00e9charg\u00e9s par {0}',
     user_dl_book: 'Titre du livre',
     user_dl_nb: 'Nb t\u00e9l\u00e9chargements',
