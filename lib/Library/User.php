@@ -27,7 +27,12 @@ class Library_User extends Zend_Db_Table_Abstract {
             'columns' => 'type_id',
             'refTableClass' => 'Library_User_Type',
             'refColumns' => 'id'
-        )
+        ),
+        'Deficiency' => array(
+            'columns' => 'deficiency_id',
+            'refTableClass' => 'Library_User_Deficiency',
+            'refColumns' => 'id'
+        ),
     );
 
     public static function right($right) {

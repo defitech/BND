@@ -124,6 +124,7 @@ class Library_Controller {
                 
         $config = array();
         $config['userTypes'] = Library_User_Type::getComboList();
+        $config['userDeficiencies'] = Library_User_Deficiency::getComboList();
         
         return array(
             'success' => true,

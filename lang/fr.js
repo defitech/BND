@@ -85,6 +85,7 @@ Library.wording = {
 
     user_right: 'Droit (1 = admin)',
     user_type: 'Type',
+    user_deficiency: 'Affection',
     user_email: 'Email',
     user_title: 'Gestion des utilisateurs',
     user_button: 'Utilisateurs',
@@ -99,6 +100,13 @@ Library.wording = {
     user_type_add: "Ajouter un type d'utilisateur",
     user_type_label: 'Type',
     user_type_choose: '- - - Choisir un type - - -'
+,
+    user_deficiency_title: "Affections",
+    user_deficiency_remove: "Voulez-vous supprimer cette affection?",
+    user_deficiency_edit: "Modifier l'affection",
+    user_deficiency_add: "Ajouter une affection",
+    user_deficiency_label: 'Affection',
+    user_deficiency_choose: '- - - Choisir une affection - - -'
 ,
     user_dl_title: 'Livres t\u00e9l\u00e9charg\u00e9s par {0}',
     user_dl_book: 'Titre du livre',

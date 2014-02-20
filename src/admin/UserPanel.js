@@ -39,7 +39,7 @@ Library.admin.UserPanel = Ext.extend(Ext.Panel, {
                 new Library.admin.UserDownload({
                     region: 'east',
                     margins: '0 0 0 2',
-                    width: 350,
+                    width: 320,
                     border: false,
                     collapsible: true,
                     split: true,

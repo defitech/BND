@@ -79,6 +79,8 @@ CREATE TABLE `library_user` (
   `pass` varchar(255) NOT NULL,
   `right` int(3),
   `type_id` int(11),
+  `deficiency_id` int(11),
+  `confirmed` tinyint(1),
   `last_connected` DATETIME NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
@@ -104,5 +106,16 @@ CREATE TABLE `library_user_download` (
 CREATE TABLE `library_user_type` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `user_type` varchar(200) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+#
+# Structure de la table: library_user_deficiency
+#
+
+# --------------------------------------------------------
+CREATE TABLE `library_user_deficiency` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_deficiency` varchar(200) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;

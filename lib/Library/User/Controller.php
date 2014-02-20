@@ -445,6 +445,10 @@ class Library_User_Controller extends Library_Controller {
         return Library_User_Type::getComboList();
     }
     
+    protected function getUserDeficiencies() {
+        return Library_User_Deficiency::getComboList();
+    }
+
     protected function addUserType() {
         Library_Config::getInstance()->testIssetAuser(1);
 
@@ -459,6 +463,23 @@ class Library_User_Controller extends Library_Controller {
             'success' => true,
             'id' => $row->id,
             'value' => $row->user_type
+        );
+    }
+
+    protected function addUserDeficiency() {
+        Library_Config::getInstance()->testIssetAuser(1);
+
+        $table = new Library_User_Deficiency();
+
+        $row = $table->createRow();
+
+        $row->user_deficiency = $this->getParam('value');
+        $row->save();
+
+        return array(
+            'success' => true,
+            'id' => $row->id,
+            'value' => $row->user_deficiency
         );
     }
     
@@ -478,6 +499,23 @@ class Library_User_Controller extends Library_Controller {
             'id' => $row->id
         );
     }
+
+    protected function editUserDeficiency() {
+        Library_Config::getInstance()->testIssetAuser(1);
+
+        $table = new Library_User_Deficiency();
+
+        $row = $table->fetchRow($table->select()->where('id = ?', $this->getParam('id')));
+
+        $row->user_deficiency = $this->getParam('value');
+        $row->save();
+
+        return array(
+            'success' => true,
+            'value' => $row->user_deficiency,
+            'id' => $row->id
+        );
+    }
     
     protected function removeUserType() {
         Library_Config::getInstance()->testIssetAuser(1);
@@ -492,6 +530,18 @@ class Library_User_Controller extends Library_Controller {
         );
     }
 
+    protected function removeUserDeficiency() {
+        Library_Config::getInstance()->testIssetAuser(1);
+        
+        $table = new Library_User_Deficiency();
+        $table->delete($table->getAdapter()->quoteInto('id = ?', $this->getParam('id')));
+
+        Library_Config::log(sprintf(Library_Wording::get('user_deficiency_delete'), $this->getParam('id')));
+        return array(
+            'success' => true,
+            'id' => $this->getParam('id')
+        );
+    }
 
 
 }

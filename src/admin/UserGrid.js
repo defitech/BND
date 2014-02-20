@@ -260,6 +260,197 @@ Library.admin.UserGrid = Ext.extend(Ext.grid.EditorGridPanel, {
         });
         return win;
     },
+
+    /**
+     * Envoie au serveur l'information d'ajout ou de suppression d'un type
+     * d'utilisateur
+     * 
+     * @param {String} action
+     * @param {Ext.Window} win
+     * @param {String} newValue la nouvelle valeur dans un cas d'edition
+     * @return void
+     */
+    manageUserDeficiency: function(action, win, newValue) {
+        win._mask.show();
+        var form = win.getComponent(0).getForm();
+        var combo = form.findField('deficiency_id');
+        // preparation de la requete ajax
+        Ext.Ajax.request({
+            url: Library.Main.config().controller,
+            params: {
+                // formation de la commande en fonction de l'action
+                cmd: action + 'UserDeficiency',
+                // l'id du type selectionne, si suppression
+                id: combo.getValue(),
+                // la valeur du nouveau type, si ajout
+                value: newValue
+            },
+            success: function(response) {
+                win._mask.hide();
+                var json = Library.Main.getJson(response);
+                if (json.success) {
+                    // on envoie un event pour informer que l'action s'est bien
+                    // deroulee cote serveur
+                    win.fireEvent('userdeficiencyaction', win, action, json);
+                    // on recupere le record selectionne
+                    var r = combo.findRecord('id', combo.getValue());
+                    switch (action) {
+                        case 'add':
+                            // on ajoute le record dans le store de la popup
+                            combo.getStore().add(new Ext.data.Record({
+                                id: json.id,
+                                value: json.value
+                            }));
+                            // on vide le champ
+                            combo.reset()
+                            break;
+                        case 'edit':
+                            r.set('value', json.value);
+                            combo.setValue(json.id);
+                            break;
+                        case 'remove':
+                            // on supprime le record du store de la popup
+                            combo.getStore().remove(r);
+                            // on remet a zero l'affichage du combo
+                            combo.reset();
+                    }
+                }
+            },
+            failure: function(response) {
+                win._mask.hide();
+                Library.Main.failure(response);
+            }
+        });
+    },
+
+    /**
+     * Cree la fenetre qui permet d'ajouter, modifier ou supprimer une affection
+     * 
+     * @return {Ext.Window}
+     */
+    getUserDeficiencyWindow: function() {
+        var me = this;
+        // definition du store du combo des affections
+        var store = {
+            xtype: 'arraystore',
+            proxy: new Ext.data.HttpProxy({
+                url: Library.Main.config().controller
+            }),
+            baseParams: {
+                cmd: 'getUserDeficiencies'
+            },
+            fields: ['id', 'value']
+        };
+        // definition de la fenetre de gestion des affections
+        var win = new Ext.Window({
+            title: Library.wording.user_deficiency_title,
+            modal: true,
+            width: 380,
+            height: 120,
+            layout: 'fit',
+            items: [{
+                xtype: 'form',
+                border: false,
+                bodyStyle: 'padding: 10px',
+                items: [{
+                    xtype: 'compositefield',
+                    fieldLabel: Library.wording.user_deficiency_edit,
+                    items: [{
+                        xtype: 'combo',
+                        hiddenName: 'deficiency_id',
+                        mode: 'remote',
+                        triggerAction: 'all',
+                        store: store,
+                        displayField: 'value',
+                        valueField: 'id',
+                        emptyText: Library.wording.user_deficiency_choose,
+                        flex: 1
+                    }, {
+                        xtype: 'button',
+                        iconCls: 'book-relation-add',
+                        handler: function() {
+                            Ext.Msg.prompt(Library.wording.user_deficiency_title, Library.wording.user_deficiency_add, function(choice, txt){
+                                if (choice == 'ok' && txt) {
+                                    me.manageUserDeficiency('add', win, txt);
+                                }
+                            });
+                        }
+                    }, {
+                        xtype: 'button',
+                        iconCls: 'book-relation-edit',
+                        handler: function() {
+                            var combo = win.getComponent(0).getForm().findField('deficiency_id');
+                            if (!combo.getValue()) return;
+                            
+                            Ext.Msg.prompt(Library.wording.user_deficiency_title, Library.wording.user_deficiency_edit, function(choice, txt){
+                                if (choice == 'ok' && txt) {
+                                    me.manageUserDeficiency('edit', win, txt);
+                                }
+                            }, this, false, combo.getRawValue());
+                        }
+                    }, {
+                        xtype: 'button',
+                        iconCls: 'book-relation-remove',
+                        handler: function() {
+                            var combo = win.getComponent(0).getForm().findField('deficiency_id');
+                            if (!combo.getValue()) return;
+                            
+                            Ext.Msg.confirm(Library.wording.user_deficiency_title, Library.wording.user_deficiency_remove, function(choice){
+                                if (choice == 'yes')
+                                    me.manageUserDeficiency('remove', win);
+                            });
+                        }
+                    }]
+                }]
+            }],
+            buttons: [{
+                text: Library.wording.info_book_close,
+                iconCls: 'book-window-close',
+                scale: 'medium',
+                handler: function() {
+                    win.close();
+                }
+            }],
+            listeners: {
+                afterrender: function(cmp) {
+                    cmp._mask = new Ext.LoadMask(cmp.bwrap);
+                },
+                destroy: function(cmp) {
+                    delete cmp._mask;
+                },
+                userdeficiencyaction: function(w, action, json) {
+                    // ici, on est juste apres la reussite du serveur quant a
+                    // l'action sur une affection
+                    var i = 0;
+                    // on va recuperer la position de la colonne du type
+                    while (me.getColumnModel().getDataIndex(i)) {
+                        if (me.getColumnModel().getDataIndex(i) == 'deficiency_id')
+                            break;
+                        i++;
+                    }
+                    // on recupere le combo de la cellule (CellEditor)
+                    var field = me.getColumnModel().getCellEditor(i, 0).field;
+                    var r = field.findRecord('id', json.id);
+                    switch (action) {
+                        case 'add':
+                            // si on ajoutait un type, on le met dans le store
+                            field.getStore().add(new Ext.data.Record({
+                                id: json.id,
+                                value: json.value
+                            }));
+                            break;
+                        case 'edit':
+                            r.set('value', json.value);
+                            break;
+                        case 'remove':
+                            // si on supprimait un type, on l'enleve du store
+                            field.getStore().remove(r);
+                    }
+                }
+            }
+        });
+        return win;
+    },
     
     addUser: function() {
         var User = this.getStore().recordType;
@@ -267,7 +458,8 @@ Library.admin.UserGrid = Ext.extend(Ext.grid.EditorGridPanel, {
             login: '',
             pass: '',
             right: 0,
-            type_id: null
+            type_id: null,
+            deficiency_id: null
         });
         this.stopEditing();
         this.getStore().insert(0, u);
@@ -386,6 +578,8 @@ Library.admin.UserGrid = Ext.extend(Ext.grid.EditorGridPanel, {
                     {name: 'email'},
                     {name: 'type_id'},
                     {name: 'type_text'},
+                    {name: 'deficiency_id'},
+                    {name: 'deficiency_text'},
                     {name: 'confirmed'}
                 ]
             }),
@@ -423,6 +617,7 @@ Library.admin.UserGrid = Ext.extend(Ext.grid.EditorGridPanel, {
                 },
                 {
                     header : Library.wording.connect_password,
+                    width: 55,
                     dataIndex : 'pass',
                     editor: new Ext.form.TextField({
                         allowBlank: false,
@@ -441,6 +636,7 @@ Library.admin.UserGrid = Ext.extend(Ext.grid.EditorGridPanel, {
                 },
                 {
                     header : Library.wording.user_email,
+                    width: 55,
                     dataIndex : 'email',
                     editor: new Ext.form.TextField({
                         allowBlank: true,
@@ -476,8 +672,37 @@ Library.admin.UserGrid = Ext.extend(Ext.grid.EditorGridPanel, {
                     }
                 },
                 {
+                    header : '&nbsp;',
+                    dataIndex : 'deficiency_text',
+                    hidden: true,
+                    hideable: false
+                },
+                {
+                    header: Library.wording.user_deficiency,
+                    dataIndex: 'deficiency_id',
+                    editor: new Ext.form.ComboBox({
+                        allowBlank: false,
+                        mode: 'local',
+                        displayField: 'value',
+                        valueField: 'id',
+                        store: new Ext.data.ArrayStore({
+                            fields: ['id', 'value'],
+                            data: Library.Main.config().userDeficiencies
+                        })
+                    }),
+                    renderer: function(value, metaData, record, rowIndex, colIndex){
+                        if (!value) return '';
+                        
+                        var combo = me.getColumnModel().getCellEditor(colIndex, rowIndex).field;
+                        var index = combo.getStore().find('id', value);
+                        var r = combo.getStore().getAt(index);
+                        return r ? r.get('value') : '';
+                    }
+                },
+                {
                     xtype: 'actioncolumn',
                     width: 40,
+                    resizeable: false,
                     height: 22,
                     sortable: false,
                     hideable: false,
@@ -594,6 +819,14 @@ Library.admin.UserGrid = Ext.extend(Ext.grid.EditorGridPanel, {
                 scope: this,
                 handler: function() {
                     var win = this.getUserTypeWindow();
+                    win.show();
+                }
+            }, '-', {
+                iconCls: 'book-user-deficiency',
+                tooltip: Library.wording.user_deficiency_title,
+                scope: this,
+                handler: function() {
+                    var win = this.getUserDeficiencyWindow();
                     win.show();
                 }
             }, '-', {

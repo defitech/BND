@@ -222,6 +222,10 @@ body.book-background-montagnes {
     background-image: url('../images/star.png') !important;
 }
 
+.book-user-deficiency {
+    background-image: url('../images/handicap.png') !important;
+}
+
 .book-user-sendpass {
     background-image: url('../images/passlostsmall.png') !important;
     height: 16px;
@@ -230,13 +234,13 @@ body.book-background-montagnes {
 .book-user-form {
     background-image: url('../images/form-signed.png') !important;
     height: 16px;
-    width: 14px;
+    width: 13px;
 }
 
 .book-user-form-no {
     background-image: url('../images/form-signed-gray.png') !important;
     height: 16px;
-    width: 14px;
+    width: 13px;
 }
 
 .window-wait-debug .x-window-body {
