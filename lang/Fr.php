@@ -8,7 +8,7 @@ class Fr {
 
         'bad_thumb_type' => "Mauvais type de fichier pour l'aperçu",
         'bad_pdf_type' => "Mauvais type de fichier pour le PDF",
-        'bad_login' => 'Mauvais couple login/pass',
+        'bad_login' => 'Mauvais identifiant et ou mauvais mot de passe!',
         'bad_csv_type' => "Mauvais fichier fourni. Il doit s agir d'un CSV",
         
         'book_delete' => 'suppression du(des) livre(s): %s',

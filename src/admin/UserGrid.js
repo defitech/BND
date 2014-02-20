@@ -580,7 +580,8 @@ Library.admin.UserGrid = Ext.extend(Ext.grid.EditorGridPanel, {
                     {name: 'type_text'},
                     {name: 'deficiency_id'},
                     {name: 'deficiency_text'},
-                    {name: 'confirmed'}
+                    {name: 'confirmed'},
+                    {name: 'inactive'}
                 ]
             }),
             url: Library.Main.config().controller,
@@ -701,9 +702,9 @@ Library.admin.UserGrid = Ext.extend(Ext.grid.EditorGridPanel, {
                 },
                 {
                     xtype: 'actioncolumn',
-                    width: 40,
-                    resizeable: false,
+                    width: 44,
                     height: 22,
+                    resizeable: false,
                     sortable: false,
                     hideable: false,
                     items: [{
@@ -762,6 +763,47 @@ Library.admin.UserGrid = Ext.extend(Ext.grid.EditorGridPanel, {
                             var record = grid.getStore().getAt(row);
                             me.sendPasswordDemand(record);
                         }
+                    },{
+                        getClass: function(v, meta, record) {
+                            var cls = 'book-user-active';
+                            var tip = Library.wording.user_active;
+                            if (record.get('inactive') == 1) {
+                                cls += '-no';
+                                tip = Library.wording.user_inactive;
+                            }
+                            this.items[0].tooltip = tip;
+                            return cls;
+                        },
+                        handler: function(grid, row, col) {
+                            var record = grid.getStore().getAt(row);
+                            var newval;
+                            if ( record.get('inactive') != 1 ) {
+                                newval = 1;
+                            } else {
+                                newval = 0;
+                            }
+                            record.set('inactive', newval);
+                            Ext.Ajax.request({
+                                url: Library.Main.config().controller,
+                                scope: this,
+                                params: {
+                                    cmd: 'saveUser',
+                                    id: record.get('id'),
+                                    field: 'inactive',
+                                    value: newval
+                                },
+                                success: function(response) {
+                                    var json = Library.Main.getJson(response);
+                                    if (json.success) {
+                                        record.set('id', json.id);
+                                        record.commit();
+                                    }
+                                },
+                                failure: function(response) {
+                                    Library.Main.failure(response);
+                                }
+                            });
+                        },
                     }]
                 }
             ]

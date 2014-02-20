@@ -243,6 +243,18 @@ body.book-background-montagnes {
     width: 13px;
 }
 
+.book-user-active {
+    background-image: url('../images/active.png') !important;
+    height: 16px;
+    width: 11px;
+}
+
+.book-user-active-no {
+    background-image: url('../images/inactive.png') !important;
+    height: 16px;
+    width: 11px;
+}
+
 .window-wait-debug .x-window-body {
     text-align: center;
 }

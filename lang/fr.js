@@ -78,7 +78,7 @@ Library.wording = {
     profile_ok: "Votre profil a \u00e9t\u00e9 enregistr\u00e9",
     connect_title: 'Connexion',
     connect_logout: 'D\u00e9connexion',
-    connect_login: 'Login',
+    connect_login: 'Identifiant',
     connect_password: 'Mot de passe',
     connect_password_confirm: 'R\u00e9p\u00e9ter',
     connect_password_old: 'Passe actuel',
@@ -127,7 +127,7 @@ Library.wording = {
     user_passsend_tip: "Envoyer une demande de mot de passe \u00e0 l'adresse {0}",
     user_passsend_tip_no: "Impossible d'envoyer une demande de mot de passe. Aucune adresse email trouv\u00e9e",
     user_password_lost: "Mot de passe oubli\u00e9",
-    user_password_label: "- - - Login ou mail - - -",
+    user_password_label: "- - - Identifiant ou mail - - -",
     user_password_lost_label: "Pour r\u00e9cup\u00e9rer votre mot de passe, inscrivez ci-dessous soit votre <strong>email</strong>, " 
         + "soit votre <strong>nom d'utilisateur BDN (login)</strong>. Si vous ne disposez d'aucun email, merci de prendre "
         + "contact avec Defitech.<br/><br/>",

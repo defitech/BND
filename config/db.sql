@@ -81,6 +81,7 @@ CREATE TABLE `library_user` (
   `type_id` int(11),
   `deficiency_id` int(11),
   `confirmed` tinyint(1),
+  `inactive` tinyint(1),
   `last_connected` DATETIME NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
