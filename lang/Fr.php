@@ -61,7 +61,7 @@ cet email. Merci de ne pas y répondre.
         'mail_subject_create' => "BND > Defitech > Création d'un compte",
         'mail_content_create' => "Bonjour,
 
-Un compte vient d'être créé vous dans la base de données de livres
+Un compte vient d'être créé pour vous dans la base de données de livres
 numérisés de defitech, la BND. Votre identifiant de connexion (login)
 est: '%s'
 
